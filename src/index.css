@@ -1,0 +1,560 @@
+/* Google Fonts are now loaded via <link> in index.html (non-blocking).
+   The @import below has been removed to eliminate render-blocking CSSOM stall. */
+
+@import "tailwindcss";
+
+@theme {
+  --color-space-darkest: #03050d;
+  --color-space-darker: #070b19;
+  --color-space-dark: #0e1630;
+  --color-space-light: #1b264f;
+
+  --color-cyber-blue: #3b82f6;
+  --color-cyber-cyan: #06b6d4;
+  --color-cyber-purple: #a855f7;
+  --color-cyber-pink: #ec4899;
+  --color-cyber-green: #10b981;
+
+  --font-sans: var(--font-outfit), var(--font-inter), 'system-ui', 'sans-serif';
+  --font-mono: var(--font-fira-code), 'Courier New', 'monospace';
+
+  --animate-pulse-slow: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-float-delayed: float 6s ease-in-out infinite 3s;
+  --animate-spin-slow: spin 20s linear infinite;
+  --animate-spin-reverse: spin-reverse 25s linear infinite;
+  --animate-glow-pulse: glow-pulse 2s ease-in-out infinite;
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+  @keyframes spin-reverse {
+    0% { transform: rotate(360deg); }
+    100% { transform: rotate(0deg); }
+  }
+  @keyframes glow-pulse {
+    0%, 100% { opacity: 0.6; filter: drop-shadow(0 0 5px rgba(6, 182, 212, 0.5)); }
+    50% { opacity: 1; filter: drop-shadow(0 0 15px rgba(6, 182, 212, 0.8)); }
+  }
+  @keyframes text-glitch {
+    0%, 100% {
+      text-shadow: 0.05em 0 0 rgba(255, 0, 85, 0.75),
+                  -0.025em -0.05em 0 rgba(0, 255, 204, 0.75),
+                  0.025em 0.05em 0 rgba(168, 85, 247, 0.75);
+    }
+    15% {
+      text-shadow: -0.05em -0.025em 0 rgba(255, 0, 85, 0.75),
+                  0.025em 0.025em 0 rgba(0, 255, 204, 0.75),
+                  -0.05em -0.05em 0 rgba(168, 85, 247, 0.75);
+    }
+    49% {
+      text-shadow: 0.025em 0.05em 0 rgba(255, 0, 85, 0.75),
+                  -0.05em -0.025em 0 rgba(0, 255, 204, 0.75),
+                  0.05em 0.05em 0 rgba(168, 85, 247, 0.75);
+    }
+    50% {
+      text-shadow: -0.025em -0.05em 0 rgba(255, 0, 85, 0.75),
+                  0.05em 0.025em 0 rgba(0, 255, 204, 0.75),
+                  -0.025em -0.05em 0 rgba(168, 85, 247, 0.75);
+    }
+    99% {
+      text-shadow: 0.025em 0.05em 0 rgba(255, 0, 85, 0.75),
+                  -0.025em 0.05em 0 rgba(0, 255, 204, 0.75),
+                  -0.05em -0.025em 0 rgba(168, 85, 247, 0.75);
+    }
+  }
+  @keyframes glitch {
+    0% { clip-path: inset(40% 0 61% 0); transform: skew(0.3deg); }
+    20% { clip-path: inset(92% 0 1% 0); transform: skew(-0.5deg); }
+    40% { clip-path: inset(25% 0 58% 0); transform: skew(0.8deg); }
+    60% { clip-path: inset(80% 0 5% 0); transform: skew(-0.2deg); }
+    80% { clip-path: inset(11% 0 85% 0); transform: skew(0.5deg); }
+    100% { clip-path: inset(50% 0 40% 0); transform: skew(0deg); }
+  }
+  @keyframes shake {
+    0%, 100% { transform: translate(0, 0); }
+    10% { transform: translate(-2px, -1px); }
+    20% { transform: translate(-1px, 2px); }
+    30% { transform: translate(1px, -1px); }
+    40% { transform: translate(-1px, -2px); }
+    50% { transform: translate(2px, 1px); }
+    60% { transform: translate(1px, -1px); }
+    70% { transform: translate(-2px, 2px); }
+    80% { transform: translate(2px, -1px); }
+    90% { transform: translate(-1px, -2px); }
+  }
+}
+
+@utility glass-card {
+  background: rgba(7, 11, 25, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+@utility glass-card-glow {
+  background: rgba(7, 11, 25, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(6, 182, 212, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(6, 182, 212, 0.1),
+              inset 0 0 12px rgba(6, 182, 212, 0.05);
+}
+
+@utility glass-card-purple {
+  background: rgba(7, 11, 25, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(168, 85, 247, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(168, 85, 247, 0.1),
+              inset 0 0 12px rgba(168, 85, 247, 0.05);
+}
+
+@utility text-glow-cyan {
+  text-shadow: 0 0 10px rgba(6, 182, 212, 0.6), 0 0 20px rgba(6, 182, 212, 0.3);
+}
+
+@utility text-glow-purple {
+  text-shadow: 0 0 10px rgba(168, 85, 247, 0.6), 0 0 20px rgba(168, 85, 247, 0.3);
+}
+
+@utility text-glow-blue {
+  text-shadow: 0 0 10px rgba(59, 130, 246, 0.6), 0 0 20px rgba(59, 130, 246, 0.3);
+}
+
+@utility border-glow-cyan {
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
+  border-color: rgba(6, 182, 212, 0.6);
+}
+
+@utility border-glow-purple {
+  box-shadow: 0 0 15px rgba(168, 85, 247, 0.4);
+  border-color: rgba(168, 85, 247, 0.6);
+}
+
+@utility cyber-grid {
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+@utility aurora-bg {
+  filter: blur(100px);
+  opacity: 0.15;
+  mix-blend-mode: screen;
+}
+
+@utility reveal-mask {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+}
+
+@utility scrollbar-none {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@utility animate-glitch {
+  animation: glitch 1s linear infinite alternate-reverse;
+}
+
+@utility animate-shake {
+  animation: shake 0.3s ease-in-out infinite;
+}
+
+@utility animate-cyber-glitch {
+  animation: text-glitch 0.5s infinite, shake 0.35s ease-in-out infinite;
+}
+
+@utility transform-gpu {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+html {
+  /* scroll-behavior: smooth is intentionally removed.
+     It conflicts with GSAP ScrollTrigger's scroll control and
+     Framer Motion's useScroll calculations, causing jank and
+     incorrect scroll position reads. JS scroll controllers
+     provide their own easing. */
+  background-color: #03050d;
+  color: #ffffff;
+  font-family: 'Outfit', 'Inter', sans-serif;
+  overflow-x: clip;
+  -webkit-overflow-scrolling: touch;
+  /* Promote to GPU layer — prevents repaints bleeding into
+     compositor-thread animations (star field, Three.js canvas) */
+  isolation: isolate;
+}
+
+body {
+  overflow-x: clip;
+  background-color: #03050d;
+  cursor: none; /* We will use a custom mouse pointer */
+}
+
+/* Custom Scrollbar for cyber theme */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #03050d;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(59, 130, 246, 0.2);
+  border-radius: 4px;
+  border: 1px solid rgba(6, 182, 212, 0.2);
+  transition: background 0.3s;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(6, 182, 212, 0.5);
+  box-shadow: 0 0 10px rgba(6, 182, 212, 0.6);
+}
+
+/* Selection style */
+::selection {
+  background: rgba(6, 182, 212, 0.3);
+  color: #ffffff;
+  text-shadow: 0 0 5px rgba(6, 182, 212, 0.5);
+}
+
+/* Custom interactive classes */
+.btn-cyber-primary {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 15px rgba(6, 182, 212, 0.2);
+}
+
+.btn-cyber-primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: 0.5s;
+}
+
+.btn-cyber-primary:hover::before {
+  left: 100%;
+}
+
+.btn-cyber-primary:hover {
+  box-shadow: 0 0 25px rgba(6, 182, 212, 0.5);
+  transform: translateY(-2px);
+}
+
+.btn-cyber-secondary {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.btn-cyber-secondary:hover {
+  background: rgba(6, 182, 212, 0.05);
+  border-color: rgba(6, 182, 212, 0.8);
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.2);
+  transform: translateY(-2px);
+}
+
+/* slanting glass reflection sheen loop */
+.cyber-sheen {
+  position: relative;
+  overflow: hidden;
+}
+
+.cyber-sheen::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.35),
+    transparent
+  );
+  transform: translateX(-150%) skewX(-20deg);
+  will-change: transform;
+  animation: cyber-sheen-loop 4s infinite ease-in-out;
+}
+
+@keyframes cyber-sheen-loop {
+  0% { transform: translateX(-150%) skewX(-20deg); }
+  25% { transform: translateX(250%) skewX(-20deg); }
+  100% { transform: translateX(250%) skewX(-20deg); }
+}
+
+/* ═══════ Spinning Gradient Border CTA ═══════ */
+@keyframes border-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.shiny-cta {
+  position: relative;
+  border-radius: 9999px;
+  padding: 1rem 2.5rem;
+  background: transparent;
+  cursor: pointer;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 0;
+  overflow: hidden;
+  border: none;
+}
+
+/* Spinning gradient ring (large rotating element to avoid pill wobble) */
+.shiny-cta::before {
+  content: '';
+  position: absolute;
+  top: -150%;
+  left: -50%;
+  width: 200%;
+  height: 400%;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0%,
+    #ef233c 5%,
+    #ef233c 15%,
+    #ef233c 30%,
+    transparent 40%,
+    transparent 100%
+  );
+  animation: border-spin 2.2s linear infinite;
+  z-index: -2;
+  transform-origin: center;
+}
+
+/* Inner fill & dot-grid texture */
+.shiny-cta::after {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border-radius: 9999px;
+  background: 
+    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.12) 0.5px, transparent 0) padding-box,
+    #080101;
+  background-size: 4px 4px;
+  z-index: -1;
+}
+
+.shiny-cta:hover::after {
+  background: 
+    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.18) 0.5px, transparent 0) padding-box,
+    #120202;
+  background-size: 4px 4px;
+}
+
+.shiny-cta:hover {
+  box-shadow: 0 0 35px rgba(239, 35, 60, 0.35), 0 0 70px rgba(239, 35, 60, 0.15);
+}
+
+/* ═══════ Parallax Star Field ═══════ */
+@keyframes animStar {
+  from { transform: translate3d(0, 0px, 0); }
+  to { transform: translate3d(0, -2000px, 0); }
+}
+
+.stars-layer-1 {
+  box-shadow:
+    30px 100px #fff, 75px 280px #fff, 120px 80px #fff, 180px 420px #fff,
+    220px 190px #fff, 340px 480px #fff, 410px 110px #fff, 460px 350px #fff,
+    520px 220px #fff, 590px 510px #fff, 660px 90px #fff, 710px 390px #fff,
+    780px 160px #fff, 840px 530px #fff, 910px 240px #fff, 960px 450px #fff,
+    1020px 50px #fff, 1080px 410px #fff, 1140px 180px #fff, 1220px 520px #fff,
+    1280px 90px #fff, 1340px 340px #fff, 1410px 220px #fff, 1470px 490px #fff,
+    1540px 120px #fff, 1610px 380px #fff, 1680px 240px #fff, 1740px 510px #fff,
+    1810px 70px #fff, 1870px 320px #fff, 1940px 180px #fff, 2010px 450px #fff,
+    2080px 110px #fff, 2140px 370px #fff, 2210px 230px #fff, 2270px 520px #fff,
+    2340px 80px #fff, 2410px 330px #fff, 2480px 190px #fff, 2540px 470px #fff,
+    50px 600px #fff, 150px 750px #fff, 240px 650px #fff, 380px 800px #fff,
+    510px 710px #fff, 600px 850px #fff, 700px 620px #fff, 790px 760px #fff,
+    890px 680px #fff, 980px 820px #fff, 1090px 640px #fff, 1180px 780px #fff,
+    1290px 690px #fff, 1370px 830px #fff, 1480px 600px #fff, 1580px 740px #fff,
+    1710px 660px #fff, 1810px 810px #fff, 1910px 680px #fff, 2020px 830px #fff,
+    2110px 610px #fff, 2220px 750px #fff, 2310px 670px #fff, 2420px 820px #fff,
+    2510px 600px #fff, 120px 950px #fff, 320px 1000px #fff, 520px 920px #fff,
+    720px 1020px #fff, 920px 900px #fff, 1120px 960px #fff, 1320px 890px #fff,
+    1520px 1020px #fff, 1720px 880px #fff, 1920px 950px #fff, 2120px 900px #fff,
+    2320px 990px #fff, 2520px 870px #fff, 80px 1150px #fff, 280px 1250px #fff,
+    480px 1100px #fff, 680px 1230px #fff, 880px 1070px #fff, 1080px 1200px #fff,
+    1280px 1130px #fff, 1480px 1270px #fff, 1680px 1080px #fff, 1880px 1220px #fff,
+    2080px 1150px #fff, 2280px 1280px #fff, 2480px 1090px #fff, 150px 1350px #fff,
+    350px 1450px #fff, 550px 1380px #fff, 750px 1470px #fff, 950px 1360px #fff,
+    1150px 1420px #fff, 1350px 1350px #fff, 1550px 1480px #fff, 1750px 1340px #fff,
+    1950px 1410px #fff, 2150px 1360px #fff, 2350px 1490px #fff, 2550px 1330px #fff,
+    100px 1550px #fff, 300px 1650px #fff, 500px 1580px #fff, 700px 1670px #fff,
+    900px 1560px #fff, 1100px 1620px #fff, 1300px 1550px #fff, 1500px 1680px #fff,
+    1700px 1540px #fff, 1900px 1610px #fff, 2100px 1560px #fff, 2300px 1690px #fff,
+    2500px 1530px #fff, 50px 1750px #fff, 250px 1850px #fff, 450px 1720px #fff,
+    650px 1880px #fff, 850px 1700px #fff, 1050px 1830px #fff, 1250px 1760px #fff,
+    1450px 1900px #fff, 1650px 1710px #fff, 1850px 1860px #fff, 2050px 1730px #fff,
+    2250px 1890px #fff, 2450px 1700px #fff, 200px 1950px #fff, 400px 1990px #fff,
+    600px 1930px #fff, 800px 1970px #fff, 1000px 1910px #fff, 1200px 1980px #fff,
+    1400px 1920px #fff, 1600px 1990px #fff, 1800px 1930px #fff, 2000px 1970px #fff,
+    2200px 1910px #fff, 2400px 1980px #fff;
+}
+
+.stars-layer-1::after {
+  content: " ";
+  position: absolute;
+  top: 2000px;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  background: transparent;
+  box-shadow: inherit;
+}
+
+.stars-layer-2 {
+  box-shadow:
+    60px 150px #fff, 190px 320px #fff, 340px 90px #fff, 450px 450px #fff,
+    580px 170px #fff, 700px 520px #fff, 830px 120px #fff, 940px 380px #fff,
+    1080px 250px #fff, 1210px 540px #fff, 1330px 60px #fff, 1460px 400px #fff,
+    1590px 190px #fff, 1740px 480px #fff, 1860px 130px #fff, 2010px 270px #fff,
+    2150px 530px #fff, 2290px 80px #fff, 2430px 410px #fff, 2550px 190px #fff,
+    100px 490px #fff, 260px 620px #fff, 390px 580px #fff, 520px 720px #fff,
+    660px 650px #fff, 790px 780px #fff, 920px 600px #fff, 1050px 740px #fff,
+    1180px 660px #fff, 1310px 800px #fff, 1440px 570px #fff, 1570px 710px #fff,
+    1700px 630px #fff, 1820px 770px #fff, 1950px 590px #fff, 2080px 730px #fff,
+    2210px 650px #fff, 2340px 790px #fff, 2470px 580px #fff, 160px 870px #fff,
+    420px 940px #fff, 620px 890px #fff, 820px 970px #fff, 1020px 850px #fff,
+    1220px 920px #fff, 1420px 980px #fff, 1620px 830px #fff, 1820px 910px #fff,
+    2020px 850px #fff, 2220px 930px #fff, 2420px 890px #fff, 110px 1070px #fff,
+    370px 1140px #fff, 570px 1020px #fff, 770px 1180px #fff, 970px 1060px #fff,
+    1170px 1150px #fff, 1370px 1080px #fff, 1570px 1210px #fff, 1770px 1030px #fff,
+    1970px 1160px #fff, 2170px 1080px #fff, 2370px 1200px #fff, 2570px 1020px #fff,
+    150px 1370px #fff, 450px 1440px #fff, 750px 1390px #fff, 1050px 1470px #fff,
+    1350px 1350px #fff, 1650px 1420px #fff, 1950px 1480px #fff, 2250px 1330px #fff,
+    2550px 1410px #fff, 200px 1670px #fff, 500px 1590px #fff, 800px 1680px #fff,
+    1100px 1560px #fff, 1400px 1620px #fff, 1700px 1550px #fff, 2000px 1690px #fff,
+    2300px 1530px #fff, 200px 1870px #fff, 600px 1790px #fff, 1000px 1880px #fff,
+    1400px 1760px #fff, 1800px 1820px #fff, 2200px 1750px #fff, 2500px 1890px #fff;
+}
+
+.stars-layer-2::after {
+  content: " ";
+  position: absolute;
+  top: 2000px;
+  left: 0;
+  width: 2px;
+  height: 2px;
+  background: transparent;
+  box-shadow: inherit;
+}
+
+.stars-layer-3 {
+  box-shadow:
+    50px 100px rgba(239, 35, 60, 0.45), 430px 720px rgba(239, 35, 60, 0.35),
+    820px 340px rgba(239, 35, 60, 0.35), 1250px 580px rgba(239, 35, 60, 0.4),
+    180px 1350px rgba(239, 35, 60, 0.35), 1550px 890px rgba(239, 35, 60, 0.3),
+    670px 200px rgba(239, 35, 60, 0.45), 1400px 150px rgba(239, 35, 60, 0.3),
+    300px 500px rgba(239, 35, 60, 0.35), 1100px 800px rgba(239, 35, 60, 0.4),
+    900px 600px rgba(239, 35, 60, 0.35), 1700px 400px rgba(239, 35, 60, 0.3),
+    1950px 200px rgba(239, 35, 60, 0.4), 2150px 900px rgba(239, 35, 60, 0.3),
+    2350px 1400px rgba(239, 35, 60, 0.35), 2550px 700px rgba(239, 35, 60, 0.3);
+}
+
+.stars-layer-3::after {
+  content: " ";
+  position: absolute;
+  top: 2000px;
+  left: 0;
+  width: 2px;
+  height: 2px;
+  background: transparent;
+  box-shadow: inherit;
+}
+
+
+
+/* ═══════ Accessibility: Reduced Motion ═══════ */
+/*
+  Respect user's OS-level "Reduce Motion" preference.
+  This disables all CSS animations and transitions for affected users
+  WITHOUT removing them from other users.
+  JS-driven animations (GSAP, Framer Motion, Three.js) handle their own
+  prefers-reduced-motion checks via the prefersReducedMotion() utility.
+*/
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .stars-layer-1,
+  .stars-layer-2,
+  .stars-layer-3 {
+    animation: none !important;
+  }
+}
+
+/* ═══════ GPU Promotion for animated star layers ═══════ */
+/*
+  Promote the three animated star divs to their own compositor layer.
+  This prevents their CSS animation from triggering repaints on the
+  main document layer and keeps them on the GPU compositing thread.
+*/
+.stars-layer-1,
+.stars-layer-2,
+.stars-layer-3 {
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  contain: paint;
+}
+
+@utility content-visibility-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: 1000px;
+}
+
+/* Lenis smooth scrolling standard configurations */
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis-scrolling iframe {
+  pointer-events: none;
+}
