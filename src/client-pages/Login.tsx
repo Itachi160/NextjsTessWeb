@@ -350,7 +350,7 @@ export default function Login() {
         />
 
         {/* ═══ Effect 1: Spinning Conic Gradient Border ═══ */}
-        <div className="absolute -inset-[1px] rounded-2xl overflow-hidden pointer-events-none z-[1]" style={{ transform: 'translate3d(0, 0, 0)', isolation: 'isolate' }}>
+        <div className="absolute -inset-[1px] rounded-2xl overflow-hidden pointer-events-none z-[1]" style={{ isolation: 'isolate' }}>
           <motion.div
             className="absolute -inset-[150%] z-0 will-change-transform"
             animate={{ rotate: [0, 360] }}
@@ -368,13 +368,12 @@ export default function Login() {
 
         {/* ═══ Main Card ═══ */}
         <div 
-          className="p-10 rounded-2xl border border-white/[0.06] shadow-2xl relative overflow-hidden z-[2] will-change-transform"
+          className="p-10 rounded-2xl border border-white/[0.06] shadow-2xl relative overflow-hidden z-[2]"
           style={{
             background: '#03050d',
             boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.37)',
             backfaceVisibility: 'hidden',
             WebkitBackfaceVisibility: 'hidden',
-            transform: 'translate3d(0, 0, 0)',
             isolation: 'isolate',
           }}
         >
@@ -384,7 +383,6 @@ export default function Login() {
             style={{
               backfaceVisibility: 'hidden',
               WebkitBackfaceVisibility: 'hidden',
-              transform: 'translate3d(0, 0, 0)',
             }}
           />
           
