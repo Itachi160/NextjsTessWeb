@@ -24,7 +24,7 @@ export default function Projects() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   useEffect(() => {
-    document.title = 'Projects Showcase | CloudSource Technologies';
+    document.title = 'Projects Showcase | Tesseract Infosystems';
     window.scrollTo(0, 0);
   }, []);
 

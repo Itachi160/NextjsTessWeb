@@ -24,7 +24,7 @@ export default function TestimonialsSection() {
       name: 'Sarah Jenkins',
       role: 'Chief Technology Officer',
       company: 'Fintech Global LLC',
-      quote: 'CloudSource Technologies re-engineered our core payment systems from a legacy server base to a distributed Kubernetes stack. Their DevOps audit saved us 35% in active cloud hosting costs while improving system latencies under load.',
+      quote: 'Tesseract Infosystems re-engineered our core payment systems from a legacy server base to a distributed Kubernetes stack. Their DevOps audit saved us 35% in active cloud hosting costs while improving system latencies under load.',
       border: 'border-cyber-blue/30',
       shadow: 'shadow-blue-500/10',
     },

@@ -25,7 +25,7 @@ export default function About() {
           </span>
         </h1>
         <p className="text-gray-400 text-sm md:text-base max-w-2xl mt-2 leading-relaxed">
-          CloudSource Technologies was founded by enterprise architects to solve a single critical industry issue: compiling stable, scalable, and secure cloud software products without engineering compromises.
+          Tesseract Infosystems was founded by enterprise architects to solve a single critical industry issue: compiling stable, scalable, and secure cloud software products without engineering compromises.
         </p>
       </div>
 

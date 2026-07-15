@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useUIStore } from '../store/uiStore';
 
 export default function Preloader() {
-  const [phase, setPhase] = useState<'countdown' | 'welcome' | 'to' | 'cloudsource' | 'matrix' | 'done'>('countdown');
+  const [phase, setPhase] = useState<'countdown' | 'welcome' | 'to' | 'tesseract' | 'matrix' | 'done'>('countdown');
   const [progress, setProgress] = useState(0);
   const [glitchText, setGlitchText] = useState('00');
   const setPreloaderDone = useUIStore((state) => state.setPreloaderDone);

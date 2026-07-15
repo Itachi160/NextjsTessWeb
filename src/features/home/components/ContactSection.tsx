@@ -138,7 +138,7 @@ export default function ContactSection() {
                   {activeOffice === idx && (
                     <div className="flex gap-6 mt-3 pt-3 border-t border-white/5 text-xs text-gray-400">
                       <span className="flex items-center gap-1.5"><Phone className="w-3 h-3 text-cyber-purple" />{office.phone}</span>
-                      <span className="flex items-center gap-1.5"><Mail className="w-3 h-3 text-cyber-cyan" />engineering@cloudsource.tech</span>
+                      <span className="flex items-center gap-1.5"><Mail className="w-3 h-3 text-cyber-cyan" />contact@tesseractsys.com</span>
                     </div>
                   )}
                 </button>
