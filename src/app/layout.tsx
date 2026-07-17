@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     default: 'Tesseract Tech & Cloud Systems | Tesseract Infosystems',
     template: '%s | Tesseract Tech & Systems',
   },
-  description: 'Tesseract Infosystems (Tesseract Tech / Tesseract Sys) designs and deploys high-performance custom software platforms, cloud-native architectures, and enterprise AI systems.',
+  description: 'Tesseract Infosystems (Tesseract Tech) designs and deploys custom software platforms, cloud-native architectures, and high-performance enterprise AI systems.',
   keywords: [
     'Tesseract Tech',
     'Tesseract Sys',
@@ -65,7 +65,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'Tesseract Tech & Cloud Systems | Tesseract Infosystems',
-    description: 'Tesseract Infosystems (Tesseract Tech / Tesseract Sys) designs and deploys high-performance custom software platforms, cloud-native architectures, and enterprise AI systems.',
+    description: 'Tesseract Infosystems (Tesseract Tech) designs and deploys custom software platforms, cloud-native architectures, and high-performance enterprise AI systems.',
     url: 'https://tesseractinfosystems.com',
     siteName: 'Tesseract Infosystems',
     locale: 'en_US',
@@ -74,7 +74,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Tesseract Tech & Cloud Systems | Tesseract Infosystems',
-    description: 'Tesseract Infosystems (Tesseract Tech / Tesseract Sys) designs and deploys high-performance custom software platforms, cloud-native architectures, and enterprise AI systems.',
+    description: 'Tesseract Infosystems (Tesseract Tech) designs and deploys custom software platforms, cloud-native architectures, and high-performance enterprise AI systems.',
     creator: '@tesseractsys',
   },
   icons: {
