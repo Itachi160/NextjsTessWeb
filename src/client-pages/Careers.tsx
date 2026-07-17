@@ -10,8 +10,7 @@ export default function Careers() {
   const setCursorType = useUIStore((state) => state.setCursorType);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [selectedRole, setSelectedRole] = useState('Senior Software Engineer (Java / AWS)');
-  
-  // Form states matching compiler fields
+
   const [candName, setCandName] = useState('');
   const [candEmail, setCandEmail] = useState('');
   const [candPortfolio, setCandPortfolio] = useState('');
@@ -41,11 +40,10 @@ export default function Careers() {
 
   return (
     <div className="pt-32 pb-24 px-6 max-w-7xl mx-auto flex flex-col gap-10 relative z-10 font-mono">
-      {/* Background visual elements */}
+
       <div className="absolute top-[10%] left-0 w-80 h-80 rounded-full bg-cyber-cyan/5 blur-[120px] pointer-events-none" />
       <div className="absolute bottom-[10%] right-0 w-80 h-80 rounded-full bg-cyber-purple/5 blur-[120px] pointer-events-none" />
 
-      {/* Header section */}
       <div className="flex flex-col gap-3">
         <span className="text-[10px] uppercase font-mono tracking-[0.2em] text-cyber-cyan font-bold flex items-center gap-2">
           <Terminal className="w-3.5 h-3.5 animate-pulse" />
@@ -59,7 +57,6 @@ export default function Careers() {
         </h1>
       </div>
 
-      {/* Ultra-compact benefits ticker bar */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full bg-[#03050d]/60 border border-white/5 p-4 rounded-2xl relative overflow-hidden backdrop-blur-md">
         <div className="absolute inset-0 bg-gradient-to-r from-cyber-blue/[0.02] to-cyber-purple/[0.02] pointer-events-none" />
         {benefits.map((b, idx) => (
@@ -73,10 +70,8 @@ export default function Careers() {
         ))}
       </div>
 
-      {/* Main Split Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        
-        {/* Left column: Node Active Openings */}
+
         <div className="lg:col-span-5 flex flex-col gap-4">
           <div className="flex items-center justify-between border-b border-white/5 pb-2">
             <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest">// ACTIVE_CORES</h2>
@@ -92,11 +87,10 @@ export default function Careers() {
                   onClick={() => setSelectedRole(job.title)}
                   onMouseEnter={() => setCursorType('hover')}
                   onMouseLeave={() => setCursorType('default')}
-                  className={`relative p-4 rounded-xl border transition-all duration-300 cursor-pointer ${
-                    isSelected
+                  className={`relative p-4 rounded-xl border transition-all duration-300 cursor-pointer ${isSelected
                       ? 'border-cyber-cyan bg-cyber-cyan/[0.02] shadow-[0_0_15px_rgba(6,182,212,0.1)]'
                       : 'border-white/5 bg-white/[0.01] hover:border-white/10 hover:bg-white/[0.02]'
-                  }`}
+                    }`}
                 >
                   <div className="flex justify-between items-start gap-4">
                     <div>
@@ -121,10 +115,8 @@ export default function Careers() {
           </div>
         </div>
 
-        {/* Right column: Interactive Code-based application board */}
         <div className="lg:col-span-7">
           <div className="glass-card rounded-2xl border border-white/10 bg-[#03050d]/80 shadow-2xl relative overflow-hidden flex flex-col">
-            {/* Title Bar */}
             <div className="h-9 bg-white/[0.02] border-b border-white/5 flex items-center justify-between px-4">
               <div className="flex items-center gap-1.5">
                 <span className="w-2.5 h-2.5 rounded-full bg-rose-500/80" />
@@ -155,15 +147,13 @@ export default function Careers() {
                   </motion.div>
                 ) : (
                   <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-                    
-                    {/* Simulated TypeScript Class format fields */}
+
                     <div className="text-[10px] text-gray-500 mb-2 leading-relaxed">
                       <span className="text-cyber-purple font-bold">import</span> &#123; Candidate &#125; <span className="text-cyber-purple font-bold">from</span> <span className="text-cyber-cyan">'@tesseract/hr'</span>;<br />
                       <span className="text-cyber-purple font-bold">const</span> application = <span className="text-cyber-purple font-bold">new</span> <span className="text-white font-bold">Candidate</span>(&#123;<br />
                       &nbsp;&nbsp;role: <span className="text-cyber-cyan">'{selectedRole.split(' (')[0]}'</span>
                     </div>
 
-                    {/* Inputs embedded inside compiler HUD */}
                     <div className="flex flex-col gap-3">
                       <div className="flex flex-col sm:flex-row gap-3">
                         <div className="flex flex-col gap-1 w-full">
@@ -202,7 +192,6 @@ export default function Careers() {
                         />
                       </div>
 
-                      {/* PDF Dropzone */}
                       <div className="flex flex-col gap-1">
                         <label className="text-[8px] uppercase tracking-wider text-gray-500 font-bold">Resume Document (.PDF)</label>
                         <div className="border border-dashed border-white/10 rounded-lg p-4 text-center cursor-pointer hover:border-cyber-cyan/40 bg-white/[0.01] hover:bg-white/[0.02] transition-all relative flex flex-col justify-center items-center gap-0.5">

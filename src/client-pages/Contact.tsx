@@ -21,7 +21,6 @@ export default function Contact() {
     'SYSTEM: Tesseract HQ nodes online.'
   ]);
 
-  // Simulate incoming terminal telemetry ticks
   useEffect(() => {
     const logPool = [
       'TELEMETRY: Latency to Baramati node: 12ms',
@@ -43,13 +42,11 @@ export default function Contact() {
     e.preventDefault();
     setFormSubmitted(true);
     setLogs((prev) => [...prev, `SYSTEM: Preparing email transmission for ${selectedStack.toUpperCase()}...`]);
-    
-    // Construct mailto link
+
     const subject = encodeURIComponent(`Project Inquiry (${selectedStack.toUpperCase()}) - ${name}`);
     const body = encodeURIComponent(`Hello Tesseract Team,\n\nI would like to initiate a request for:\nService: ${selectedStack.toUpperCase()}\nName: ${name}\nEmail: ${email}\n\nMessage:\n${message}`);
     const mailtoUrl = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
-    
-    // Open email client
+
     window.location.href = mailtoUrl;
 
     setTimeout(() => {
@@ -62,13 +59,11 @@ export default function Contact() {
 
   return (
     <div className="relative min-h-screen font-sans" style={{ background: 'linear-gradient(180deg, #03050d 0%, #080c1e 50%, #03050d 100%)' }}>
-      {/* Dynamic particles backglow */}
       <div className="absolute top-1/4 left-10 w-[450px] h-[450px] rounded-full bg-cyber-purple/5 blur-[120px] pointer-events-none animate-pulse" />
       <div className="absolute bottom-1/4 right-10 w-[450px] h-[450px] rounded-full bg-cyber-cyan/5 blur-[120px] pointer-events-none animate-pulse" />
 
       <div className="pt-32 pb-24 px-6 max-w-7xl mx-auto flex flex-col lg:flex-row items-stretch justify-between gap-12 relative z-10">
-        
-        {/* Left Console: Telemetry HUD & Info */}
+
         <div className="w-full lg:w-[45%] flex flex-col gap-6 justify-between">
           <div className="flex flex-col gap-6">
             <div>
@@ -86,8 +81,6 @@ export default function Contact() {
                 Configure your system modules, link your tech targets, and initialize a connection with our core engineering team.
               </p>
             </div>
-
-            {/* Diagnostic Terminal logs */}
             <div className="glass-card rounded-2xl border border-white/5 bg-[#03050d]/80 p-5 font-mono text-[11px] text-gray-400 shadow-2xl relative overflow-hidden flex flex-col gap-2.5 min-h-[160px]">
               <div className="flex items-center justify-between pb-3 border-b border-white/5">
                 <div className="flex items-center gap-1.5">
@@ -109,14 +102,13 @@ export default function Contact() {
             </div>
           </div>
 
-          {/* Headquarters Node details */}
           <div className="glass-card p-6 rounded-2xl border border-cyber-cyan/20 bg-[#05091a]/40 flex flex-col gap-4 relative overflow-hidden shadow-lg mt-auto">
             <div className="absolute inset-0 cyber-grid opacity-[0.02] pointer-events-none" />
             <h4 className="text-xs uppercase font-mono tracking-widest text-cyber-cyan font-bold flex items-center gap-2">
               <MapPin className="w-4 h-4 text-cyber-cyan" />
               Headquarters Node
             </h4>
-            
+
             <div className="flex flex-col gap-1">
               <span className="text-white font-extrabold text-sm">Tesseract Infosystems</span>
               <p className="text-gray-400 text-xs leading-relaxed">
@@ -137,10 +129,8 @@ export default function Contact() {
           </div>
         </div>
 
-        {/* Right Pane: Fully Styled Interactive IDE Console Form */}
         <div className="w-full lg:w-[50%] flex flex-col justify-center">
           <div className="glass-card-glow rounded-3xl border border-white/10 bg-[#03050d]/90 shadow-2xl relative overflow-hidden flex flex-col h-full">
-            {/* Console Title IDE Bar */}
             <div className="h-10 bg-white/[0.02] border-b border-white/5 flex items-center justify-between px-5">
               <div className="flex items-center gap-1.5">
                 <span className="w-3 h-3 rounded-full bg-rose-500/80" />
@@ -154,7 +144,7 @@ export default function Contact() {
             <div className="p-8 flex flex-col gap-6 relative z-10 flex-grow justify-center">
               <AnimatePresence mode="wait">
                 {formSubmitted ? (
-                  <motion.div 
+                  <motion.div
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.95 }}
@@ -178,7 +168,6 @@ export default function Contact() {
                       <p className="text-[11px] text-gray-500">Choose the service you are interested in below.</p>
                     </div>
 
-                    {/* Segmented Grid Stack Choice Buttons */}
                     <div className="grid grid-cols-2 gap-2.5">
                       {[
                         { id: 'cloud', label: 'Cloud-Native', icon: Database },
@@ -193,11 +182,10 @@ export default function Contact() {
                             key={stack.id}
                             type="button"
                             onClick={() => setSelectedStack(stack.id as any)}
-                            className={`flex items-center gap-2 px-4 py-3 rounded-xl border text-left text-xs uppercase font-extrabold tracking-wider transition-all duration-300 ${
-                              isSelected
+                            className={`flex items-center gap-2 px-4 py-3 rounded-xl border text-left text-xs uppercase font-extrabold tracking-wider transition-all duration-300 ${isSelected
                                 ? 'bg-gradient-to-r from-cyber-blue/15 to-cyber-cyan/15 border-cyber-cyan text-cyber-cyan shadow-[0_0_15px_rgba(6,182,212,0.15)] font-black'
                                 : 'bg-white/[0.01] border-white/5 text-gray-400 hover:border-white/20 hover:text-white'
-                            }`}
+                              }`}
                           >
                             <StackIcon className={`w-4 h-4 shrink-0 ${isSelected ? 'text-cyber-cyan' : 'text-gray-500'}`} />
                             {stack.label}
@@ -206,7 +194,6 @@ export default function Contact() {
                       })}
                     </div>
 
-                    {/* Code Prompt Preview */}
                     <div className="bg-white/[0.01] border border-white/5 p-4 rounded-xl font-mono text-[10px] text-gray-500 overflow-x-auto whitespace-pre-wrap break-all">
                       <span className="text-cyber-purple">const</span> config = &#123; <br />
                       &nbsp;&nbsp;service: <span className="text-cyber-cyan">'{selectedStack.toUpperCase()}'</span>,<br />
@@ -215,7 +202,6 @@ export default function Contact() {
                       &#125;;
                     </div>
 
-                    {/* Inputs */}
                     <div className="flex flex-col sm:flex-row gap-4">
                       <div className="flex flex-col gap-2 w-full">
                         <label htmlFor="c-name" className="text-[9px] uppercase font-mono text-gray-500">Your Name</label>

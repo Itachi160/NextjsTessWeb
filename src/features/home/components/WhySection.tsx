@@ -35,7 +35,7 @@ function Counter({ target, suffix = '', duration = 1500, decimals = 0 }: MetricP
 
     let start = 0;
     const end = target;
-    const steps = 60;
+    const steps = 24; // Reduced from 60 to prevent React render thrashing
     const stepTime = duration / steps;
     const increment = end / steps;
 
@@ -65,7 +65,10 @@ function Counter({ target, suffix = '', duration = 1500, decimals = 0 }: MetricP
 // 1. Radar Scanning Animation for Active Pilots
 function ActivePilotsAnimation() {
   return (
-    <div className="w-12 h-12 relative flex items-center justify-center bg-blue-500/5 rounded-xl border border-blue-500/10 overflow-hidden">
+    <div
+      className="w-12 h-12 relative flex items-center justify-center bg-blue-500/5 rounded-xl border border-blue-500/10 overflow-hidden"
+      style={{ willChange: 'transform', transform: 'translate3d(0,0,0)' }}
+    >
       <svg className="w-9 h-9" viewBox="0 0 100 100">
         {/* Concentric rings */}
         <circle cx="50" cy="50" r="45" fill="none" stroke="rgba(59, 130, 246, 0.1)" strokeWidth="1" />
@@ -102,7 +105,10 @@ function ActivePilotsAnimation() {
 // 2. Orbiting Tech Nodes Animation for Training Stacks
 function TrainingStacksAnimation() {
   return (
-    <div className="w-12 h-12 relative flex items-center justify-center bg-cyan-500/5 rounded-xl border border-cyan-500/10">
+    <div
+      className="w-12 h-12 relative flex items-center justify-center bg-cyan-500/5 rounded-xl border border-cyan-500/10"
+      style={{ willChange: 'transform', transform: 'translate3d(0,0,0)' }}
+    >
       <svg className="w-9 h-9" viewBox="0 0 100 100">
         {/* Core node */}
         <circle cx="50" cy="50" r="6" fill="#06b6d4" />
@@ -147,7 +153,10 @@ function TrainingStacksAnimation() {
 // 3. Oscilloscope Sine Wave for Client SLA
 function SlaUptimeAnimation() {
   return (
-    <div className="w-12 h-12 relative flex items-center justify-center bg-purple-500/5 rounded-xl border border-purple-500/10 overflow-hidden">
+    <div
+      className="w-12 h-12 relative flex items-center justify-center bg-purple-500/5 rounded-xl border border-purple-500/10 overflow-hidden"
+      style={{ willChange: 'transform', transform: 'translate3d(0,0,0)' }}
+    >
       <svg className="w-10 h-10" viewBox="0 0 100 100" preserveAspectRatio="none">
         {/* Grid lines */}
         <line x1="0" y1="25" x2="100" y2="25" stroke="rgba(168, 85, 247, 0.05)" strokeWidth="1" />
@@ -191,7 +200,10 @@ function SlaUptimeAnimation() {
 // 4. Staggered Growth Bars for Incubated Talent
 function TalentMeterAnimation() {
   return (
-    <div className="w-12 h-12 relative flex items-center justify-center bg-pink-500/5 rounded-xl border border-pink-500/10">
+    <div
+      className="w-12 h-12 relative flex items-center justify-center bg-pink-500/5 rounded-xl border border-pink-500/10"
+      style={{ willChange: 'transform', transform: 'translate3d(0,0,0)' }}
+    >
       <svg className="w-9 h-9" viewBox="0 0 100 100">
         {/* Core framework container */}
         <rect x="15" y="15" width="70" height="70" rx="6" fill="none" stroke="rgba(236, 72, 153, 0.1)" strokeWidth="1.5" />

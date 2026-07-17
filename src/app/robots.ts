@@ -7,8 +7,8 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: '/login', // Disallow crawling the private access portal
+      disallow: '/login',
     },
-    sitemap: 'https://tesseractsys.com/sitemap.xml',
+    sitemap: 'https://tesseractinfosystems.com/sitemap.xml',
   };
 }

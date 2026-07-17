@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://cloudsource.tech/sitemap.xml
+Sitemap: https://tesseractinfosystems.com/sitemap.xml

@@ -104,6 +104,7 @@ export default function CareersSection() {
               onMouseEnter={() => setCursorType('hover')}
               onMouseLeave={() => setCursorType('default')}
               className="glass-card p-8 rounded-3xl border border-white/5 hover:border-cyber-cyan/35 transition-colors group flex flex-col justify-between min-h-[260px] shadow-lg"
+              style={{ willChange: 'transform, opacity' }}
             >
               <div>
                 <div className="flex flex-wrap gap-4 text-[10px] font-mono text-gray-500 uppercase">

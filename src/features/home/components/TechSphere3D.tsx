@@ -351,10 +351,10 @@ function TechSphere3D({ onSelect, selectedTech }: TechSphere3DProps) {
         // Hide or disable if too deep in the back
         if (rotated.z < -0.6) {
           el.style.pointerEvents = 'none';
-          el.style.display = 'none';
+          el.style.visibility = 'hidden';
         } else {
           el.style.pointerEvents = 'auto';
-          el.style.display = 'flex';
+          el.style.visibility = 'visible';
         }
       });
 
@@ -439,6 +439,7 @@ function TechSphere3D({ onSelect, selectedTech }: TechSphere3DProps) {
               alt={tech.name}
               className="w-7 h-7 object-contain pointer-events-none"
               loading="lazy"
+              decoding="async"
               onError={(e) => {
                 (e.target as HTMLImageElement).style.display = 'none';
                 const parent = (e.target as HTMLImageElement).parentElement;

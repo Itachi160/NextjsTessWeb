@@ -2,13 +2,13 @@ import { useEffect, useState, useRef, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useUIStore } from '../store/uiStore';
 
-// Easing helpers for Stage 2 circular animations
+// Easing utilities
 const easeOutQuad = (x: number) => x * (2 - x);
 const easeInQuad = (x: number) => x * x;
 const easeOutCubic = (x: number) => 1 - Math.pow(1 - x, 3);
 const easeOutExpo = (x: number) => x === 1 ? 1 : 1 - Math.pow(2, -10 * x);
 
-// Color palette definitions for Stage 2 circle arcs
+// Color config
 const PAT_COLORS = [
   '#ef2d56',
   '#f1a632',
@@ -32,20 +32,18 @@ export default function Preloader() {
   const innerRadius = 138;
   const outerRadius = 162;
 
-  // Refs for Stage 2 (Circular Matrix Loader)
+  // Component refs
   const outerCircleRef = useRef<SVGCircleElement>(null);
   const innerCirclesRefs = useRef<(SVGCircleElement | null)[]>([]);
   const dotGridRef = useRef<SVGGElement>(null);
   const logoWrapperRef = useRef<HTMLDivElement>(null);
   const logoImageRef = useRef<HTMLImageElement>(null);
   const preloaderContainerRef = useRef<HTMLDivElement>(null);
-  
-  // Spark Refs (Welding effect for Stage 2 segments)
   const innerSparksRefs = useRef<(SVGCircleElement | null)[]>([]);
 
   // Memoized dot grid coordinates
   const dotGrid = useMemo(() => {
-    const dots = [];
+    const dots: { x: number; y: number }[] = [];
     const size = 11;
     const spacing = 12;
     const start = center - Math.floor(size / 2) * spacing;
@@ -64,8 +62,7 @@ export default function Preloader() {
     return dots;
   }, []);
 
-  // Stage 1 Transition timer: triggers Stage 2 circular matrix boot
-  // Fires at 1750ms (while the sweep is still visible) for a seamless handoff
+  // Transition trigger
   useEffect(() => {
     const timer = setTimeout(() => {
       setTimelineStage('boot');
@@ -73,7 +70,7 @@ export default function Preloader() {
     return () => clearTimeout(timer);
   }, []);
 
-  // Stage 2 (Circular Matrix) high-performance animation loop
+  // Main loop animation
   useEffect(() => {
     if (timelineStage !== 'boot') return;
 
@@ -97,7 +94,7 @@ export default function Preloader() {
       const dt = now - lastTime;
       lastTime = now;
 
-      // ---- Phase 2.1: Quick Init (0 - 100ms) ----
+      // Setup initial state
       if (elapsedBoot < 100) {
         innerCirclesRefs.current.forEach((circle) => {
           if (circle) circle.style.opacity = '0';
@@ -113,7 +110,7 @@ export default function Preloader() {
         if (dotGridRef.current) dotGridRef.current.style.opacity = '0';
       }
 
-      // ---- Phase 2.2: Color Patches sequential power-on with sparks (100 - 1800ms) ----
+      // Draw inner circular segments
       else if (elapsedBoot < 1800) {
         if (logoImageRef.current) logoImageRef.current.style.opacity = '0';
         const localT = elapsedBoot - 100;
@@ -137,12 +134,12 @@ export default function Preloader() {
             const seg = (innerPerimeter / 7) * 0.75;
             circle.setAttribute('stroke-dashoffset', String(seg * (1 - segProgress)));
 
-            // LED Ignition Pulse
+            // Pulse effect
             const flash = 1.0 + 1.2 * Math.sin(lp * Math.PI) * Math.exp(-lp * 2.5);
             circle.setAttribute('stroke-width', String(6.5 * flash));
             circle.style.filter = `drop-shadow(0 0 ${12 * lp}px ${circle.getAttribute('stroke')})`;
 
-            // Welding spark riding segment head
+            // Spark alignment
             if (spark) {
               if (lp < 0.99) {
                 spark.style.opacity = '1';
@@ -168,7 +165,7 @@ export default function Preloader() {
         });
       }
 
-      // ---- Phase 2.3: Outer Ring Formation (1800 - 3000ms, NO white spark dot!) ----
+      // Outer ring assembly
       else if (elapsedBoot < 3000) {
         if (logoImageRef.current) logoImageRef.current.style.opacity = '0';
         innerCirclesRefs.current.forEach((circle) => {
@@ -192,7 +189,7 @@ export default function Preloader() {
         }
       }
 
-      // ---- Phase 2.4: Ring Rotation (3000 - 3800ms) ----
+      // Rotation sequence
       else if (elapsedBoot < 3800) {
         if (logoImageRef.current) logoImageRef.current.style.opacity = '0';
         if (outerCircleRef.current) {
@@ -216,7 +213,7 @@ export default function Preloader() {
         });
       }
 
-      // ---- Phase 2.5: Inner Logo Reveal (3800 - 5000ms) ----
+      // Logo scaling
       else if (elapsedBoot < 5000) {
         rotationAngle += 120 * (dt / 1000);
         if (outerCircleRef.current) {
@@ -246,7 +243,7 @@ export default function Preloader() {
         }
       }
 
-      // ---- Phase 2.6: Loading Progress Breathing (5000 - 6000ms) ----
+      // Breathing effect
       else if (elapsedBoot < 6000) {
         rotationAngle += 120 * (dt / 1000);
         if (outerCircleRef.current) {
@@ -275,7 +272,7 @@ export default function Preloader() {
         }
       }
 
-      // ---- Phase 2.7: Settle & Flight (6000ms+) ----
+      // Transition to main view
       else {
         if (!flightTriggered) {
           flightTriggered = true;
@@ -365,9 +362,6 @@ export default function Preloader() {
         }}
         transition={{ duration: 1.1, ease: 'easeInOut' }}
       >
-        {/* =========================================================================
-            STAGE 1 — FULL-SCREEN "SYSTEM BOOT" & COUNTDOWN (Zero-Lag CSS Driven)
-            ========================================================================= */}
         {timelineStage === 'countdown' && (
           <div className="boot-container">
 
@@ -415,9 +409,6 @@ export default function Preloader() {
           </div>
         )}
 
-        {/* =========================================================================
-            STAGE 2 — CIRCULAR MATRIX LOADER UI
-            ========================================================================= */}
         {timelineStage === 'boot' && (
           <motion.div
             className="relative flex items-center justify-center w-[380px] h-[380px]"

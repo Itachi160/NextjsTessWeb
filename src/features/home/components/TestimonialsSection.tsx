@@ -89,7 +89,7 @@ export default function TestimonialsSection() {
                   onMouseEnter={() => setCursorType('hover')}
                   onMouseLeave={() => setCursorType('default')}
                   className={`glass-card p-8 md:p-12 rounded-3xl border ${item.border} ${item.shadow} flex flex-col gap-6 relative w-full`}
-                  style={{ transformStyle: 'preserve-3d', perspective: 1000 }}
+                  style={{ transformStyle: 'preserve-3d', perspective: 1000, willChange: 'transform, opacity' }}
                 >
                   {/* Quote Icon overlay */}
                   <Quote className="absolute top-8 right-8 w-20 h-20 text-white/5 pointer-events-none" />

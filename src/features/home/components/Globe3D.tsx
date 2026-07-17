@@ -263,10 +263,10 @@ function Globe3D({ onSelect, selectedOffice }: Globe3DProps) {
         // Hide or disable if too deep in the back
         if (p.z < -0.3) {
           el.style.pointerEvents = 'none';
-          el.style.display = 'none';
+          el.style.visibility = 'hidden';
         } else {
           el.style.pointerEvents = 'auto';
-          el.style.display = 'flex';
+          el.style.visibility = 'visible';
         }
       });
 

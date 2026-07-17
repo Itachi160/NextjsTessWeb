@@ -167,7 +167,7 @@ export default function HeroSection() {
               className="rounded-xl border border-white/[0.06] bg-space-darker/40 backdrop-blur-sm p-2 flex items-center justify-center"
               style={{ width: tech.size + 16, height: tech.size + 16 }}
             >
-              <img src={tech.logo} alt={tech.name} className="object-contain" style={{ width: tech.size, height: tech.size }} loading="lazy" />
+              <img src={tech.logo} alt={tech.name} className="object-contain" style={{ width: tech.size, height: tech.size }} loading="lazy" decoding="async" />
             </div>
             <motion.div
               className="absolute inset-0 rounded-xl border border-cyber-cyan/10"

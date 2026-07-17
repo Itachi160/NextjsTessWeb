@@ -167,6 +167,7 @@ export default function ProjectsSection() {
                     sizes="(max-width: 768px) 280px, 440px"
                     className="object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
                     loading="lazy"
+                    decoding="async"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-space-darkest via-space-darkest/40 to-transparent" />
                   <div className="absolute top-4 left-4">

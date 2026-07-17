@@ -3,7 +3,7 @@ import { MetadataRoute } from 'next';
 export const dynamic = 'force-static';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://tesseractsys.com';
+  const baseUrl = 'https://tesseractinfosystems.com';
   const routes = ['', '/about', '/services', '/solutions', '/careers', '/contact'];
 
   return routes.map((route) => ({

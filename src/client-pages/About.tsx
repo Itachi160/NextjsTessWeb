@@ -14,8 +14,7 @@ export default function About() {
 
   return (
     <div className="pt-32 pb-24 px-6 max-w-7xl mx-auto flex flex-col gap-16 relative z-10" style={{ background: 'linear-gradient(180deg, #03050d 0%, #070b19 40%, #03050d 100%)' }}>
-      
-      {/* Page Title */}
+
       <div className="flex flex-col gap-4">
         <span className="text-xs uppercase font-mono tracking-widest text-cyber-cyan font-bold">Company Profile</span>
         <h1 className="text-4xl md:text-6xl font-black text-white leading-none">
@@ -29,10 +28,8 @@ export default function About() {
         </p>
       </div>
 
-      {/* Grid: Pillars */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        
-        {/* Card 1: Enterprise Engineering */}
+
         <div
           onMouseEnter={() => setCursorType('hover')}
           onMouseLeave={() => setCursorType('default')}
@@ -49,7 +46,6 @@ export default function About() {
           </div>
         </div>
 
-        {/* Card 2: Security & Compliance */}
         <div
           onMouseEnter={() => setCursorType('hover')}
           onMouseLeave={() => setCursorType('default')}
@@ -67,7 +63,6 @@ export default function About() {
         </div>
       </div>
 
-      {/* Leadership Section */}
       <div>
         <h2 className="text-2xl font-black mb-8 text-glow-cyan text-cyber-cyan">Engineering Leadership</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -89,7 +84,6 @@ export default function About() {
         </div>
       </div>
 
-      {/* Certifications row */}
       <div className="glass-card p-8 rounded-3xl border border-white/5 flex flex-col md:flex-row items-center justify-between gap-6">
         <div>
           <h4 className="text-white font-extrabold text-base flex items-center gap-2">

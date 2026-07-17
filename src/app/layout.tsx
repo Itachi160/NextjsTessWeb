@@ -25,13 +25,15 @@ const firaCode = Fira_Code({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://tesseractsys.com'),
+  metadataBase: new URL('https://tesseractinfosystems.com'),
   title: {
-    default: 'Tesseract Infosystems | Enterprise Software & Cloud Engineering',
-    template: '%s | Tesseract Infosystems',
+    default: 'Tesseract Tech & Cloud Systems | Tesseract Infosystems',
+    template: '%s | Tesseract Tech & Systems',
   },
-  description: 'Tesseract Infosystems designs and deploys immersive, high-performance, enterprise-grade cloud systems, custom software platforms, and artificial intelligence solutions.',
+  description: 'Tesseract Infosystems (Tesseract Tech / Tesseract Sys) designs and deploys high-performance custom software platforms, cloud-native architectures, and enterprise AI systems.',
   keywords: [
+    'Tesseract Tech',
+    'Tesseract Sys',
     'Tesseract Infosystems',
     'Enterprise Software Engineering',
     'Cloud-Native Cloud Systems',
@@ -62,24 +64,25 @@ export const metadata: Metadata = {
     canonical: '/',
   },
   openGraph: {
-    title: 'Tesseract Infosystems | Enterprise Software & Cloud Engineering',
-    description: 'Tesseract Infosystems designs and deploys immersive, high-performance, enterprise-grade cloud systems, custom software platforms, and artificial intelligence solutions.',
-    url: 'https://tesseractsys.com',
+    title: 'Tesseract Tech & Cloud Systems | Tesseract Infosystems',
+    description: 'Tesseract Infosystems (Tesseract Tech / Tesseract Sys) designs and deploys high-performance custom software platforms, cloud-native architectures, and enterprise AI systems.',
+    url: 'https://tesseractinfosystems.com',
     siteName: 'Tesseract Infosystems',
     locale: 'en_US',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Tesseract Infosystems | Enterprise Software & Cloud Engineering',
-    description: 'Tesseract Infosystems designs and deploys immersive, high-performance, enterprise-grade cloud systems, custom software platforms, and artificial intelligence solutions.',
+    title: 'Tesseract Tech & Cloud Systems | Tesseract Infosystems',
+    description: 'Tesseract Infosystems (Tesseract Tech / Tesseract Sys) designs and deploys high-performance custom software platforms, cloud-native architectures, and enterprise AI systems.',
     creator: '@tesseractsys',
   },
   icons: {
     icon: [
-      { url: '/favicon.svg', type: 'image/svg+xml' },
-      { url: '/Logo Hd.png', type: 'image/png' },
+      { url: '/favicon.png', type: 'image/png' },
     ],
+    shortcut: '/favicon.png',
+    apple: '/favicon.png',
   },
 };
 
@@ -91,10 +94,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${outfit.variable} ${inter.variable} ${firaCode.variable} scrollbar-none`}>
       <head>
+        <link rel="icon" href="/favicon.png" type="image/png" />
+        <link rel="apple-touch-icon" href="/favicon.png" />
         {/* Preconnect to JSdelivr CDN for icons, matching index.html */}
         <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
         <link rel="preload" as="image" href="/Logo Hd.webp" fetchPriority="high" />
-        {/* JSON-LD Structured Data Schema Markup to help Google index business parameters */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -102,11 +106,11 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "ProfessionalService",
               "name": "Tesseract Infosystems",
-              "image": "https://tesseractsys.com/Logo%20Hd.png",
-              "@id": "https://tesseractsys.com/#organization",
-              "url": "https://tesseractsys.com",
+              "image": "https://tesseractinfosystems.com/Logo%20Hd.png",
+              "@id": "https://tesseractinfosystems.com/#organization",
+              "url": "https://tesseractinfosystems.com",
               "telephone": "+91 20 5555 0199",
-              "email": "contact@tesseractsys.com",
+              "email": "contact@tesseractinfosystems.com",
               "address": {
                 "@type": "PostalAddress",
                 "streetAddress": "Ozarde Estate, Tc College Road",

@@ -314,23 +314,28 @@ export default function KeyboardAssemblySection() {
   // Framer Motion transforms tied to smoothScroll to keep cards, texts, and canvas fully synchronized
   const heroOpacity = useTransform(smoothScroll, [0, 0.12, 0.18], [1, 1, 0]);
   const heroY = useTransform(smoothScroll, [0, 0.12, 0.18], [0, -30, -50]);
-  const heroDisplay = useTransform(smoothScroll, (v) => v > 0.18 ? 'none' : 'flex');
+  const heroVisibility = useTransform(smoothScroll, (v) => v > 0.18 ? 'hidden' : 'visible');
+  const heroPointerEvents = useTransform(smoothScroll, (v) => v > 0.18 ? 'none' : 'auto');
 
   const sec2Opacity = useTransform(smoothScroll, [0.18, 0.23, 0.40, 0.45], [0, 1, 1, 0]);
   const sec2X = useTransform(smoothScroll, [0.18, 0.23, 0.40, 0.45], [-50, 0, 0, -50]);
-  const sec2Display = useTransform(smoothScroll, (v) => (v < 0.18 || v > 0.45) ? 'none' : 'block');
+  const sec2Visibility = useTransform(smoothScroll, (v) => (v < 0.18 || v > 0.45) ? 'hidden' : 'visible');
+  const sec2PointerEvents = useTransform(smoothScroll, (v) => (v < 0.18 || v > 0.45) ? 'none' : 'auto');
 
   const sec3Opacity = useTransform(smoothScroll, [0.45, 0.50, 0.65, 0.70], [0, 1, 1, 0]);
   const sec3X = useTransform(smoothScroll, [0.45, 0.50, 0.65, 0.70], [50, 0, 0, 50]);
-  const sec3Display = useTransform(smoothScroll, (v) => (v < 0.45 || v > 0.70) ? 'none' : 'block');
+  const sec3Visibility = useTransform(smoothScroll, (v) => (v < 0.45 || v > 0.70) ? 'hidden' : 'visible');
+  const sec3PointerEvents = useTransform(smoothScroll, (v) => (v < 0.45 || v > 0.70) ? 'none' : 'auto');
 
   const sec4Opacity = useTransform(smoothScroll, [0.70, 0.75, 0.84, 0.88], [0, 1, 1, 0]);
   const sec4X = useTransform(smoothScroll, [0.70, 0.75, 0.84, 0.88], [-50, 0, 0, -50]);
-  const sec4Display = useTransform(smoothScroll, (v) => (v < 0.70 || v > 0.88) ? 'none' : 'block');
+  const sec4Visibility = useTransform(smoothScroll, (v) => (v < 0.70 || v > 0.88) ? 'hidden' : 'visible');
+  const sec4PointerEvents = useTransform(smoothScroll, (v) => (v < 0.70 || v > 0.88) ? 'none' : 'auto');
 
   const sec5Opacity = useTransform(smoothScroll, [0.88, 0.93, 1.0], [0, 1, 1]);
   const sec5Y = useTransform(smoothScroll, [0.88, 0.93, 1.0], [50, 0, 0]);
-  const sec5Display = useTransform(smoothScroll, (v) => v < 0.88 ? 'none' : 'flex');
+  const sec5Visibility = useTransform(smoothScroll, (v) => v < 0.88 ? 'hidden' : 'visible');
+  const sec5PointerEvents = useTransform(smoothScroll, (v) => v < 0.88 ? 'none' : 'auto');
 
   return (
     <div
@@ -400,8 +405,8 @@ export default function KeyboardAssemblySection() {
         {/* ═══ SCROLLING STORYTELLING BEATS OVERLAYS ═══ */}
 
         <motion.div
-          className="absolute inset-x-6 top-1/2 -translate-y-1/2 flex flex-col items-center justify-center text-center max-w-3xl mx-auto z-20 font-sans pointer-events-auto"
-          style={{ opacity: heroOpacity, y: heroY, display: heroDisplay }}
+          className="absolute inset-x-6 top-1/2 -translate-y-1/2 flex flex-col items-center justify-center text-center max-w-3xl mx-auto z-20 font-sans"
+          style={{ opacity: heroOpacity, y: heroY, visibility: heroVisibility, pointerEvents: heroPointerEvents }}
         >
           <div className="glass-card p-8 md:p-12 rounded-3xl border border-white/10 bg-[#03050d]/85 backdrop-blur-md shadow-[0_12px_40px_rgba(0,0,0,0.6)] flex flex-col items-center max-w-2xl w-full">
             <div className="flex items-center gap-2 mb-4 bg-white/[0.02] border border-white/[0.06] px-3.5 py-1 rounded-full w-fit">
@@ -431,8 +436,8 @@ export default function KeyboardAssemblySection() {
 
         {/* 2. High End System Design Beat (Left Card) */}
         <motion.div
-          className="absolute left-4 right-4 bottom-8 md:bottom-auto md:left-16 md:right-auto md:top-1/2 md:-translate-y-1/2 max-w-sm md:max-w-md w-auto z-20 font-sans pointer-events-auto"
-          style={{ opacity: sec2Opacity, x: sec2X, display: sec2Display }}
+          className="absolute left-4 right-4 bottom-8 md:bottom-auto md:left-16 md:right-auto md:top-1/2 md:-translate-y-1/2 max-w-sm md:max-w-md w-auto z-20 font-sans"
+          style={{ opacity: sec2Opacity, x: sec2X, visibility: sec2Visibility, pointerEvents: sec2PointerEvents }}
         >
           <div className="glass-card p-6 md:p-8 rounded-3xl border border-[#0050FF]/25 shadow-[0_8px_32px_rgba(0,0,0,0.5),_0_0_20px_rgba(0,80,255,0.06)] hover:bg-[#070b19]/90 transition-colors duration-300 flex flex-col gap-4">
             <div className="w-10 h-10 rounded-xl bg-[#0050FF]/10 border border-[#0050FF]/30 flex items-center justify-center text-[#0050FF] shrink-0">
@@ -464,8 +469,8 @@ export default function KeyboardAssemblySection() {
 
         {/* 3. Data Engineering Beat (Right Card) */}
         <motion.div
-          className="absolute left-4 right-4 bottom-8 md:bottom-auto md:right-16 md:left-auto md:top-1/2 md:-translate-y-1/2 max-w-sm md:max-w-md w-auto z-20 font-sans pointer-events-auto"
-          style={{ opacity: sec3Opacity, x: sec3X, display: sec3Display }}
+          className="absolute left-4 right-4 bottom-8 md:bottom-auto md:right-16 md:left-auto md:top-1/2 md:-translate-y-1/2 max-w-sm md:max-w-md w-auto z-20 font-sans"
+          style={{ opacity: sec3Opacity, x: sec3X, visibility: sec3Visibility, pointerEvents: sec3PointerEvents }}
         >
           <div className="glass-card p-6 md:p-8 rounded-3xl border border-cyber-cyan/25 shadow-[0_8px_32px_rgba(0,0,0,0.5),_0_0_20px_rgba(6,182,212,0.06)] hover:bg-[#070b19]/90 transition-colors duration-300 flex flex-col gap-4">
             <div className="w-10 h-10 rounded-xl bg-cyber-cyan/10 border border-cyber-cyan/30 flex items-center justify-center text-cyber-cyan shrink-0">
@@ -497,8 +502,8 @@ export default function KeyboardAssemblySection() {
 
         {/* 4. AI & Intelligent Automation Beat (Left Card) */}
         <motion.div
-          className="absolute left-4 right-4 bottom-8 md:bottom-auto md:left-16 md:right-auto md:top-1/2 md:-translate-y-1/2 max-w-sm md:max-w-md w-auto z-20 font-sans pointer-events-auto"
-          style={{ opacity: sec4Opacity, x: sec4X, display: sec4Display }}
+          className="absolute left-4 right-4 bottom-8 md:bottom-auto md:left-16 md:right-auto md:top-1/2 md:-translate-y-1/2 max-w-sm md:max-w-md w-auto z-20 font-sans"
+          style={{ opacity: sec4Opacity, x: sec4X, visibility: sec4Visibility, pointerEvents: sec4PointerEvents }}
         >
           <div className="glass-card p-6 md:p-8 rounded-3xl border border-cyber-purple/25 shadow-[0_8px_32px_rgba(0,0,0,0.5),_0_0_20px_rgba(168,85,247,0.06)] hover:bg-[#070b19]/90 transition-colors duration-300 flex flex-col gap-4">
             <div className="w-10 h-10 rounded-xl bg-cyber-purple/10 border border-cyber-purple/30 flex items-center justify-center text-cyber-purple shrink-0">
@@ -530,8 +535,8 @@ export default function KeyboardAssemblySection() {
 
         {/* 5. Cloud-Native Engineering Beat (Centered) */}
         <motion.div
-          className="absolute inset-x-4 bottom-6 md:bottom-auto md:inset-x-6 md:top-1/2 md:-translate-y-1/2 flex flex-col items-center justify-center text-center max-w-3xl mx-auto z-20 font-sans pointer-events-auto"
-          style={{ opacity: sec5Opacity, y: sec5Y, display: sec5Display }}
+          className="absolute inset-x-4 bottom-6 md:bottom-auto md:inset-x-6 md:top-1/2 md:-translate-y-1/2 flex flex-col items-center justify-center text-center max-w-3xl mx-auto z-20 font-sans"
+          style={{ opacity: sec5Opacity, y: sec5Y, visibility: sec5Visibility, pointerEvents: sec5PointerEvents }}
         >
           <div className="glass-card p-8 md:p-12 rounded-3xl border border-[#0050FF]/25 bg-[#03050d]/85 backdrop-blur-md shadow-[0_12px_40px_rgba(0,0,0,0.6)] flex flex-col items-center max-w-2xl w-full">
             <div className="flex items-center gap-2 mb-4 bg-[#00D6FF]/10 border border-[#00D6FF]/30 px-3 py-1 rounded-full w-fit">

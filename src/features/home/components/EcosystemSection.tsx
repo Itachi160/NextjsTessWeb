@@ -62,6 +62,8 @@ export default function EcosystemSection() {
                             src={selectedTech.logo}
                             alt={selectedTech.name}
                             className="w-6 h-6 sm:w-9 sm:h-9 object-contain pointer-events-none"
+                            loading="lazy"
+                            decoding="async"
                           />
                         </div>
                         <div>

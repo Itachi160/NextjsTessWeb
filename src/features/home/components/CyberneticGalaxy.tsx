@@ -1366,7 +1366,7 @@ export default function CyberneticGalaxy() {
                             boxShadow: isLogoActive ? `0 0 15px ${matched?.hexColor}50` : undefined,
                             background: isLogoActive ? `${matched?.hexColor}12` : undefined
                           }}>
-                          <img src={logo.logo} alt={logo.name} className="w-full h-full object-contain pointer-events-none" />
+                          <img src={logo.logo} alt={logo.name} className="w-full h-full object-contain pointer-events-none" loading="lazy" decoding="async" />
                         </div>
                         <span className="absolute right-11 top-1/2 -translate-y-1/2 text-[8px] font-mono bg-space-darkest px-2 py-0.5 rounded border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
                           {logo.name}
