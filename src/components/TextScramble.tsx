@@ -15,7 +15,7 @@ export default function TextScramble({
   className = '',
   trigger = true,
 }: TextScrambleProps) {
-  const [displayText, setDisplayText] = useState('');
+  const [displayText, setDisplayText] = useState(text);
 
   useEffect(() => {
     if (!trigger) {

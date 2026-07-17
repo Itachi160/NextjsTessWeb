@@ -76,34 +76,29 @@ export default function ProjectsSection() {
     const track = trackRef.current;
     if (!container || !track) return;
 
+    if (track.scrollWidth <= container.offsetWidth) return;
+
     let ctx: gsap.Context | null = null;
-
-    // Wait for layout to settle before measuring
-    const timer = setTimeout(() => {
-      if (track.scrollWidth <= container.offsetWidth) return;
-
-      ctx = gsap.context(() => {
-        gsap.to(track, {
-          x: () => -(track.scrollWidth - container.offsetWidth),
-          ease: 'none',
-          scrollTrigger: {
-            trigger: container,
-            pin: true,
-            scrub: 1,
-            start: 'top top',
-            end: () => `+=${track.scrollWidth - container.offsetWidth}`,
-            invalidateOnRefresh: true,
-            onToggle: (self) => {
-              // Store reference for targeted cleanup
-              scrollTriggerRef.current = self;
-            },
+    ctx = gsap.context(() => {
+      gsap.to(track, {
+        x: () => -(track.scrollWidth - container.offsetWidth),
+        ease: 'none',
+        scrollTrigger: {
+          trigger: container,
+          pin: true,
+          scrub: 1,
+          start: 'top top',
+          end: () => `+=${track.scrollWidth - container.offsetWidth}`,
+          invalidateOnRefresh: true,
+          onToggle: (self) => {
+            // Store reference for targeted cleanup
+            scrollTriggerRef.current = self;
           },
-        });
-      }, container);
-    }, 100);
+        },
+      });
+    }, container);
 
     return () => {
-      clearTimeout(timer);
       if (ctx) {
         ctx.revert();
       }
