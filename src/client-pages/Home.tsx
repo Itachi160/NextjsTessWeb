@@ -43,11 +43,9 @@ export default function Home() {
 
       <div className="h-px w-full bg-gradient-to-r from-transparent via-cyber-purple/10 to-transparent" />
 
-      <div style={{ background: 'rgba(3, 5, 13, 0.65)' }} className="relative content-visibility-auto">
+      <div className="relative z-30 bg-[#03050d]">
         <EcosystemSection />
       </div>
-
-      <div className="h-px w-full bg-gradient-to-r from-transparent via-cyber-cyan/10 to-transparent" />
 
       <ProjectsSection />
       <div className="h-px w-full bg-gradient-to-r from-transparent via-cyber-purple/10 to-transparent" />

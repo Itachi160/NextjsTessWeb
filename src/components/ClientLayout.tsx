@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -10,10 +10,10 @@ import CinematicTransition from './CinematicTransition';
 import { MessageSquare } from 'lucide-react';
 import { useUIStore } from '../store/uiStore';
 import { motion } from 'framer-motion';
-import Lenis from 'lenis';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import dynamic from 'next/dynamic';
+import LenisProvider from './LenisProvider';
 
 // Register ScrollTrigger client-side
 if (typeof window !== 'undefined') {
@@ -45,44 +45,6 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
     };
   }, []);
 
-  // Initialize Lenis smooth scroll on mount
-  useEffect(() => {
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // easeOutExpo
-      orientation: 'vertical',
-      gestureOrientation: 'vertical',
-      smoothWheel: true,
-      syncTouch: false, // Syncs touch scrolling on mobile to emulate smooth scrolling
-      touchMultiplier: 1.5,
-    });
-
-    // Synchronize Lenis scroll position update checks with GSAP ScrollTrigger
-    lenis.on('scroll', ScrollTrigger.update);
-
-    const updateLenis = (time: number) => {
-      // time is in seconds from gsap.ticker, lenis expects milliseconds
-      lenis.raf(time * 1000);
-    };
-
-    gsap.ticker.add(updateLenis);
-    gsap.ticker.lagSmoothing(0);
-
-    return () => {
-      gsap.ticker.remove(updateLenis);
-      lenis.destroy();
-    };
-  }, []);
-
-  // Reset scroll ONLY on actual page transitions (prevents scrolling to top on HMR hot-reloads or tab focus re-syncs)
-  const prevPathname = useRef<string | null>(null);
-  useEffect(() => {
-    if (prevPathname.current !== null && prevPathname.current !== pathname) {
-      window.scrollTo(0, 0);
-    }
-    prevPathname.current = pathname;
-  }, [pathname]);
-
   const handleContactClick = () => {
     setIsTransitioning(true);
     setTimeout(() => {
@@ -98,6 +60,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   const showThreeCanvas = pathname !== '/login';
 
   return (
+    <LenisProvider>
     <div className="relative min-h-screen text-white">
       {/* Cinematic intro preloader */}
       <Preloader />
@@ -166,5 +129,6 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
       {/* Custom Cursor */}
       <CustomCursor />
     </div>
+    </LenisProvider>
   );
 }

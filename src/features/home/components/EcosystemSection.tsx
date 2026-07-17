@@ -1,6 +1,8 @@
+'use client';
+
 import { useRef, useState } from 'react';
 import { Compass, Network, Cpu } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useScroll } from 'framer-motion';
 import ScrollReveal from '../../../components/ScrollReveal';
 import dynamic from 'next/dynamic';
 import type { TechItem } from './TechSphere3D';
@@ -11,16 +13,21 @@ export default function EcosystemSection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [selectedTech, setSelectedTech] = useState<TechItem | null>(null);
 
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start start', 'end end'],
+  });
+
   return (
-    <div ref={containerRef} className="relative h-[220vh] lg:h-[320vh] w-full bg-[#03050d]">
-      {/* Sticky wrapper locks the section in viewport during scroll */}
-      <section className="sticky top-0 h-screen w-full flex flex-col justify-center overflow-hidden pt-24 pb-8 px-4 sm:px-6">
+    <div ref={containerRef} className="relative z-30 h-[180vh] lg:h-[220vh] w-full bg-[#03050d]">
+      {/* Sticky wrapper — opaque + high z so cards below cannot flash through */}
+      <section className="sticky top-0 z-30 h-screen w-full flex flex-col justify-center overflow-hidden bg-[#03050d] pt-24 pb-8 px-4 sm:px-6 isolate">
         
         {/* Background ambient glows */}
         <div className="absolute top-1/2 left-1/4 w-[500px] h-[500px] rounded-full bg-cyber-cyan/5 blur-[150px] pointer-events-none -translate-y-1/2" />
         <div className="absolute bottom-0 right-0 w-[400px] h-[400px] rounded-full bg-cyber-purple/5 blur-[120px] pointer-events-none" />
 
-        <div className="max-w-7xl mx-auto font-sans w-full z-10">
+        <div className="max-w-7xl mx-auto font-sans w-full relative z-10">
           {/* Header */}
           <ScrollReveal direction="up" className="text-center mb-4 sm:mb-10">
             <h2 className="text-[10px] sm:text-xs uppercase font-mono tracking-widest text-cyber-cyan font-semibold mb-1 sm:mb-3">
@@ -38,7 +45,7 @@ export default function EcosystemSection() {
           <div className="flex flex-col lg:flex-row gap-4 sm:gap-8 items-center w-full">
             {/* Left: 3D Sphere Visual */}
             <div className="w-full lg:w-1/2 flex justify-center items-center relative min-h-[260px] sm:min-h-[320px] lg:min-h-[460px]">
-              <TechSphere3D onSelect={setSelectedTech} selectedTech={selectedTech} />
+              <TechSphere3D onSelect={setSelectedTech} selectedTech={selectedTech} scrollProgress={scrollYProgress} />
             </div>
 
             {/* Right: Details Panel */}

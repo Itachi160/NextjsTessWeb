@@ -68,7 +68,6 @@ export default function ProjectsSection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const setCursorType = useUIStore((state) => state.setCursorType);
-  // Keep a ref to the ScrollTrigger instance so we can kill only it on cleanup
   const scrollTriggerRef = useRef<ScrollTrigger | null>(null);
 
   useEffect(() => {
@@ -76,35 +75,87 @@ export default function ProjectsSection() {
     const track = trackRef.current;
     if (!container || !track) return;
 
-    if (track.scrollWidth <= container.offsetWidth) return;
+    const getScrollDistance = () => {
+      const containerWidth = container.offsetWidth;
+      const trackWidth = track.scrollWidth;
+      return Math.max(0, trackWidth - containerWidth);
+    };
 
     let ctx: gsap.Context | null = null;
-    ctx = gsap.context(() => {
-      gsap.to(track, {
-        x: () => -(track.scrollWidth - container.offsetWidth),
-        ease: 'none',
-        scrollTrigger: {
-          trigger: container,
-          pin: true,
-          scrub: 1,
-          start: 'top top',
-          end: () => `+=${track.scrollWidth - container.offsetWidth}`,
-          invalidateOnRefresh: true,
-          onToggle: (self) => {
-            // Store reference for targeted cleanup
-            scrollTriggerRef.current = self;
-          },
-        },
+    let refreshQueued = false;
+
+    const queueRefresh = () => {
+      if (refreshQueued) return;
+      refreshQueued = true;
+      requestAnimationFrame(() => {
+        refreshQueued = false;
+        ScrollTrigger.refresh();
       });
-    }, container);
+    };
+
+    const setupScroll = () => {
+      if (getScrollDistance() <= 0) return;
+
+      ctx?.revert();
+
+      ctx = gsap.context(() => {
+        gsap.to(track, {
+          x: () => -getScrollDistance(),
+          ease: 'none',
+          scrollTrigger: {
+            trigger: container,
+            pin: true,
+            scrub: 0.8,
+            start: 'top top',
+            end: () => `+=${getScrollDistance()}`,
+            invalidateOnRefresh: true,
+            anticipatePin: 0,
+            pinSpacing: true,
+            onToggle: (self) => {
+              scrollTriggerRef.current = self;
+            },
+          },
+        });
+      }, container);
+
+      queueRefresh();
+    };
+
+    setupScroll();
+
+    const handleResize = () => {
+      setupScroll();
+    };
+
+    const images = track.querySelectorAll('img');
+    let pendingImages = 0;
+
+    const handleImageReady = () => {
+      pendingImages -= 1;
+      if (pendingImages <= 0) {
+        queueRefresh();
+      }
+    };
+
+    images.forEach((img) => {
+      if (!img.complete) {
+        pendingImages += 1;
+        img.addEventListener('load', handleImageReady, { once: true });
+        img.addEventListener('error', handleImageReady, { once: true });
+      }
+    });
+
+    window.addEventListener('resize', handleResize);
 
     return () => {
+      window.removeEventListener('resize', handleResize);
+      images.forEach((img) => {
+        img.removeEventListener('load', handleImageReady);
+        img.removeEventListener('error', handleImageReady);
+      });
       if (ctx) {
         ctx.revert();
       }
-      // CRITICAL FIX: Kill only our specific ScrollTrigger, not every instance.
-      // The old implementation called ScrollTrigger.getAll().forEach(t => t.kill())
-      // which wiped out ALL scroll animations site-wide on unmount.
       if (scrollTriggerRef.current) {
         scrollTriggerRef.current.kill();
         scrollTriggerRef.current = null;
@@ -113,7 +164,11 @@ export default function ProjectsSection() {
   }, []);
 
   return (
-    <section ref={containerRef} className="relative overflow-hidden" style={{ background: '#03050d' }}>
+    <section
+      ref={containerRef}
+      className="relative z-10 overflow-hidden"
+      style={{ background: '#03050d' }}
+    >
       {/* Top edge glow */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyber-cyan/20 to-transparent" />
 
@@ -202,8 +257,8 @@ export default function ProjectsSection() {
             );
           })}
 
-          {/* End spacer to ensure last card is fully visible and scrollable */}
-          <div className="w-[320px] md:w-[240px] shrink-0" />
+          {/* Trailing padding so the last card can scroll fully into view */}
+          <div className="w-6 md:w-12 shrink-0" aria-hidden="true" />
         </div>
       </div>
 

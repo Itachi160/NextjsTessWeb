@@ -2,13 +2,11 @@ import { useEffect, useState, useRef, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useUIStore } from '../store/uiStore';
 
-// Easing utilities
 const easeOutQuad = (x: number) => x * (2 - x);
 const easeInQuad = (x: number) => x * x;
 const easeOutCubic = (x: number) => 1 - Math.pow(1 - x, 3);
 const easeOutExpo = (x: number) => x === 1 ? 1 : 1 - Math.pow(2, -10 * x);
 
-// Color config
 const PAT_COLORS = [
   '#ef2d56',
   '#f1a632',
@@ -23,27 +21,25 @@ export default function Preloader() {
   const [timelineStage, setTimelineStage] = useState<'countdown' | 'boot'>('countdown');
   const [flightState, setFlightState] = useState<'intro' | 'flight'>('intro');
   const [targetRect, setTargetRect] = useState<{ left: number; top: number; width: number; height: number } | null>(null);
-  
+
   const preloaderDone = useUIStore((state) => state.preloaderDone);
   const setPreloaderDone = useUIStore((state) => state.setPreloaderDone);
 
-  // SVG dimensions for Stage 2
   const center = 190;
   const innerRadius = 138;
   const outerRadius = 162;
 
-  // Component refs
   const outerCircleRef = useRef<SVGCircleElement>(null);
   const innerCirclesRefs = useRef<(SVGCircleElement | null)[]>([]);
   const dotGridRef = useRef<SVGGElement>(null);
   const logoWrapperRef = useRef<HTMLDivElement>(null);
   const logoImageRef = useRef<HTMLImageElement>(null);
   const preloaderContainerRef = useRef<HTMLDivElement>(null);
+
   const innerSparksRefs = useRef<(SVGCircleElement | null)[]>([]);
 
-  // Memoized dot grid coordinates
   const dotGrid = useMemo(() => {
-    const dots: { x: number; y: number }[] = [];
+    const dots = [];
     const size = 11;
     const spacing = 12;
     const start = center - Math.floor(size / 2) * spacing;
@@ -62,7 +58,7 @@ export default function Preloader() {
     return dots;
   }, []);
 
-  // Transition trigger
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setTimelineStage('boot');
@@ -70,14 +66,13 @@ export default function Preloader() {
     return () => clearTimeout(timer);
   }, []);
 
-  // Main loop animation
   useEffect(() => {
     if (timelineStage !== 'boot') return;
 
     let rafId: number;
     let startTime = 0;
     let lastTime = 0;
-    
+
     let rotationAngle = 0;
     let currentSpeed = 0;
     let flightTriggered = false;
@@ -94,7 +89,6 @@ export default function Preloader() {
       const dt = now - lastTime;
       lastTime = now;
 
-      // Setup initial state
       if (elapsedBoot < 100) {
         innerCirclesRefs.current.forEach((circle) => {
           if (circle) circle.style.opacity = '0';
@@ -110,7 +104,6 @@ export default function Preloader() {
         if (dotGridRef.current) dotGridRef.current.style.opacity = '0';
       }
 
-      // Draw inner circular segments
       else if (elapsedBoot < 1800) {
         if (logoImageRef.current) logoImageRef.current.style.opacity = '0';
         const localT = elapsedBoot - 100;
@@ -129,30 +122,27 @@ export default function Preloader() {
             const easedLp = easeOutCubic(lp);
             circle.style.opacity = String(easedLp);
 
-            // Draw segment
             const segProgress = easeOutExpo(lp);
             const seg = (innerPerimeter / 7) * 0.75;
             circle.setAttribute('stroke-dashoffset', String(seg * (1 - segProgress)));
 
-            // Pulse effect
             const flash = 1.0 + 1.2 * Math.sin(lp * Math.PI) * Math.exp(-lp * 2.5);
             circle.setAttribute('stroke-width', String(6.5 * flash));
             circle.style.filter = `drop-shadow(0 0 ${12 * lp}px ${circle.getAttribute('stroke')})`;
 
-            // Spark alignment
             if (spark) {
               if (lp < 0.99) {
                 spark.style.opacity = '1';
                 const rotAngle = idx * (360 / 7);
                 const arcAngle = (360 / 7) * 0.75;
-                
+
                 const theta = (rotAngle + arcAngle * segProgress) * Math.PI / 180;
                 const sparkX = center + innerRadius * Math.cos(theta);
                 const sparkY = center + innerRadius * Math.sin(theta);
-                
+
                 spark.setAttribute('cx', String(sparkX));
                 spark.setAttribute('cy', String(sparkY));
-                
+
                 const fR = 2.5 + Math.random() * 2.5;
                 spark.setAttribute('r', String(fR));
                 spark.setAttribute('fill', '#ffffff');
@@ -165,7 +155,6 @@ export default function Preloader() {
         });
       }
 
-      // Outer ring assembly
       else if (elapsedBoot < 3000) {
         if (logoImageRef.current) logoImageRef.current.style.opacity = '0';
         innerCirclesRefs.current.forEach((circle) => {
@@ -189,7 +178,6 @@ export default function Preloader() {
         }
       }
 
-      // Rotation sequence
       else if (elapsedBoot < 3800) {
         if (logoImageRef.current) logoImageRef.current.style.opacity = '0';
         if (outerCircleRef.current) {
@@ -213,7 +201,6 @@ export default function Preloader() {
         });
       }
 
-      // Logo scaling
       else if (elapsedBoot < 5000) {
         rotationAngle += 120 * (dt / 1000);
         if (outerCircleRef.current) {
@@ -243,7 +230,6 @@ export default function Preloader() {
         }
       }
 
-      // Breathing effect
       else if (elapsedBoot < 6000) {
         rotationAngle += 120 * (dt / 1000);
         if (outerCircleRef.current) {
@@ -272,7 +258,6 @@ export default function Preloader() {
         }
       }
 
-      // Transition to main view
       else {
         if (!flightTriggered) {
           flightTriggered = true;
@@ -330,7 +315,6 @@ export default function Preloader() {
     return () => cancelAnimationFrame(rafId);
   }, [timelineStage]);
 
-  // Safety fallback timeout
   useEffect(() => {
     const safetyTimer = setTimeout(() => {
       console.warn('Preloader safety fallback triggered.');
@@ -352,9 +336,8 @@ export default function Preloader() {
     <AnimatePresence>
       <motion.div
         ref={preloaderContainerRef}
-        className={`fixed inset-0 z-[99999] bg-[#050505] flex flex-col items-center justify-center overflow-hidden transition-all duration-300 ${
-          flightState === 'flight' ? 'pointer-events-none' : 'pointer-events-auto'
-        }`}
+        className={`fixed inset-0 z-[99999] bg-[#050505] flex flex-col items-center justify-center overflow-hidden transition-all duration-300 ${flightState === 'flight' ? 'pointer-events-none' : 'pointer-events-auto'
+          }`}
         style={{ transform: 'translateZ(0)', willChange: 'transform' }}
         initial={{ backgroundColor: 'rgba(5, 5, 5, 1)' }}
         animate={{
@@ -362,14 +345,12 @@ export default function Preloader() {
         }}
         transition={{ duration: 1.1, ease: 'easeInOut' }}
       >
+
         {timelineStage === 'countdown' && (
           <div className="boot-container">
 
-
-            {/* Premium vignette overlay */}
             <div className="boot-vignette" />
 
-            {/* Stage 1 Traveling light line traces */}
             <svg
               viewBox="0 0 100 100"
               className="absolute inset-0 w-full h-full pointer-events-none transform-gpu"
@@ -379,20 +360,18 @@ export default function Preloader() {
                 <line x1="0" y1="30" x2="100" y2="30" className="trace-l2r" stroke="rgba(255,255,255,0.22)" strokeWidth="0.25" strokeDasharray="30 70" />
                 <line x1="100" y1="70" x2="0" y2="70" className="trace-r2l" stroke="rgba(255,255,255,0.22)" strokeWidth="0.25" strokeDasharray="30 70" />
                 <line x1="0" y1="50" x2="100" y2="50" className="trace-l2r" stroke="rgba(255,255,255,0.18)" strokeWidth="0.25" strokeDasharray="20 80" />
-                
+
                 <line x1="25" y1="0" x2="25" y2="100" className="trace-l2r" stroke="rgba(255,255,255,0.22)" strokeWidth="0.25" strokeDasharray="30 70" />
                 <line x1="75" y1="100" x2="75" y2="0" className="trace-r2l" stroke="rgba(255,255,255,0.22)" strokeWidth="0.25" strokeDasharray="30 70" />
                 <line x1="50" y1="0" x2="50" y2="100" className="trace-l2r" stroke="rgba(255,255,255,0.18)" strokeWidth="0.25" strokeDasharray="20 80" />
               </g>
 
-              {/* Stage 1 Geometric outlines */}
               <g className="boot-panels">
                 <rect x="8" y="10" width="22" height="12" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="0.2" />
                 <rect x="70" y="78" width="22" height="12" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="0.2" />
               </g>
             </svg>
 
-            {/* Stage 1 0 to 100% Countdown HUD */}
             <div className="boot-countdown-hud">
               <div className="count-number" />
               <div className="boot-diagnostic">
@@ -402,7 +381,6 @@ export default function Preloader() {
               </div>
             </div>
 
-            {/* Stage 1 Diagonal Energy Sweep */}
             <div className="absolute inset-0 boot-sweep bg-gradient-to-r from-transparent via-white/[0.04] to-transparent pointer-events-none transform-gpu" />
 
 
@@ -438,7 +416,7 @@ export default function Preloader() {
               }}
               transition={{ duration: 0.9, ease: 'easeInOut' }}
             >
-              {/* SVG circular color patches */}
+
               <g>
                 {Array.from({ length: 7 }).map((_, idx) => {
                   const rotAngle = idx * (360 / 7);
@@ -468,7 +446,6 @@ export default function Preloader() {
                 })}
               </g>
 
-              {/* Laser welding sparks on color patches */}
               <g>
                 {Array.from({ length: 7 }).map((_, idx) => (
                   <circle
@@ -487,7 +464,6 @@ export default function Preloader() {
                 ))}
               </g>
 
-              {/* Thin outer circular ring */}
               <circle
                 ref={outerCircleRef}
                 cx={center}
@@ -504,7 +480,6 @@ export default function Preloader() {
                 }}
               />
 
-              {/* Auxiliary aesthetic dashed circle */}
               <circle
                 cx={center}
                 cy={center}
@@ -515,7 +490,6 @@ export default function Preloader() {
                 strokeDasharray="3 6"
               />
 
-              {/* Static grid particles */}
               <g ref={dotGridRef} style={{ opacity: 0, willChange: 'opacity' }}>
                 {dotGrid.map((dot, idx) => (
                   <circle
@@ -529,7 +503,6 @@ export default function Preloader() {
               </g>
             </motion.svg>
 
-            {/* Central Logo */}
             <div
               ref={logoWrapperRef}
               className="relative z-10 w-48 h-48 flex items-center justify-center"
@@ -546,19 +519,18 @@ export default function Preloader() {
         )}
 
 
-      {/* Diagnostic text footer (only in boot stage) */}
-      {timelineStage === 'boot' && (
-        <motion.div
-          className="absolute bottom-16 text-[9px] font-mono tracking-[0.4em] uppercase text-gray-500 flex items-center gap-2 select-none"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: flightState === 'flight' ? 0 : 0.6 }}
-          transition={{ duration: 0.4 }}
-        >
-          <span className="w-1.5 h-1.5 rounded-full bg-cyber-cyan animate-pulse" />
-          Decentralizing Core Network Modules
-        </motion.div>
-      )}
-    </motion.div>
-  </AnimatePresence>
-);
+        {timelineStage === 'boot' && (
+          <motion.div
+            className="absolute bottom-16 text-[9px] font-mono tracking-[0.4em] uppercase text-gray-500 flex items-center gap-2 select-none"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: flightState === 'flight' ? 0 : 0.6 }}
+            transition={{ duration: 0.4 }}
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-cyber-cyan animate-pulse" />
+            Decentralizing Core Network Modules
+          </motion.div>
+        )}
+      </motion.div>
+    </AnimatePresence>
+  );
 }

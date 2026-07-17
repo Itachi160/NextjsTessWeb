@@ -1,4 +1,5 @@
 import { useRef, useEffect, useState, memo, useCallback } from 'react';
+import type { MotionValue } from 'framer-motion';
 
 export interface TechItem {
   name: string;
@@ -33,9 +34,10 @@ export const TECH_ITEMS: TechItem[] = [
 interface TechSphere3DProps {
   onSelect: (tech: TechItem | null) => void;
   selectedTech: TechItem | null;
+  scrollProgress?: MotionValue<number>;
 }
 
-function TechSphere3D({ onSelect, selectedTech }: TechSphere3DProps) {
+function TechSphere3D({ onSelect, selectedTech, scrollProgress }: TechSphere3DProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const itemRefs = useRef<(HTMLButtonElement | null)[]>([]);
@@ -363,6 +365,22 @@ function TechSphere3D({ onSelect, selectedTech }: TechSphere3DProps) {
 
     render();
 
+    const applyScrollProgress = (progress: number) => {
+      // Full rotation completes within the ecosystem section scroll range
+      scrollAngle.current = progress * Math.PI * 2;
+    };
+
+    if (scrollProgress) {
+      applyScrollProgress(scrollProgress.get());
+      const unsubscribe = scrollProgress.on('change', applyScrollProgress);
+      return () => {
+        cancelAnimationFrame(animId);
+        unsubscribe();
+        window.removeEventListener('resize', resize);
+        window.removeEventListener('resize', updateRectCache);
+      };
+    }
+
     const handleScroll = () => {
       scrollAngle.current = window.scrollY * 0.0035;
     };
@@ -377,7 +395,7 @@ function TechSphere3D({ onSelect, selectedTech }: TechSphere3DProps) {
       window.removeEventListener('resize', resize);
       window.removeEventListener('resize', updateRectCache);
     };
-  }, [isIntersecting, updateRectCache]);
+  }, [isIntersecting, updateRectCache, scrollProgress]);
 
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!rectRef.current) updateRectCache();

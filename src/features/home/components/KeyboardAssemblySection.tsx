@@ -1,40 +1,38 @@
 'use client';
 
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
-import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { Database, Server, Cpu, Play, ChevronRight, Activity } from 'lucide-react';
 import { useUIStore } from '../../../store/uiStore';
 import MagneticButton from '../../../components/MagneticButton';
 import { isSlowConnection, isLowEndDevice } from '../../../utils/performance';
 
-// Detect if slow connection or low-end hardware context is present
-const getAdaptiveFramesConfig = () => {
-  const isSlow = typeof window !== 'undefined' && (isSlowConnection() || isLowEndDevice());
-  return {
-    isSlow,
-    totalFrames: isSlow ? 41 : 81
-  };
-};
-
-const adaptiveConfig = getAdaptiveFramesConfig();
-const TOTAL_FRAMES = adaptiveConfig.totalFrames;
-
 // Image configuration helper
-const getFramePath = (index: number) => {
-  // On slow networks/devices, map index 0..40 to original frames 0..80 (even frames only)
-  const mappedIndex = adaptiveConfig.isSlow ? index * 2 : index;
+const getFramePath = (index: number, isSlow: boolean) => {
+  const mappedIndex = isSlow ? index * 2 : index;
   const paddedIndex = String(mappedIndex).padStart(3, '0');
-  return `/Keyboard Assemble Animation/Video 4_${paddedIndex}.webp`;
+  return encodeURI(`/Keyboard Assemble Animation/Video 4_${paddedIndex}.webp`);
 };
 
 // Global static cache to prevent re-preloading images when component remounts on page switches
 let cachedImages: HTMLImageElement[] = [];
 let cachedImagesLoaded = false;
+let cachedFrameCount = 0;
 
 export default function KeyboardAssemblySection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const isIntersectingRef = useRef(false);
+  const drawFrameRef = useRef<(latest: number) => void>(() => {});
+
+  const { totalFrames, isSlow } = useMemo(() => {
+    const slow = isSlowConnection() || isLowEndDevice();
+    return {
+      isSlow: slow,
+      totalFrames: slow ? 41 : 81,
+    };
+  }, []);
 
   const setCursorType = useUIStore((state) => state.setCursorType);
   const router = useRouter();
@@ -54,18 +52,17 @@ export default function KeyboardAssemblySection() {
   const [loadProgress, setLoadProgress] = useState(0);
   const [imagesArray, setImagesArray] = useState<HTMLImageElement[]>([]);
   const [activeSection, setActiveSection] = useState<'overview' | 'tactility' | 'latency' | 'orchestration' | 'deploy'>('overview');
-  const [isIntersecting, setIsIntersecting] = useState(false);
   const [shouldPreload, setShouldPreload] = useState(false);
 
   // Sync cache state on client mount to prevent hydration mismatch
   useEffect(() => {
-    if (cachedImagesLoaded) {
+    if (cachedImagesLoaded && cachedFrameCount === totalFrames) {
       setImagesLoaded(true);
       setLoadProgress(100);
       setImagesArray(cachedImages);
       setShouldPreload(true);
     }
-  }, []);
+  }, [totalFrames]);
 
   // Viewport intersection observer to control preloading and active animation states
   useEffect(() => {
@@ -74,7 +71,7 @@ export default function KeyboardAssemblySection() {
 
     // Trigger animations only when visible in viewport to save CPU cycles
     const animObserver = new IntersectionObserver(([entry]) => {
-      setIsIntersecting(entry.isIntersecting);
+      isIntersectingRef.current = entry.isIntersecting;
     }, { threshold: 0.01 });
 
     // Preload images 1200px in advance (while user is reading Hero/About sections)
@@ -94,9 +91,9 @@ export default function KeyboardAssemblySection() {
     };
   }, []);
 
-  // Preload all 81 frames when close to viewport or cached using a chunked queue
+  // Preload all frames when close to viewport or cached using a chunked queue
   useEffect(() => {
-    if (cachedImagesLoaded) {
+    if (cachedImagesLoaded && cachedFrameCount === totalFrames) {
       setImagesLoaded(true);
       setLoadProgress(100);
       setImagesArray(cachedImages);
@@ -110,23 +107,24 @@ export default function KeyboardAssemblySection() {
     const tempImages: HTMLImageElement[] = [];
 
     // Pre-initialize array with empty/unloaded images to maintain correct index mapping
-    for (let i = 0; i < TOTAL_FRAMES; i++) {
+    for (let i = 0; i < totalFrames; i++) {
       tempImages[i] = new Image();
     }
 
     const handleSingleLoad = () => {
       if (isAborted) return;
       loadedCount++;
-      const progress = Math.round((loadedCount / TOTAL_FRAMES) * 100);
+      const progress = Math.round((loadedCount / totalFrames) * 100);
       
       // Throttle state updates to steps of 5% to avoid React render thrashing
       if (progress % 5 === 0 || progress === 100) {
         setLoadProgress(progress);
       }
 
-      if (loadedCount === TOTAL_FRAMES) {
+      if (loadedCount === totalFrames) {
         cachedImages = tempImages;
         cachedImagesLoaded = true;
+        cachedFrameCount = totalFrames;
         setImagesArray(tempImages);
         setImagesLoaded(true);
       }
@@ -134,8 +132,8 @@ export default function KeyboardAssemblySection() {
 
     // Load initial critical frames immediately (first 12 frames)
     const initialBatchSize = 12;
-    for (let i = 0; i < Math.min(initialBatchSize, TOTAL_FRAMES); i++) {
-      tempImages[i].src = getFramePath(i);
+    for (let i = 0; i < Math.min(initialBatchSize, totalFrames); i++) {
+      tempImages[i].src = getFramePath(i, isSlow);
       tempImages[i].onload = handleSingleLoad;
       tempImages[i].onerror = () => {
         console.error(`Failed to load image frame at index: ${i}`);
@@ -145,7 +143,7 @@ export default function KeyboardAssemblySection() {
 
     // Load the rest sequentially in chunks to avoid clogging the network
     const remainingIndices = Array.from(
-      { length: TOTAL_FRAMES - initialBatchSize },
+      { length: totalFrames - initialBatchSize },
       (_, i) => i + initialBatchSize
     );
     const concurrentLimit = 6;
@@ -156,7 +154,7 @@ export default function KeyboardAssemblySection() {
       const currentIdx = remainingIndices[queueIndex++];
       
       const img = tempImages[currentIdx];
-      img.src = getFramePath(currentIdx);
+      img.src = getFramePath(currentIdx, isSlow);
       img.onload = () => {
         handleSingleLoad();
         loadNext();
@@ -176,22 +174,14 @@ export default function KeyboardAssemblySection() {
     return () => {
       isAborted = true;
     };
-  }, [shouldPreload]);
+  }, [shouldPreload, totalFrames, isSlow]);
 
-  // Set up scroll hooks
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start start', 'end end'],
   });
 
-  // Fast, highly responsive spring config to eliminate double-smoothing input delay
-  const smoothScroll = useSpring(scrollYProgress, {
-    damping: 30,
-    stiffness: 180,
-    restDelta: 0.0001,
-  });
-
-  // High-performance canvas drawing loop with event-driven spring scroll synchronization
+  // High-performance canvas drawing loop synced directly to scroll progress
   useEffect(() => {
     if (!imagesLoaded || imagesArray.length === 0) return;
 
@@ -200,13 +190,9 @@ export default function KeyboardAssemblySection() {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    if (!isIntersecting) return;
-
     let lastValue = -1;
-    // Track section in a ref to avoid calling setActiveSection on every frame
     let lastSection: typeof activeSection = 'overview';
 
-    // Cache rect to prevent layout thrashing inside high-frequency scroll loop
     let rect = canvas.getBoundingClientRect();
 
     const handleResize = () => {
@@ -223,85 +209,78 @@ export default function KeyboardAssemblySection() {
     };
 
     const drawFrame = (latest: number) => {
-      // Only call setActiveSection when section actually CHANGES (not every frame)
+      if (!isIntersectingRef.current) return;
+
       const newSection = getSectionForProgress(latest);
       if (newSection !== lastSection) {
         lastSection = newSection;
         setActiveSection(newSection);
       }
 
-      // Redraw only if the scroll value has shifted
-      if (latest !== lastValue) {
-        lastValue = latest;
+      if (Math.abs(latest - lastValue) < 0.0005) return;
+      lastValue = latest;
 
-        // Map scroll progress (0-0.85) to frame indices (0-80)
-        const rawFrame = latest < 0.85
-          ? (latest / 0.85) * (TOTAL_FRAMES - 1)
-          : (TOTAL_FRAMES - 1);
-        
-        // Retrieve frame numbers and the decimal ratio between them for cross-fading
-        const floatFrame = Math.min(TOTAL_FRAMES - 1, Math.max(0, rawFrame));
-        const frameIndex = Math.floor(floatFrame);
-        const nextFrameIndex = Math.min(TOTAL_FRAMES - 1, frameIndex + 1);
-        const ratio = floatFrame - frameIndex;
+      const rawFrame = latest < 0.85
+        ? (latest / 0.85) * (totalFrames - 1)
+        : (totalFrames - 1);
 
-        const img1 = imagesArray[frameIndex];
-        const img2 = imagesArray[nextFrameIndex];
+      const floatFrame = Math.min(totalFrames - 1, Math.max(0, rawFrame));
+      const frameIndex = Math.floor(floatFrame);
+      const nextFrameIndex = Math.min(totalFrames - 1, frameIndex + 1);
+      const ratio = floatFrame - frameIndex;
 
-        if (img1 && img1.complete) {
-          const dpr = Math.min(window.devicePixelRatio || 1, window.innerWidth < 768 ? 1.5 : 2.0);
+      const img1 = imagesArray[frameIndex];
+      const img2 = imagesArray[nextFrameIndex];
 
-          if (canvas.width !== rect.width * dpr || canvas.height !== rect.height * dpr) {
-            canvas.width = rect.width * dpr;
-            canvas.height = rect.height * dpr;
-            ctx.setTransform(1, 0, 0, 1, 0, 0);
-            ctx.scale(dpr, dpr);
-          }
+      if (img1 && img1.complete) {
+        const dpr = Math.min(window.devicePixelRatio || 1, window.innerWidth < 768 ? 1.5 : 2.0);
 
-          ctx.clearRect(0, 0, rect.width, rect.height);
-
-          const imgRatio = img1.width / img1.height;
-          const canvasRatio = rect.width / rect.height;
-
-          let drawW = rect.width;
-          let drawH = rect.height;
-          let drawX = 0;
-          let drawY = 0;
-
-          if (imgRatio > canvasRatio) {
-            drawW = rect.width;
-            drawH = rect.width / imgRatio;
-            drawY = (rect.height - drawH) / 2;
-          } else {
-            drawH = rect.height;
-            drawW = rect.height * imgRatio;
-            drawX = (rect.width - drawW) / 2;
-          }
-
-          ctx.imageSmoothingEnabled = true;
-          ctx.imageSmoothingQuality = 'high';
-
-          // Render first frame at full opacity
-          ctx.globalAlpha = 1.0;
-          ctx.drawImage(img1, drawX, drawY, drawW, drawH);
-
-          // Render second frame over it with variable opacity (cross-fade)
-          if (ratio > 0.005 && img2 && img2.complete && frameIndex !== nextFrameIndex) {
-            ctx.globalAlpha = ratio;
-            ctx.drawImage(img2, drawX, drawY, drawW, drawH);
-          }
-
-          // Reset opacity to default
-          ctx.globalAlpha = 1.0;
+        if (canvas.width !== rect.width * dpr || canvas.height !== rect.height * dpr) {
+          canvas.width = rect.width * dpr;
+          canvas.height = rect.height * dpr;
+          ctx.setTransform(1, 0, 0, 1, 0, 0);
+          ctx.scale(dpr, dpr);
         }
+
+        ctx.clearRect(0, 0, rect.width, rect.height);
+
+        const imgRatio = img1.width / img1.height;
+        const canvasRatio = rect.width / rect.height;
+
+        let drawW = rect.width;
+        let drawH = rect.height;
+        let drawX = 0;
+        let drawY = 0;
+
+        if (imgRatio > canvasRatio) {
+          drawW = rect.width;
+          drawH = rect.width / imgRatio;
+          drawY = (rect.height - drawH) / 2;
+        } else {
+          drawH = rect.height;
+          drawW = rect.height * imgRatio;
+          drawX = (rect.width - drawW) / 2;
+        }
+
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+
+        ctx.globalAlpha = 1.0;
+        ctx.drawImage(img1, drawX, drawY, drawW, drawH);
+
+        if (ratio > 0.005 && img2 && img2.complete && frameIndex !== nextFrameIndex) {
+          ctx.globalAlpha = ratio;
+          ctx.drawImage(img2, drawX, drawY, drawW, drawH);
+        }
+
+        ctx.globalAlpha = 1.0;
       }
     };
 
-    // Draw the initial frame immediately when component mounts or intersects
-    drawFrame(smoothScroll.get());
+    drawFrameRef.current = drawFrame;
+    drawFrame(scrollYProgress.get());
 
-    // Subscribe to smoothScroll changes — triggers only when spring value moves
-    const unsubscribe = smoothScroll.on('change', (latest) => {
+    const unsubscribe = scrollYProgress.on('change', (latest) => {
       drawFrame(latest);
     });
 
@@ -309,33 +288,49 @@ export default function KeyboardAssemblySection() {
       unsubscribe();
       window.removeEventListener('resize', handleResize);
     };
-  }, [imagesLoaded, imagesArray, smoothScroll, isIntersecting]);
+  }, [imagesLoaded, imagesArray, scrollYProgress, totalFrames]);
 
-  // Framer Motion transforms tied to smoothScroll to keep cards, texts, and canvas fully synchronized
-  const heroOpacity = useTransform(smoothScroll, [0, 0.12, 0.18], [1, 1, 0]);
-  const heroY = useTransform(smoothScroll, [0, 0.12, 0.18], [0, -30, -50]);
-  const heroVisibility = useTransform(smoothScroll, (v) => v > 0.18 ? 'hidden' : 'visible');
-  const heroPointerEvents = useTransform(smoothScroll, (v) => v > 0.18 ? 'none' : 'auto');
+  // Redraw when the section re-enters the viewport
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container || !imagesLoaded) return;
 
-  const sec2Opacity = useTransform(smoothScroll, [0.18, 0.23, 0.40, 0.45], [0, 1, 1, 0]);
-  const sec2X = useTransform(smoothScroll, [0.18, 0.23, 0.40, 0.45], [-50, 0, 0, -50]);
-  const sec2Visibility = useTransform(smoothScroll, (v) => (v < 0.18 || v > 0.45) ? 'hidden' : 'visible');
-  const sec2PointerEvents = useTransform(smoothScroll, (v) => (v < 0.18 || v > 0.45) ? 'none' : 'auto');
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        requestAnimationFrame(() => {
+          drawFrameRef.current(scrollYProgress.get());
+        });
+      }
+    }, { threshold: 0.01 });
 
-  const sec3Opacity = useTransform(smoothScroll, [0.45, 0.50, 0.65, 0.70], [0, 1, 1, 0]);
-  const sec3X = useTransform(smoothScroll, [0.45, 0.50, 0.65, 0.70], [50, 0, 0, 50]);
-  const sec3Visibility = useTransform(smoothScroll, (v) => (v < 0.45 || v > 0.70) ? 'hidden' : 'visible');
-  const sec3PointerEvents = useTransform(smoothScroll, (v) => (v < 0.45 || v > 0.70) ? 'none' : 'auto');
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, [imagesLoaded, scrollYProgress]);
 
-  const sec4Opacity = useTransform(smoothScroll, [0.70, 0.75, 0.84, 0.88], [0, 1, 1, 0]);
-  const sec4X = useTransform(smoothScroll, [0.70, 0.75, 0.84, 0.88], [-50, 0, 0, -50]);
-  const sec4Visibility = useTransform(smoothScroll, (v) => (v < 0.70 || v > 0.88) ? 'hidden' : 'visible');
-  const sec4PointerEvents = useTransform(smoothScroll, (v) => (v < 0.70 || v > 0.88) ? 'none' : 'auto');
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.12, 0.18], [1, 1, 0]);
+  const heroY = useTransform(scrollYProgress, [0, 0.12, 0.18], [0, -30, -50]);
+  const heroVisibility = useTransform(scrollYProgress, (v) => v > 0.18 ? 'hidden' : 'visible');
+  const heroPointerEvents = useTransform(scrollYProgress, (v) => v > 0.18 ? 'none' : 'auto');
 
-  const sec5Opacity = useTransform(smoothScroll, [0.88, 0.93, 1.0], [0, 1, 1]);
-  const sec5Y = useTransform(smoothScroll, [0.88, 0.93, 1.0], [50, 0, 0]);
-  const sec5Visibility = useTransform(smoothScroll, (v) => v < 0.88 ? 'hidden' : 'visible');
-  const sec5PointerEvents = useTransform(smoothScroll, (v) => v < 0.88 ? 'none' : 'auto');
+  const sec2Opacity = useTransform(scrollYProgress, [0.18, 0.23, 0.40, 0.45], [0, 1, 1, 0]);
+  const sec2X = useTransform(scrollYProgress, [0.18, 0.23, 0.40, 0.45], [-50, 0, 0, -50]);
+  const sec2Visibility = useTransform(scrollYProgress, (v) => (v < 0.18 || v > 0.45) ? 'hidden' : 'visible');
+  const sec2PointerEvents = useTransform(scrollYProgress, (v) => (v < 0.18 || v > 0.45) ? 'none' : 'auto');
+
+  const sec3Opacity = useTransform(scrollYProgress, [0.45, 0.50, 0.65, 0.70], [0, 1, 1, 0]);
+  const sec3X = useTransform(scrollYProgress, [0.45, 0.50, 0.65, 0.70], [50, 0, 0, 50]);
+  const sec3Visibility = useTransform(scrollYProgress, (v) => (v < 0.45 || v > 0.70) ? 'hidden' : 'visible');
+  const sec3PointerEvents = useTransform(scrollYProgress, (v) => (v < 0.45 || v > 0.70) ? 'none' : 'auto');
+
+  const sec4Opacity = useTransform(scrollYProgress, [0.70, 0.75, 0.84, 0.88], [0, 1, 1, 0]);
+  const sec4X = useTransform(scrollYProgress, [0.70, 0.75, 0.84, 0.88], [-50, 0, 0, -50]);
+  const sec4Visibility = useTransform(scrollYProgress, (v) => (v < 0.70 || v > 0.88) ? 'hidden' : 'visible');
+  const sec4PointerEvents = useTransform(scrollYProgress, (v) => (v < 0.70 || v > 0.88) ? 'none' : 'auto');
+
+  const sec5Opacity = useTransform(scrollYProgress, [0.88, 0.93, 1.0], [0, 1, 1]);
+  const sec5Y = useTransform(scrollYProgress, [0.88, 0.93, 1.0], [50, 0, 0]);
+  const sec5Visibility = useTransform(scrollYProgress, (v) => v < 0.88 ? 'hidden' : 'visible');
+  const sec5PointerEvents = useTransform(scrollYProgress, (v) => v < 0.88 ? 'none' : 'auto');
 
   return (
     <div
