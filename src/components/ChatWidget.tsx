@@ -29,7 +29,7 @@ const INITIAL_MESSAGES: Message[] = [
   {
     id: 'welcome-1',
     sender: 'bot',
-    text: `Hello! Welcome to **Tesseract InfoSystems**.\n\nI am your AI assistant powered by **Gemini AI**. How can I help you today?\n\n• Custom Software & Clean Architecture\n• Hyperscale Cloud & Kubernetes\n• AI & Deep Learning Orchestrations\n• Careers & Project Cost Estimations`,
+    text: `Hello! Welcome to **Tesseract InfoSystems**.\n\nI am your AI assistant powered by **Tesseract AI**. How can I help you today?\n\n• Custom Software & Clean Architecture\n• Hyperscale Cloud & Kubernetes\n• AI & Deep Learning Orchestrations\n• Careers & Project Cost Estimations`,
     timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
   },
 ];
@@ -281,7 +281,7 @@ export default function ChatWidget() {
                       Tesseract AI
                     </h3>
                     <span className="px-1.5 py-0.5 rounded text-[8px] font-mono font-bold bg-cyber-cyan/15 border border-cyber-cyan/30 text-cyber-cyan">
-                      GEMINI AI
+                      Tesseract AI
                     </span>
                   </div>
                   <div className="flex items-center gap-1.5 mt-0.5">
@@ -337,10 +337,10 @@ export default function ChatWidget() {
                   <div className={`max-w-[82%] flex flex-col ${msg.sender === 'user' ? 'items-end' : 'items-start'}`}>
                     <div
                       className={`px-4 py-3 rounded-2xl leading-relaxed break-words ${msg.sender === 'user'
-                          ? 'bg-gradient-to-r from-cyber-blue/20 to-cyber-cyan/20 border border-cyber-cyan/40 text-white rounded-tr-none shadow-[0_0_15px_rgba(6,182,212,0.1)]'
-                          : msg.isError
-                            ? 'bg-rose-500/10 border border-rose-500/30 text-rose-300 rounded-tl-none font-mono text-[11px]'
-                            : 'bg-white/[0.04] border border-white/10 text-gray-200 rounded-tl-none font-normal'
+                        ? 'bg-gradient-to-r from-cyber-blue/20 to-cyber-cyan/20 border border-cyber-cyan/40 text-white rounded-tr-none shadow-[0_0_15px_rgba(6,182,212,0.1)]'
+                        : msg.isError
+                          ? 'bg-rose-500/10 border border-rose-500/30 text-rose-300 rounded-tl-none font-mono text-[11px]'
+                          : 'bg-white/[0.04] border border-white/10 text-gray-200 rounded-tl-none font-normal'
                         }`}
                     >
                       {msg.text.length === 0 && msg.isStreaming ? (

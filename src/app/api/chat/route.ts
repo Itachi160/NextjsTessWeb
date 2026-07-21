@@ -20,7 +20,7 @@ export async function POST(req: Request) {
     if (!apiKey || apiKey === 'your_gemini_api_key_here') {
       return NextResponse.json(
         {
-          error: 'GEMINI_API_KEY environment variable is missing or unconfigured. Please add your key to .env.local or Cloudflare Workers environment variables.',
+          error: 'CHAT_API_KEY environment variable is missing or unconfigured. Please add your key to .env.local or Cloudflare Workers environment variables.',
         },
         { status: 500 }
       );
@@ -105,9 +105,8 @@ ${retrievedContext}`;
           }
         } else {
           const errData = await res.json().catch(() => ({}));
-          console.warn(`Gemini API [${modelName}] failed:`, errData);
           const errMessage =
-            errData?.error?.message || `Gemini API HTTP ${res.status} (${res.statusText})`;
+            errData?.error?.message || `API HTTP ${res.status} (${res.statusText})`;
           const currentErr = new Error(errMessage);
 
           if (i === 0) {
@@ -127,9 +126,9 @@ ${retrievedContext}`;
       const finalError = primaryError || lastError;
       const errorMessage =
         finalError?.message ||
-        'Failed to receive a response from Gemini AI. Please check your GEMINI_API_KEY.';
+        'Failed to receive a response from Chat AI. Please check your API_KEY.';
       return NextResponse.json(
-        { error: `Gemini API Error: ${errorMessage}` },
+        { error: `AI API Error: ${errorMessage}` },
         { status: 502 }
       );
     }
