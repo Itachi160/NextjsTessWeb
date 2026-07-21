@@ -95,7 +95,6 @@ export default function ChatWidget() {
     setIsLoading(true);
     setApiError(null);
 
-    // Format chat history for API
     const historyPayload = messages
       .filter((m) => !m.isError && m.text.trim().length > 0)
       .map((m) => ({
@@ -150,7 +149,6 @@ export default function ChatWidget() {
         scrollToBottom();
       }
 
-      // Finalize streaming
       setMessages((prev) =>
         prev.map((m) =>
           m.id === botMsgId ? { ...m, isStreaming: false } : m
@@ -165,11 +163,11 @@ export default function ChatWidget() {
         prev.map((m) =>
           m.id === botMsgId
             ? {
-                ...m,
-                text: `⚠️ **Connection Error**\n\n${errMsg}`,
-                isError: true,
-                isStreaming: false,
-              }
+              ...m,
+              text: `⚠️ **Connection Error**\n\n${errMsg}`,
+              isError: true,
+              isStreaming: false,
+            }
             : m
         )
       );
@@ -183,7 +181,6 @@ export default function ChatWidget() {
     setApiError(null);
   };
 
-  // Helper to render markdown bolding & newlines
   const renderFormattedText = (text: string, isStreaming?: boolean) => {
     if (!text && isStreaming) {
       return null;
@@ -221,7 +218,6 @@ export default function ChatWidget() {
 
   return (
     <>
-      {/* ─── FLOATING TOGGLE BUTTON ─── */}
       <div className="fixed bottom-6 right-6 z-50 flex items-center gap-3">
         <AnimatePresence>
           {!isOpen && (
@@ -259,7 +255,6 @@ export default function ChatWidget() {
         </motion.button>
       </div>
 
-      {/* ─── CHAT WINDOW MODAL ─── */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -270,13 +265,11 @@ export default function ChatWidget() {
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
             className="fixed bottom-24 right-4 sm:right-6 z-50 w-[calc(100vw-2rem)] sm:w-[400px] h-[540px] max-h-[85vh] rounded-3xl border border-white/10 bg-[#03050d]/95 shadow-[0_20px_50px_rgba(0,0,0,0.85)] backdrop-blur-2xl flex flex-col overflow-hidden font-sans pointer-events-auto overscroll-contain"
           >
-            {/* Grid pattern overlay */}
+
             <div className="absolute inset-0 cyber-grid opacity-[0.02] pointer-events-none" />
 
-            {/* Top ambient glow */}
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-32 bg-cyber-cyan/10 blur-[50px] pointer-events-none" />
 
-            {/* ─── CHAT HEADER ─── */}
             <div className="relative z-10 px-5 py-4 border-b border-white/10 flex items-center justify-between bg-white/[0.02] shrink-0">
               <div className="flex items-center gap-3">
                 <div className="w-9 h-9 rounded-xl border border-cyber-cyan/30 bg-cyber-cyan/10 flex items-center justify-center text-cyber-cyan shrink-0">
@@ -321,7 +314,6 @@ export default function ChatWidget() {
               </div>
             </div>
 
-            {/* ─── MESSAGES CONTAINER (SCROLLABLE) ─── */}
             <div
               ref={scrollContainerRef}
               data-lenis-prevent="true"
@@ -333,9 +325,8 @@ export default function ChatWidget() {
                   key={msg.id}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className={`flex gap-3 ${
-                    msg.sender === 'user' ? 'justify-end' : 'justify-start'
-                  }`}
+                  className={`flex gap-3 ${msg.sender === 'user' ? 'justify-end' : 'justify-start'
+                    }`}
                 >
                   {msg.sender === 'bot' && (
                     <div className="w-7 h-7 rounded-lg border border-cyber-cyan/30 bg-cyber-cyan/10 flex items-center justify-center text-cyber-cyan shrink-0 mt-0.5">
@@ -345,13 +336,12 @@ export default function ChatWidget() {
 
                   <div className={`max-w-[82%] flex flex-col ${msg.sender === 'user' ? 'items-end' : 'items-start'}`}>
                     <div
-                      className={`px-4 py-3 rounded-2xl leading-relaxed break-words ${
-                        msg.sender === 'user'
+                      className={`px-4 py-3 rounded-2xl leading-relaxed break-words ${msg.sender === 'user'
                           ? 'bg-gradient-to-r from-cyber-blue/20 to-cyber-cyan/20 border border-cyber-cyan/40 text-white rounded-tr-none shadow-[0_0_15px_rgba(6,182,212,0.1)]'
                           : msg.isError
-                          ? 'bg-rose-500/10 border border-rose-500/30 text-rose-300 rounded-tl-none font-mono text-[11px]'
-                          : 'bg-white/[0.04] border border-white/10 text-gray-200 rounded-tl-none font-normal'
-                      }`}
+                            ? 'bg-rose-500/10 border border-rose-500/30 text-rose-300 rounded-tl-none font-mono text-[11px]'
+                            : 'bg-white/[0.04] border border-white/10 text-gray-200 rounded-tl-none font-normal'
+                        }`}
                     >
                       {msg.text.length === 0 && msg.isStreaming ? (
                         <div className="flex items-center gap-1.5 py-0.5">
@@ -379,7 +369,6 @@ export default function ChatWidget() {
               <div ref={messagesEndRef} />
             </div>
 
-            {/* ─── QUICK SUGGESTION CHIPS ─── */}
             {messages.length <= 2 && !isLoading && (
               <div className="relative z-10 px-4 pb-2 flex flex-wrap gap-1.5 shrink-0">
                 {SUGGESTED_QUESTIONS.map((q, idx) => (
@@ -396,7 +385,6 @@ export default function ChatWidget() {
               </div>
             )}
 
-            {/* ─── CHAT INPUT BAR ─── */}
             <div className="relative z-10 p-3 border-t border-white/10 bg-white/[0.02] shrink-0">
               <form
                 onSubmit={(e) => {

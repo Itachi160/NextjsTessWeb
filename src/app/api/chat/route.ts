@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { getRelevantContext } from '../../../lib/knowledgeBase';
 
+export const runtime = 'edge';
+
 export async function POST(req: Request) {
   try {
     const body = await req.json().catch(() => ({}));
@@ -18,8 +20,7 @@ export async function POST(req: Request) {
     if (!apiKey || apiKey === 'your_gemini_api_key_here') {
       return NextResponse.json(
         {
-          error:
-            'GEMINI_API_KEY environment variable is missing or unconfigured. Please add your key to .env.local or Cloudflare Workers environment variables.',
+          error: 'GEMINI_API_KEY environment variable is missing or unconfigured. Please add your key to .env.local or Cloudflare Workers environment variables.',
         },
         { status: 500 }
       );
@@ -69,7 +70,6 @@ ${retrievedContext}`;
       },
     };
 
-    // Candidate model endpoints for streaming
     const modelsToTry = [
       'gemini-3.5-flash',
       'gemini-3.1-flash-lite',
@@ -77,94 +77,64 @@ ${retrievedContext}`;
       'gemini-1.5-flash',
     ];
 
-    const encoder = new TextEncoder();
+    let replyText = '';
+    let primaryError: Error | null = null;
+    let lastError: Error | null = null;
 
-    const stream = new ReadableStream({
-      async start(controller) {
-        let hasStreamed = false;
-        let lastErrMessage = '';
+    for (let i = 0; i < modelsToTry.length; i++) {
+      const modelName = modelsToTry[i];
+      try {
+        const geminiEndpoint = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
 
-        for (const modelName of modelsToTry) {
-          try {
-            const geminiEndpoint = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:streamGenerateContent?alt=sse&key=${apiKey}`;
+        const res = await fetch(geminiEndpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(geminiPayload),
+        });
 
-            const res = await fetch(geminiEndpoint, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify(geminiPayload),
-            });
+        if (res.ok) {
+          const data = await res.json();
+          const candidateText =
+            data?.candidates?.[0]?.content?.parts?.[0]?.text;
 
-            if (!res.ok) {
-              const errData = await res.json().catch(() => ({}));
-              lastErrMessage =
-                errData?.error?.message || `HTTP ${res.status} (${res.statusText})`;
-              console.warn(`Gemini stream [${modelName}] failed:`, lastErrMessage);
-              continue;
-            }
-
-            if (res.body) {
-              const reader = res.body.getReader();
-              const decoder = new TextDecoder();
-              let buffer = '';
-
-              while (true) {
-                const { done, value } = await reader.read();
-                if (done) break;
-
-                buffer += decoder.decode(value, { stream: true });
-                const lines = buffer.split('\n');
-                buffer = lines.pop() || '';
-
-                for (const line of lines) {
-                  const trimmed = line.trim();
-                  if (trimmed.startsWith('data:')) {
-                    const jsonStr = trimmed.slice(5).trim();
-                    if (!jsonStr || jsonStr === '[DONE]') continue;
-                    try {
-                      const parsed = JSON.parse(jsonStr);
-                      const chunkText =
-                        parsed?.candidates?.[0]?.content?.parts?.[0]?.text;
-                      if (chunkText) {
-                        controller.enqueue(encoder.encode(chunkText));
-                        hasStreamed = true;
-                      }
-                    } catch (e) {
-                      // ignore parse errors for partial chunks
-                    }
-                  }
-                }
-              }
-
-              if (hasStreamed) {
-                controller.close();
-                return;
-              }
-            }
-          } catch (err: any) {
-            lastErrMessage = err?.message || 'Network error';
-            console.warn(`Gemini stream exception [${modelName}]:`, lastErrMessage);
+          if (candidateText) {
+            replyText = candidateText.trim();
+            break;
           }
-        }
+        } else {
+          const errData = await res.json().catch(() => ({}));
+          console.warn(`Gemini API [${modelName}] failed:`, errData);
+          const errMessage =
+            errData?.error?.message || `Gemini API HTTP ${res.status} (${res.statusText})`;
+          const currentErr = new Error(errMessage);
 
-        if (!hasStreamed) {
-          const errPayload = `API Error: ${
-            lastErrMessage || 'Failed to stream response from Gemini AI.'
-          }`;
-          controller.enqueue(encoder.encode(`[ERROR]: ${errPayload}`));
-          controller.close();
+          if (i === 0) {
+            primaryError = currentErr;
+          }
+          lastError = currentErr;
         }
-      },
-    });
+      } catch (err: any) {
+        if (i === 0) {
+          primaryError = err;
+        }
+        lastError = err;
+      }
+    }
 
-    return new Response(stream, {
-      headers: {
-        'Content-Type': 'text/plain; charset=utf-8',
-        'Cache-Control': 'no-cache, no-transform',
-        'Connection': 'keep-alive',
-      },
-    });
+    if (!replyText) {
+      const finalError = primaryError || lastError;
+      const errorMessage =
+        finalError?.message ||
+        'Failed to receive a response from Gemini AI. Please check your GEMINI_API_KEY.';
+      return NextResponse.json(
+        { error: `Gemini API Error: ${errorMessage}` },
+        { status: 502 }
+      );
+    }
+
+    return NextResponse.json({ reply: replyText });
   } catch (error: any) {
     console.error('Chat API Error:', error);
     return NextResponse.json(
