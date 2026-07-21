@@ -38,11 +38,20 @@ function LenisScrollTriggerSync() {
       },
     });
 
-    const onScroll = () => ScrollTrigger.update();
+    let rafId: number | null = null;
+    const onScroll = () => {
+      if (rafId === null) {
+        rafId = requestAnimationFrame(() => {
+          rafId = null;
+          ScrollTrigger.update();
+        });
+      }
+    };
     lenis.on('scroll', onScroll);
     ScrollTrigger.refresh();
 
     return () => {
+      if (rafId !== null) cancelAnimationFrame(rafId);
       lenis.off('scroll', onScroll);
       ScrollTrigger.scrollerProxy(document.documentElement, {});
     };

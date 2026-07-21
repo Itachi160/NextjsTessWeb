@@ -1,6 +1,3 @@
-/**
- * Tesseract InfoSystems - Website Knowledge Base & Context Retriever
- */
 
 export interface KnowledgeChunk {
   id: string;
@@ -122,22 +119,20 @@ Employee Perks & Benefits:
   }
 ];
 
-/**
- * Retrieve top relevant knowledge chunks based on query matching
- */
+
 export function getRelevantContext(query: string, maxResults = 4): string {
   const lowerQuery = query.toLowerCase();
   const words = lowerQuery.split(/\W+/).filter(w => w.length > 2);
 
   const scored = KNOWLEDGE_BASE.map(chunk => {
     let score = 0;
-    // Check keyword matches
+
     chunk.keywords.forEach(kw => {
       if (lowerQuery.includes(kw)) {
         score += 3;
       }
     });
-    // Check title matches
+
     words.forEach(word => {
       if (chunk.title.toLowerCase().includes(word)) {
         score += 2;
@@ -149,17 +144,15 @@ export function getRelevantContext(query: string, maxResults = 4): string {
     return { chunk, score };
   });
 
-  // Sort by score descending
   scored.sort((a, b) => b.score - a.score);
 
-  // Take top chunks or default all if query is broad
   const topChunks = scored
     .filter(s => s.score > 0)
     .slice(0, maxResults)
     .map(s => s.chunk.content);
 
   if (topChunks.length === 0) {
-    // Return main general overview chunks as default context
+
     return KNOWLEDGE_BASE.slice(0, 3).map(c => c.content).join('\n\n---\n\n');
   }
 

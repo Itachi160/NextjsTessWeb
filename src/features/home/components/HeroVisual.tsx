@@ -202,14 +202,17 @@ export default function HeroVisual() {
       c.closePath();
     };
 
+    const handleScroll = () => {
+      scrollAngle.current = window.scrollY * 0.0045;
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
     const render = () => {
       if (document.hidden) {
         animId = requestAnimationFrame(render);
         return;
       }
       ctx.clearRect(0, 0, width, height);
-
-      scrollAngle.current = window.scrollY * 0.0045;
 
       autoAngle.current.y += hoveredHubRef.current !== null ? 0.0005 : 0.0018;
       autoAngle.current.x = Math.sin(Date.now() * 0.0003) * 0.08;
@@ -571,6 +574,7 @@ export default function HeroVisual() {
 
     return () => {
       cancelAnimationFrame(animId);
+      window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', resize);
       canvas.removeEventListener('mousemove', handleMouseMove);
       canvas.removeEventListener('mouseleave', handleMouseLeave);

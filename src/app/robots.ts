@@ -4,11 +4,17 @@ export const dynamic = 'force-static';
 
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: {
-      userAgent: '*',
-      allow: '/',
-      disallow: '/login',
-    },
+    rules: [
+      {
+        userAgent: '*',
+        allow: '/',
+        disallow: ['/login'],
+      },
+      {
+        userAgent: 'Googlebot-Image',
+        allow: '/',
+      },
+    ],
     sitemap: 'https://tesseractinfosystems.com/sitemap.xml',
   };
 }

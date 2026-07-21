@@ -6,9 +6,9 @@ import { useCanvasStore } from '../../store/canvasStore';
 
 interface OfficeLocation {
   name: string;
-  coords: [number, number, number]; // 3D local coordinate on radius 2 sphere
+  coords: [number, number, number];
   description: string;
-  targetRot: [number, number]; // [rotX, rotY] target rotation to face camera
+  targetRot: [number, number];
 }
 
 const OFFICES: OfficeLocation[] = [
@@ -26,7 +26,6 @@ export default function Globe() {
 
   const targetRotation = useRef<[number, number]>([0, 0]);
 
-  // Update target rotation when active office changes
   useEffect(() => {
     const office = OFFICES.find(o => o.name === activeOffice);
     if (office) {
@@ -37,29 +36,24 @@ export default function Globe() {
   useFrame((state) => {
     if (!groupRef.current) return;
 
-    // Smoothly interpolate rotation to center the active office towards the camera
     const speed = 0.05;
-    
-    // Calculate difference and wrap rotation for shortest paths
+
     let diffX = targetRotation.current[0] - groupRef.current.rotation.x;
     let diffY = targetRotation.current[1] - groupRef.current.rotation.y;
-    
+
     groupRef.current.rotation.x += diffX * speed;
     groupRef.current.rotation.y += diffY * speed;
 
-    // Slow wobble animation to feel floating
     const time = state.clock.getElapsedTime();
     if (globeRef.current) {
-      globeRef.current.rotation.y = time * 0.05; // slowly rotate the inner earth mesh
+      globeRef.current.rotation.y = time * 0.05;
     }
   });
 
   return (
     <group ref={groupRef} position={[0, -78, 0]}>
-      {/* Ambient glow inside */}
       <pointLight intensity={3} color="#06b6d4" distance={8} />
 
-      {/* Main Globe Mesh (Dotted/Wireframe) */}
       <mesh ref={globeRef}>
         <sphereGeometry args={[2.0, 32, 32]} />
         <meshStandardMaterial
@@ -72,7 +66,6 @@ export default function Globe() {
         />
       </mesh>
 
-      {/* Inner Glowing Core */}
       <mesh>
         <sphereGeometry args={[1.7, 32, 32]} />
         <meshBasicMaterial
@@ -83,15 +76,12 @@ export default function Globe() {
         />
       </mesh>
 
-      {/* Meridian Rings */}
       <gridHelper args={[4, 4, '#3b82f6', '#06b6d4']} rotation={[Math.PI / 2, 0, 0]} />
 
-      {/* Office Locations */}
       {OFFICES.map((office) => {
         const isActive = activeOffice === office.name;
         return (
           <group key={office.name} position={office.coords}>
-            {/* Glowing marker dot */}
             <mesh onClick={() => setActiveOffice(office.name)}>
               <sphereGeometry args={[0.08, 16, 16]} />
               <meshBasicMaterial
@@ -100,7 +90,6 @@ export default function Globe() {
               />
             </mesh>
 
-            {/* Glowing Ring around node */}
             {isActive && (
               <mesh>
                 <ringGeometry args={[0.12, 0.16, 32]} />
@@ -113,7 +102,6 @@ export default function Globe() {
               </mesh>
             )}
 
-            {/* HTML label showing active office details */}
             {isActive && (
               <Html distanceFactor={6} center className="pointer-events-none select-none">
                 <div className="glass-card-purple p-2.5 rounded-lg border border-purple-500/30 text-[10px] w-36 shadow-lg shadow-purple-500/20 text-white animate-fade-in font-sans">

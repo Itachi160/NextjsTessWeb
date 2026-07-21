@@ -1,13 +1,14 @@
-import { Cpu, Cloud, Code, Settings, Smartphone, Database, RefreshCw } from 'lucide-react';
+import { Cpu, Cloud, Code, Settings, Smartphone, Database, RefreshCw, Bot, TrendingUp, Users, ShieldCheck, BarChart3 } from 'lucide-react';
 import { useUIStore } from '../../../store/uiStore';
 import ScrollReveal from '../../../components/ScrollReveal';
 
 interface ServiceItem {
-  icon: typeof Cpu;
+  icon: any;
   title: string;
   desc: string;
   hoverBorder: string;
   accent: string;
+  badge?: string;
 }
 
 export default function ServicesSection() {
@@ -18,10 +19,14 @@ export default function ServicesSection() {
     { icon: Database, title: 'Enterprise Applications', desc: 'Designing fault-tolerant backends, transaction managers, and systems engineered to scale for thousands of users.', hoverBorder: 'hover:border-cyber-cyan/40', accent: 'group-hover:text-cyber-cyan' },
     { icon: Cloud, title: 'Cloud Solutions', desc: 'Architecting multi-cloud hybrid systems and serverless topologies to reduce latencies and cut cloud cost footprints.', hoverBorder: 'hover:border-purple-500/40', accent: 'group-hover:text-purple-400' },
     { icon: Settings, title: 'DevOps Engineering', desc: 'Implementing secure CI/CD pipelines, automated deployments, configuration management, and robust microservices.', hoverBorder: 'hover:border-pink-500/40', accent: 'group-hover:text-pink-400' },
-    { icon: Cpu, title: 'AI Solutions', desc: 'Integrating deep neural networks, custom LLMs, NLP algorithms, and automated analytical models into standard apps.', hoverBorder: 'hover:border-emerald-500/40', accent: 'group-hover:text-emerald-400' },
+    { icon: Bot, title: 'AI & Automation Solutions', desc: 'Automate workflows, save operational time, and boost productivity with smart intelligent agents and custom neural pipelines.', hoverBorder: 'hover:border-emerald-500/40', accent: 'group-hover:text-emerald-400', badge: 'FEATURED' },
+    { icon: TrendingUp, title: 'Digital Marketing', desc: 'Data-driven SEO, PPC, social media strategies, and high-converting content marketing that drives real measurable results.', hoverBorder: 'hover:border-amber-500/40', accent: 'group-hover:text-amber-400', badge: 'GROWTH' },
+    { icon: Users, title: 'IT Staffing Solutions', desc: 'Access top IT talent, vetted developers, and specialized engineering pods quickly and efficiently to scale your teams.', hoverBorder: 'hover:border-cyan-500/40', accent: 'group-hover:text-cyan-400', badge: 'TALENT' },
     { icon: Code, title: 'Web Development', desc: 'Developing fast, secure, search-engine-optimized frontend platforms that offer premium, immersive interactions.', hoverBorder: 'hover:border-yellow-500/40', accent: 'group-hover:text-yellow-400' },
     { icon: Smartphone, title: 'Mobile Development', desc: 'Building native or cross-platform mobile apps for iOS and Android with offline-first synchronization.', hoverBorder: 'hover:border-orange-500/40', accent: 'group-hover:text-orange-400' },
     { icon: RefreshCw, title: 'Digital Transformation', desc: 'Migrating outdated legacy platforms to cloud-native stacks, boosting speeds, and modernizing workflows.', hoverBorder: 'hover:border-indigo-500/40', accent: 'group-hover:text-indigo-400' },
+    { icon: ShieldCheck, title: 'Cybersecurity & Zero Trust', desc: 'Deploying multi-layered network security, automated vulnerability auditing, eBPF telemetry, and SOC 2/HIPAA compliance.', hoverBorder: 'hover:border-red-500/40', accent: 'group-hover:text-red-400' },
+    { icon: BarChart3, title: 'Data & Analytics Engineering', desc: 'Structuring real-time data pipelines, high-throughput ETL buffers, vector search stores, and predictive analytics engines.', hoverBorder: 'hover:border-teal-500/40', accent: 'group-hover:text-teal-400' },
   ];
 
   return (
@@ -59,12 +64,17 @@ export default function ServicesSection() {
               <div
                 onMouseEnter={() => setCursorType('hover')}
                 onMouseLeave={() => setCursorType('default')}
-                className={`glass-card p-6 rounded-2xl border border-white/5 transition-all duration-300 ${service.hoverBorder} hover:shadow-[0_8px_30px_rgb(0,0,0,0.4)] flex flex-col gap-4 group h-full`}
+                className={`glass-card p-6 rounded-2xl border border-white/5 transition-all duration-300 ${service.hoverBorder} hover:shadow-[0_8px_30px_rgb(0,0,0,0.4)] flex flex-col gap-4 group h-full relative overflow-hidden`}
               >
+                {service.badge && (
+                  <span className="absolute top-3 right-3 text-[9px] font-mono font-bold tracking-wider px-2 py-0.5 rounded-md bg-cyber-cyan/10 border border-cyber-cyan/30 text-cyber-cyan">
+                    {service.badge}
+                  </span>
+                )}
                 <div className={`w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center text-cyber-cyan ${service.accent} transition-all duration-300`}>
                   <IconComp className="w-5 h-5" />
                 </div>
-                <h4 className="text-white text-base font-bold group-hover:text-cyber-cyan transition-colors">
+                <h4 className="text-white text-base font-bold group-hover:text-cyber-cyan transition-colors pr-10">
                   {service.title}
                 </h4>
                 <p className="text-gray-400 text-xs leading-relaxed flex-grow">{service.desc}</p>
@@ -76,3 +86,4 @@ export default function ServicesSection() {
     </section>
   );
 }
+

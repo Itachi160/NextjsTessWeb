@@ -1,13 +1,13 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Cpu, Cloud, Code2, Calculator, ArrowRight, BadgeCheck, CheckCircle2 } from 'lucide-react';
+import { Cpu, Cloud, Code2, Calculator, ArrowRight, BadgeCheck, CheckCircle2, Bot, TrendingUp, Users } from 'lucide-react';
 import { useUIStore } from '../store/uiStore';
 import MagneticButton from '../components/MagneticButton';
 import { useRouter } from 'next/navigation';
 
 interface ServiceItem {
-  id: 'software' | 'cloud' | 'ai';
+  id: 'software' | 'cloud' | 'ai' | 'automation' | 'marketing' | 'staffing';
   title: string;
   layer: string;
   icon: any;
@@ -55,6 +55,45 @@ const SERVICES_DATA: ServiceItem[] = [
       'Vector stores for AI retrieval systems',
       'Optimized neural inference engines'
     ]
+  },
+  {
+    id: 'automation',
+    title: 'AI & Automation Solutions',
+    layer: 'LAYER_04 // INTELLIGENT AUTOMATION',
+    icon: Bot,
+    techs: ['Python', 'LangChain', 'OpenAI', 'RPA'],
+    details: 'Automating end-to-end business workflows, building autonomous AI agents, and eliminating repetitive operational tasks.',
+    features: [
+      'Autonomous workflow automation',
+      'Custom LLM & Agentic pipelines',
+      'Enterprise productivity optimization'
+    ]
+  },
+  {
+    id: 'marketing',
+    title: 'Digital Marketing',
+    layer: 'LAYER_05 // GROWTH & ANALYTICS',
+    icon: TrendingUp,
+    techs: ['SEO', 'PPC', 'Google Ads', 'Analytics'],
+    details: 'Executing data-driven SEO, high-ROI PPC campaigns, social media growth, and content strategies that scale user acquisition.',
+    features: [
+      'Data-driven SEO & Keyword Authority',
+      'High-converting PPC & Ad Campaigns',
+      'Omni-channel Social & Content Strategy'
+    ]
+  },
+  {
+    id: 'staffing',
+    title: 'IT Staffing Solutions',
+    layer: 'LAYER_06 // HUMAN CAPITAL',
+    icon: Users,
+    techs: ['Staff Augmentation', 'Dedicated Pods', 'Direct Hire'],
+    details: 'Connecting your company with top-tier software engineers, cloud architects, and dedicated tech teams on-demand.',
+    features: [
+      'Pre-vetted Senior Tech Talent',
+      'Flexible Staff Augmentation Models',
+      'Rapid team scaling & onboarding'
+    ]
   }
 ];
 
@@ -63,7 +102,7 @@ export default function Services() {
   const setIsTransitioning = useUIStore((state) => state.setIsTransitioning);
   const router = useRouter();
 
-  const [scope, setScope] = useState<'software' | 'cloud' | 'ai'>('software');
+  const [scope, setScope] = useState<'software' | 'cloud' | 'ai' | 'automation' | 'marketing' | 'staffing'>('software');
   const [scale, setScale] = useState<'sme' | 'enterprise' | 'hyperscale'>('enterprise');
   const [security, setSecurity] = useState<'standard' | 'high'>('high');
   const [estimatedCost, setEstimatedCost] = useState({ min: 1200000, max: 2400000 });
@@ -76,10 +115,19 @@ export default function Services() {
       max += 600000;
     } else if (scope === 'cloud') {
       min += 300000;
-      max += 100000;
+      max += 1000000;
     } else if (scope === 'ai') {
       min += 600000;
       max += 3000000;
+    } else if (scope === 'automation') {
+      min += 400000;
+      max += 1500000;
+    } else if (scope === 'marketing') {
+      min += 150000;
+      max += 500000;
+    } else if (scope === 'staffing') {
+      min += 250000;
+      max += 1200000;
     }
 
     if (scale === 'sme') {
@@ -195,16 +243,19 @@ export default function Services() {
 
             <div>
               <span className="text-[9px] uppercase font-bold text-gray-500 block mb-2 font-mono">Project Scope</span>
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                 {[
                   { id: 'software', label: 'Custom Software' },
                   { id: 'cloud', label: 'Cloud-Native' },
-                  { id: 'ai', label: 'AI Integration' }
+                  { id: 'ai', label: 'AI & Data' },
+                  { id: 'automation', label: 'AI & Automation' },
+                  { id: 'marketing', label: 'Digital Marketing' },
+                  { id: 'staffing', label: 'IT Staffing' }
                 ].map((s) => (
                   <button
                     key={s.id}
                     onClick={() => setScope(s.id as any)}
-                    className={`py-2 rounded-lg text-[9px] font-bold uppercase tracking-wider transition-all border cursor-pointer ${scope === s.id
+                    className={`py-2 px-1 rounded-lg text-[8px] sm:text-[9px] font-bold uppercase tracking-wider transition-all border cursor-pointer ${scope === s.id
                       ? 'bg-cyber-cyan/20 border-cyber-cyan text-cyber-cyan shadow-[0_0_8px_rgba(6,182,212,0.15)]'
                       : 'bg-white/5 border-white/5 text-gray-400'
                       }`}

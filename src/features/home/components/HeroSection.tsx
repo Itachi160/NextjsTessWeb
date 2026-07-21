@@ -54,12 +54,10 @@ export default function HeroSection() {
       }
     };
 
-    const handleMouse = (e: MouseEvent) => {
-      if (!rectCache) return;
-      mousePos.current = {
-        x: (e.clientX - rectCache.left) / rectCache.width - 0.5,
-        y: (e.clientY - rectCache.top) / rectCache.height - 0.5,
-      };
+    let rafScheduled = false;
+
+    const updateParallax = () => {
+      rafScheduled = false;
       floatingRefs.current.forEach((el, i) => {
         if (!el) return;
         const tech = HERO_TECHS[i];
@@ -71,6 +69,18 @@ export default function HeroSection() {
           overwrite: 'auto',
         });
       });
+    };
+
+    const handleMouse = (e: MouseEvent) => {
+      if (!rectCache) return;
+      mousePos.current = {
+        x: (e.clientX - rectCache.left) / rectCache.width - 0.5,
+        y: (e.clientY - rectCache.top) / rectCache.height - 0.5,
+      };
+      if (!rafScheduled) {
+        rafScheduled = true;
+        requestAnimationFrame(updateParallax);
+      }
     };
 
     window.addEventListener('resize', handleResize, { passive: true });

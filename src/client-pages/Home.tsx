@@ -31,13 +31,13 @@ export default function Home() {
       <KeyboardAssemblySection />
 
       <div className="h-px w-full bg-gradient-to-r from-transparent via-cyber-cyan/10 to-transparent" />
-      <div className="relative border-y border-white/[0.02] content-visibility-auto">
+      <div className="relative border-y border-white/[0.02]">
         <AboutSection />
       </div>
 
       <div className="h-px w-full bg-gradient-to-r from-transparent via-cyber-cyan/10 to-transparent" />
 
-      <div style={{ background: 'rgba(5, 9, 19, 0.65)' }} className="relative content-visibility-auto">
+      <div style={{ background: 'rgba(5, 9, 19, 0.65)' }} className="relative">
         <ServicesSection />
       </div>
 
@@ -50,7 +50,7 @@ export default function Home() {
       <ProjectsSection />
       <div className="h-px w-full bg-gradient-to-r from-transparent via-cyber-purple/10 to-transparent" />
 
-      <div className="relative min-h-[400px] content-visibility-auto">
+      <div className="relative min-h-[400px]">
         <Suspense fallback={<div className="h-[400px]" />}>
           <ProcessSection />
         </Suspense>
@@ -58,7 +58,7 @@ export default function Home() {
 
       <div className="h-px w-full bg-gradient-to-r from-transparent via-white/5 to-transparent" />
 
-      <div style={{ background: 'rgba(3, 5, 13, 0.65)' }} className="relative min-h-[400px] content-visibility-auto">
+      <div style={{ background: 'rgba(3, 5, 13, 0.65)' }} className="relative min-h-[400px]">
         <Suspense fallback={<div className="h-[400px]" />}>
           <WhySection />
         </Suspense>
@@ -66,7 +66,7 @@ export default function Home() {
 
       <div className="h-px w-full bg-gradient-to-r from-transparent via-cyber-cyan/10 to-transparent" />
 
-      <div style={{ background: 'rgba(5, 9, 19, 0.65)' }} className="relative min-h-[400px] content-visibility-auto">
+      <div style={{ background: 'rgba(5, 9, 19, 0.65)' }} className="relative min-h-[400px]">
         <Suspense fallback={<div className="h-[400px]" />}>
           <TestimonialsSection />
         </Suspense>
@@ -74,7 +74,7 @@ export default function Home() {
 
       <div className="h-px w-full bg-gradient-to-r from-transparent via-cyber-purple/10 to-transparent" />
 
-      <div style={{ background: 'rgba(3, 5, 13, 0.65)' }} className="relative min-h-[400px] content-visibility-auto">
+      <div style={{ background: 'rgba(3, 5, 13, 0.65)' }} className="relative min-h-[400px]">
         <Suspense fallback={<div className="h-[400px]" />}>
           <CareersSection />
         </Suspense>

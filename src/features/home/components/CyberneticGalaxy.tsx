@@ -989,12 +989,12 @@ export default function CyberneticGalaxy() {
               <motion.div
                 key={activeTrack.id}
                 initial={{ opacity: 0 }}
-                animate={{ opacity: 0.15 }}
+                animate={{ opacity: 0.18 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.5 }}
-                className="absolute inset-0 w-full h-full blur-[200px]"
+                className="absolute inset-0 w-full h-full pointer-events-none will-change-[opacity]"
                 style={{
-                  background: `radial-gradient(circle at 60% 50%, rgba(${activeTrack.glowColor}, 0.25) 0%, transparent 60%)`
+                  background: `radial-gradient(circle at 60% 50%, rgba(${activeTrack.glowColor}, 0.35) 0%, rgba(${activeTrack.glowColor}, 0.1) 35%, transparent 70%)`
                 }}
               />
             )}

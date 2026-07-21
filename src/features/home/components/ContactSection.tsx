@@ -25,12 +25,10 @@ export default function ContactSection() {
 
   return (
     <section id="contact" className="relative py-28 px-6 overflow-hidden">
-      {/* Background glows */}
       <div className="absolute top-1/3 left-0 w-96 h-96 rounded-full bg-cyber-blue/5 blur-[150px] pointer-events-none" />
       <div className="absolute bottom-0 right-1/4 w-80 h-80 rounded-full bg-cyber-purple/5 blur-[120px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
         <ScrollReveal direction="up" className="text-center mb-16">
           <h2 className="text-xs uppercase font-mono tracking-widest text-cyber-cyan font-semibold mb-3 flex items-center justify-center gap-1.5">
             <Globe className="w-4 h-4" />
@@ -45,7 +43,6 @@ export default function ContactSection() {
         </ScrollReveal>
 
         <div className="flex flex-col lg:flex-row gap-12">
-          {/* Left: Form */}
           <ScrollReveal direction="left" delay={0.1} className="w-full lg:w-1/2">
             <div className="glass-card p-8 rounded-3xl border border-white/[0.06] relative overflow-hidden">
               <div className="absolute inset-0 cyber-grid opacity-[0.03] pointer-events-none" />
@@ -100,10 +97,9 @@ export default function ContactSection() {
             </div>
           </ScrollReveal>
 
-          {/* Right: Offices */}
           <ScrollReveal direction="right" delay={0.2} className="w-full lg:w-1/2 flex flex-col gap-6">
             <h4 className="text-sm font-bold text-gray-300 uppercase tracking-wider">Our Global Offices</h4>
-            
+
             <div className="flex flex-col gap-3">
               {OFFICES.map((office, idx) => (
                 <button
@@ -111,17 +107,15 @@ export default function ContactSection() {
                   onClick={() => setActiveOffice(idx)}
                   onMouseEnter={() => setCursorType('hover')}
                   onMouseLeave={() => setCursorType('default')}
-                  className={`glass-card p-5 rounded-2xl border text-left transition-all duration-300 ${
-                    activeOffice === idx
+                  className={`glass-card p-5 rounded-2xl border text-left transition-all duration-300 ${activeOffice === idx
                       ? 'border-cyber-cyan/40 bg-cyber-cyan/[0.04] shadow-[0_0_20px_rgba(6,182,212,0.08)]'
                       : 'border-white/[0.05] hover:border-white/10'
-                  }`}
+                    }`}
                 >
                   <div className="flex justify-between items-start">
                     <div className="flex items-start gap-3">
-                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5 ${
-                        activeOffice === idx ? 'bg-cyber-cyan/15 text-cyber-cyan' : 'bg-white/[0.04] text-gray-500'
-                      }`}>
+                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5 ${activeOffice === idx ? 'bg-cyber-cyan/15 text-cyber-cyan' : 'bg-white/[0.04] text-gray-500'
+                        }`}>
                         <MapPin className="w-4 h-4" />
                       </div>
                       <div>

@@ -13,13 +13,12 @@ export default function NeuralBackground() {
     const canvas = canvasRef.current;
     if (!container || !canvas) return;
 
-    // 1. Setup Three.js Scene, Camera, and Renderer
     let width = container.clientWidth || window.innerWidth;
     let height = container.clientHeight || window.innerHeight;
     let rect = container.getBoundingClientRect();
 
     const scene = new THREE.Scene();
-    
+
     const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 100);
     camera.position.z = 15;
 
@@ -39,13 +38,11 @@ export default function NeuralBackground() {
     };
     canvas.addEventListener('webglcontextlost', handleContextLost, false);
 
-    // 2. Setup Particles Data
     const isMobile = width < 768;
-    
-    // Node Counts per Layer
-    const layer1Count = isMobile ? 60 : 180; // Background (slow, faint)
-    const layer2Count = isMobile ? 80 : 280; // Midground (connection mesh)
-    const layer3Count = isMobile ? 30 : 90;  // Foreground (reactive, bright)
+
+    const layer1Count = isMobile ? 60 : 180;
+    const layer2Count = isMobile ? 80 : 280;
+    const layer3Count = isMobile ? 30 : 90;
     const totalCount = layer1Count + layer2Count + layer3Count;
 
     interface Particle {
@@ -60,14 +57,12 @@ export default function NeuralBackground() {
 
     const particles: Particle[] = [];
 
-    // Helper for random in range
     const randRange = (min: number, max: number) => min + Math.random() * (max - min);
 
-    // Color palettes for different layers
-    const colorL1 = new THREE.Color(0x1e293b); // Muted slate-blue
-    const colorL2 = new THREE.Color(0x3b82f6); // Standard blue
-    const colorL3 = new THREE.Color(0x475569); // Muted slate grey
-    const colorL3Alt = new THREE.Color(0x64748b); // Muted steel blue
+    const colorL1 = new THREE.Color(0x1e293b);
+    const colorL2 = new THREE.Color(0x3b82f6);
+    const colorL3 = new THREE.Color(0x475569);
+    const colorL3Alt = new THREE.Color(0x64748b);
 
     for (let i = 0; i < totalCount; i++) {
       let layer = 1;
@@ -93,7 +88,6 @@ export default function NeuralBackground() {
         layer === 1 ? randRange(-8, -4) : layer === 2 ? randRange(-3, 2) : randRange(3, 6)
       );
 
-      // Organic drift velocity vector
       const vel = new THREE.Vector3(
         randRange(-0.5, 0.5) * speedScale,
         randRange(-0.5, 0.5) * speedScale,
@@ -111,7 +105,6 @@ export default function NeuralBackground() {
       });
     }
 
-    // 3. Create Points Buffers for rendering nodes
     const getLayerGeometryAndMaterial = (layerNum: number, pSize: number, pOpacity: number) => {
       const geom = new THREE.BufferGeometry();
       const layerParticles = particles.filter(p => p.layer === layerNum);
@@ -131,7 +124,6 @@ export default function NeuralBackground() {
       geom.setAttribute('position', new THREE.BufferAttribute(positions, 3));
       geom.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
-      // Circular glowing particle texture
       const canvasTex = document.createElement('canvas');
       canvasTex.width = 32;
       canvasTex.height = 32;
@@ -172,7 +164,6 @@ export default function NeuralBackground() {
     scene.add(points2);
     scene.add(points3);
 
-    // 4. Create Line Segments dynamically for connections (Layer 2)
     const maxLines = isMobile ? 180 : 550;
     const linePositions = new Float32Array(maxLines * 2 * 3);
     const lineColors = new Float32Array(maxLines * 2 * 3);
@@ -192,7 +183,6 @@ export default function NeuralBackground() {
     const lineSegments = new THREE.LineSegments(lineGeometry, lineMaterial);
     scene.add(lineSegments);
 
-    // 5. Mouse Follow Logic
     const mouse3D = new THREE.Vector3();
     const plane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
     const raycaster = new THREE.Raycaster();
@@ -209,13 +199,12 @@ export default function NeuralBackground() {
 
     const handleMouseLeave = () => {
       isHovering.current = false;
-      mouse3D.set(0, 0, -1000); // Send off-screen
+      mouse3D.set(0, 0, -1000);
     };
 
     window.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mouseleave', handleMouseLeave);
 
-    // 6. Animation Render Loop
     let animId = 0;
     const startTime = performance.now();
 
@@ -246,12 +235,9 @@ export default function NeuralBackground() {
       }
       const time = (performance.now() - startTime) * 0.001;
 
-      // Update positions and velocities
       particles.forEach((p) => {
-        // Drift movement
         p.pos.add(p.vel);
 
-        // Interaction with mouse cursor
         if (isHovering.current && p.layer >= 2) {
           const distanceToMouse = p.pos.distanceTo(mouse3D);
           const maxInteractionDist = p.layer === 3 ? 5.5 : 4.0;
@@ -260,21 +246,15 @@ export default function NeuralBackground() {
             const force = (maxInteractionDist - distanceToMouse) / maxInteractionDist;
             const dir = new THREE.Vector3().subVectors(mouse3D, p.pos).normalize();
 
-            // Apply gentle attraction force to cursor
             p.vel.addScaledVector(dir, force * 0.002 * p.layer);
             p.vel.clampLength(0.001, 0.04 * p.layer);
           }
         }
-
-        // Return slowly to base velocity drift
         p.vel.lerp(p.baseVel, 0.04);
 
-        // Pulsing scale effect on foreground nodes
         if (p.layer === 3) {
           p.pos.z += Math.sin(time * 2.0 + p.pulseOffset) * 0.003;
         }
-
-        // Keep inside bounds (wrap around boundaries)
         const boundX = 18;
         const boundY = 12;
         if (p.pos.x > boundX) { p.pos.x = -boundX; }
@@ -284,12 +264,9 @@ export default function NeuralBackground() {
         else if (p.pos.y < -boundY) { p.pos.y = boundY; }
       });
 
-      // Update node buffers
       updatePointsBuffer(points1, l1.particlesList);
       updatePointsBuffer(points2, l2.particlesList);
       updatePointsBuffer(points3, l3.particlesList);
-
-      // Rebuild connection segments between Layer 2 particles
       const linePosAttr = lineGeometry.attributes.position as THREE.BufferAttribute;
       const linePositionsArr = linePosAttr.array as Float32Array;
       const lineColAttr = lineGeometry.attributes.color as THREE.BufferAttribute;
@@ -311,21 +288,17 @@ export default function NeuralBackground() {
 
           if (dist < maxConnectDist) {
             const idx = lineCount * 2;
-            
-            // Start node
+
             linePositionsArr[idx * 3] = pA.pos.x;
             linePositionsArr[idx * 3 + 1] = pA.pos.y;
             linePositionsArr[idx * 3 + 2] = pA.pos.z;
-
-            // End node
             linePositionsArr[(idx + 1) * 3] = pB.pos.x;
             linePositionsArr[(idx + 1) * 3 + 1] = pB.pos.y;
             linePositionsArr[(idx + 1) * 3 + 2] = pB.pos.z;
 
-            // Line color with alpha fade modeled through color brightness
             const strength = 1.0 - (dist / maxConnectDist);
-            const brightness = strength * 0.10; // Extremely subtle connections
-            
+            const brightness = strength * 0.10;
+
             lineColorsArr[idx * 3] = pA.color.r * brightness;
             lineColorsArr[idx * 3 + 1] = pA.color.g * brightness;
             lineColorsArr[idx * 3 + 2] = pA.color.b * brightness;
@@ -343,7 +316,6 @@ export default function NeuralBackground() {
       lineColAttr.needsUpdate = true;
       lineGeometry.setDrawRange(0, lineCount * 2);
 
-      // Render Scene
       renderer.render(scene, camera);
 
       animId = requestAnimationFrame(render);
@@ -351,7 +323,6 @@ export default function NeuralBackground() {
 
     render();
 
-    // 7. Handle Window Resize
     const handleResize = () => {
       if (!container) return;
       width = container.clientWidth || window.innerWidth;
@@ -373,8 +344,7 @@ export default function NeuralBackground() {
       window.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseleave', handleMouseLeave);
       canvas.removeEventListener('webglcontextlost', handleContextLost);
-      
-      // Memory cleanup
+
       scene.remove(points1);
       scene.remove(points2);
       scene.remove(points3);
@@ -392,31 +362,30 @@ export default function NeuralBackground() {
   }, []);
 
   return (
-    <div 
-      ref={containerRef} 
+    <div
+      ref={containerRef}
       className="absolute inset-0 w-full h-full pointer-events-none z-0 select-none overflow-hidden"
       style={{
         background: 'radial-gradient(circle at center, #070c1e 0%, #03050d 100%)',
       }}
     >
-      {/* Three.js interactive Canvas */}
-      <canvas 
-        ref={canvasRef} 
-        className="absolute inset-0 w-full h-full block transition-opacity duration-700" 
+
+      <canvas
+        ref={canvasRef}
+        className="absolute inset-0 w-full h-full block transition-opacity duration-700"
         style={{ opacity: isInitialized ? 1 : 0 }}
       />
 
-      {/* Layer 4: Floating light bloom accents (CSS driven for best blending) */}
-      <div 
-        className="absolute rounded-full pointer-events-none w-[45%] h-[45%] bg-[#06b6d4]/[0.03] blur-[150px] animate-[pulse_8s_infinite_alternate]"
+      <div
+        className="hidden md:block absolute rounded-full pointer-events-none w-[45%] h-[45%] bg-[#06b6d4]/[0.03] blur-[150px] animate-[pulse_8s_infinite_alternate]"
         style={{ top: '10%', left: '15%' }}
       />
-      <div 
-        className="absolute rounded-full pointer-events-none w-[40%] h-[40%] bg-[#a855f7]/[0.02] blur-[160px] animate-[pulse_11s_infinite_alternate]"
+      <div
+        className="hidden md:block absolute rounded-full pointer-events-none w-[40%] h-[40%] bg-[#a855f7]/[0.02] blur-[160px] animate-[pulse_11s_infinite_alternate]"
         style={{ bottom: '15%', right: '10%' }}
       />
-      <div 
-        className="absolute rounded-full pointer-events-none w-[35%] h-[35%] bg-[#2dd4bf]/[0.02] blur-[130px] animate-[pulse_9s_infinite_alternate]"
+      <div
+        className="hidden md:block absolute rounded-full pointer-events-none w-[35%] h-[35%] bg-[#2dd4bf]/[0.02] blur-[130px] animate-[pulse_9s_infinite_alternate]"
         style={{ top: '60%', left: '50%' }}
       />
     </div>

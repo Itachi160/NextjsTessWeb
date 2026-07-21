@@ -10,7 +10,7 @@ export default function Particles() {
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
   const isLowEnd = typeof window !== 'undefined' && isLowEndDevice();
   const count = isLowEnd ? 80 : (isMobile ? 250 : 600);
-  
+
   const positions = useMemo(() => {
     const arr = new Float32Array(count * 3);
     for (let i = 0; i < count; i++) {
@@ -26,7 +26,6 @@ export default function Particles() {
     pointsRef.current.rotation.y = state.clock.getElapsedTime() * 0.015;
     pointsRef.current.rotation.x = Math.sin(state.clock.getElapsedTime() * 0.01) * 0.05;
 
-    // Subtle mouse parallax
     pointsRef.current.position.x += (state.pointer.x * 0.3 - pointsRef.current.position.x) * 0.02;
     pointsRef.current.position.y += (state.pointer.y * 0.3 - pointsRef.current.position.y) * 0.02;
   });

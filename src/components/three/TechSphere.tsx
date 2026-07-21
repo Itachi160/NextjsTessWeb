@@ -31,7 +31,6 @@ export default function TechSphere() {
   const groupRef = useRef<THREE.Group>(null);
   const { setHoveredTech, hoveredTech } = useCanvasStore();
 
-  // Distribute items evenly on a sphere using Fibonacci lattice
   const techItems = useMemo(() => {
     const items: TechItem[] = [];
     const count = TECHNOLOGIES.length;
@@ -56,8 +55,7 @@ export default function TechSphere() {
 
   useFrame((state) => {
     if (!groupRef.current) return;
-    
-    // Auto rotation
+
     const time = state.clock.getElapsedTime();
     groupRef.current.rotation.y = time * 0.12;
     groupRef.current.rotation.x = Math.sin(time * 0.05) * 0.1;
@@ -65,13 +63,11 @@ export default function TechSphere() {
 
   return (
     <group ref={groupRef} position={[-15, -22, 0]}>
-      {/* Central Core Glow */}
       <mesh>
         <sphereGeometry args={[0.8, 16, 16]} />
         <meshBasicMaterial color="#06b6d4" wireframe transparent opacity={0.1} />
       </mesh>
-      
-      {/* Tech Tags */}
+
       {techItems.map((tech) => {
         const isHovered = hoveredTech === tech.name;
         return (
@@ -84,22 +80,19 @@ export default function TechSphere() {
               <div
                 onMouseEnter={() => setHoveredTech(tech.name)}
                 onMouseLeave={() => setHoveredTech(null)}
-                className={`px-3 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all duration-300 border backdrop-blur-md flex items-center gap-1.5 ${
-                  isHovered
+                className={`px-3 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all duration-300 border backdrop-blur-md flex items-center gap-1.5 ${isHovered
                     ? 'scale-110 bg-gradient-to-r text-white shadow-[0_0_20px_rgba(6,182,212,0.6)] border-cyber-cyan border-opacity-100'
                     : 'bg-space-darkest/75 text-gray-300 border-white/10 hover:border-cyber-cyan hover:text-cyber-cyan hover:scale-105'
-                }`}
+                  }`}
                 style={{
                   boxShadow: isHovered
                     ? '0 0 20px rgba(6,182,212,0.4), inset 0 0 10px rgba(6,182,212,0.2)'
                     : 'none',
                 }}
               >
-                {/* Visual marker dot */}
                 <span
-                  className={`w-1.5 h-1.5 rounded-full ${
-                    isHovered ? 'bg-white animate-pulse' : 'bg-cyber-cyan'
-                  }`}
+                  className={`w-1.5 h-1.5 rounded-full ${isHovered ? 'bg-white animate-pulse' : 'bg-cyber-cyan'
+                    }`}
                 />
                 {tech.name}
               </div>

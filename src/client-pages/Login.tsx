@@ -327,12 +327,9 @@ export default function Login() {
           style={{ width: 'calc(100% + 96px)', height: 'calc(100% + 96px)' }}
         />
 
-        <div className="absolute -inset-[1px] rounded-2xl overflow-hidden pointer-events-none z-[1]" style={{ isolation: 'isolate' }}>
-          <motion.div
-            className="absolute -inset-[150%] z-0 will-change-transform"
-            animate={{ rotate: [0, 360] }}
-            transformTemplate={({ rotate }) => `rotate(${rotate}) translateZ(0)`}
-            transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
+        <div className="absolute -inset-[1px] rounded-2xl overflow-hidden pointer-events-none z-[1] transform-gpu" style={{ isolation: 'isolate' }}>
+          <div
+            className="absolute -inset-[150%] z-0 animate-[spin_10s_linear_infinite] will-change-transform"
             style={{
               backfaceVisibility: 'hidden',
               WebkitBackfaceVisibility: 'hidden',

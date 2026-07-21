@@ -13,10 +13,8 @@ export default function ThreeCanvas() {
         dpr={dpr}
         style={{ background: 'transparent' }}
       >
-        {/* Subtle ambient light */}
         <ambientLight intensity={0.3} />
 
-        {/* Persistent Particle Dust - background only */}
         <Particles />
       </Canvas>
     </div>

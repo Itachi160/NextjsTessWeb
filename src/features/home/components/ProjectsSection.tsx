@@ -106,7 +106,7 @@ export default function ProjectsSection() {
             start: 'top top',
             end: () => `+=${getScrollDistance()}`,
             invalidateOnRefresh: true,
-            anticipatePin: 0,
+            anticipatePin: 1,
             pinSpacing: true,
             onToggle: (self) => {
               scrollTriggerRef.current = self;

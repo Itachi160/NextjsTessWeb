@@ -37,7 +37,7 @@ export default function Footer() {
             <div className="w-8 h-8 flex items-center justify-center">
               <img
                 src="/Logo Hd.webp"
-                alt="Logo"
+                alt="Tesseract InfoSystems Logo"
                 className="w-full h-full object-contain filter invert brightness-[2.5] drop-shadow-[0_0_8px_rgba(6,182,212,0.5)]"
               />
             </div>
@@ -50,9 +50,10 @@ export default function Footer() {
           </p>
           <div className="flex items-center gap-4 mt-4">
             <a
-              href="https://linkedin.com"
+              href="https://www.linkedin.com/company/tesseractsys"
               target="_blank"
               rel="noreferrer"
+              aria-label="Tesseract InfoSystems LinkedIn Profile"
               className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-gray-400 hover:text-white hover:border-cyber-cyan hover:shadow-[0_0_10px_rgba(6,182,212,0.4)] transition-all"
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
@@ -62,9 +63,10 @@ export default function Footer() {
               </svg>
             </a>
             <a
-              href="https://twitter.com"
+              href="https://twitter.com/tesseractsys"
               target="_blank"
               rel="noreferrer"
+              aria-label="Tesseract InfoSystems Twitter Profile"
               className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-gray-400 hover:text-white hover:border-cyber-cyan hover:shadow-[0_0_10px_rgba(6,182,212,0.4)] transition-all"
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
@@ -74,9 +76,10 @@ export default function Footer() {
               </svg>
             </a>
             <a
-              href="https://github.com"
+              href="https://github.com/tesseractsys"
               target="_blank"
               rel="noreferrer"
+              aria-label="Tesseract InfoSystems GitHub Profile"
               className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-gray-400 hover:text-white hover:border-cyber-cyan hover:shadow-[0_0_10px_rgba(6,182,212,0.4)] transition-all"
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}

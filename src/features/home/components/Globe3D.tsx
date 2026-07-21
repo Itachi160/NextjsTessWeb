@@ -94,14 +94,17 @@ function Globe3D({ onSelect, selectedOffice }: Globe3DProps) {
     resize();
     window.addEventListener('resize', resize);
 
+    const handleScroll = () => {
+      scrollAngle.current = window.scrollY * 0.0035;
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
     const render = () => {
       if (document.hidden) {
         animId = requestAnimationFrame(render);
         return;
       }
       ctx.clearRect(0, 0, width, height);
-
-      scrollAngle.current = window.scrollY * 0.0035;
 
       if (!hovering.current) {
         autoAngle.current += 0.002;
@@ -264,6 +267,7 @@ function Globe3D({ onSelect, selectedOffice }: Globe3DProps) {
 
     return () => {
       cancelAnimationFrame(animId);
+      window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', resize);
       window.removeEventListener('resize', updateRectCache);
     };

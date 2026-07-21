@@ -48,22 +48,16 @@ export default function Navbar() {
   return (
     <header className="fixed top-5 left-0 w-full z-[100] px-4 md:px-8 pointer-events-none">
       <motion.div
-        className="max-w-7xl mx-auto h-16 rounded-full border border-white/10 bg-[#03050d]/80 backdrop-blur-xl flex items-center justify-between px-6 shadow-[0_20px_50px_rgba(0,0,0,0.8),_0_0_30px_rgba(0,80,255,0.05)] transition-all duration-300 pointer-events-auto hover:border-white/20 relative"
-        initial={{ clipPath: 'inset(0 90% 0 0 round 32px)', boxShadow: '0 20px 50px rgba(0,0,0,0.8), 0 0 10px rgba(6,182,212,0.1)' }}
+        className="max-w-7xl mx-auto h-16 rounded-full border border-white/10 bg-[#03050d]/80 backdrop-blur-xl flex items-center justify-between px-6 shadow-[0_20px_50px_rgba(0,0,0,0.8),_0_0_20px_rgba(6,182,212,0.2)] transition-all duration-300 pointer-events-auto hover:border-white/20 relative transform-gpu will-change-transform"
+        style={{ WebkitBackfaceVisibility: 'hidden', backfaceVisibility: 'hidden' }}
+        initial={{ clipPath: 'inset(0 90% 0 0 round 32px)' }}
         animate={preloaderDone ? {
           clipPath: 'inset(0 0% 0 0 round 32px)',
-          boxShadow: [
-            '0 20px 50px rgba(0,0,0,0.8), 0 0 10px rgba(6,182,212,0.1)',
-            '0 20px 50px rgba(0,0,0,0.8), 0 0 35px rgba(6,182,212,0.35), 0 0 70px rgba(168,85,247,0.15)',
-            '0 20px 50px rgba(0,0,0,0.8), 0 0 10px rgba(6,182,212,0.1)'
-          ]
         } : {
           clipPath: 'inset(0 90% 0 0 round 32px)',
-          boxShadow: '0 20px 50px rgba(0,0,0,0.8), 0 0 10px rgba(6,182,212,0.1)'
         }}
         transition={{
           clipPath: { duration: 1.2, ease: [0.16, 1, 0.3, 1] },
-          boxShadow: { duration: 1.8, delay: 0.2, ease: 'easeInOut' }
         }}
       >
 

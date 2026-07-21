@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Outfit, Inter, Fira_Code } from 'next/font/google';
 import ClientLayout from '../components/ClientLayout';
+import { getOrganizationSchema, getWebSiteSchema, getLocalBusinessSchema } from '../lib/seoSchemas';
 import '../index.css';
 
 const outfit = Outfit({
@@ -30,19 +31,18 @@ export const metadata: Metadata = {
     default: 'Tesseract Tech & Cloud Systems | Tesseract Infosystems',
     template: '%s | Tesseract Tech & Systems',
   },
-  description: 'Tesseract Infosystems (Tesseract Tech) designs and deploys custom software platforms, cloud-native architectures, and high-performance enterprise AI systems.',
+  description: 'Tesseract Infosystems (Tesseract Tech) designs and deploys custom software platforms, cloud-native architectures, AI & automation solutions, and high-performance enterprise systems.',
   keywords: [
     'Tesseract Tech',
     'Tesseract Sys',
     'Tesseract Infosystems',
     'Enterprise Software Engineering',
-    'Cloud-Native Cloud Systems',
+    'Cloud-Native Systems',
     'Custom Software Platforms',
-    'Artificial Intelligence Solutions',
+    'AI & Automation Solutions',
+    'Digital Marketing Services',
+    'IT Staffing Solutions',
     'Software Architecture',
-    'Immersive UI Design',
-    'PostgreSQL',
-    'React Next.js Architecture',
     'Pune Software Company',
     'Baramati IT Systems'
   ],
@@ -65,24 +65,32 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'Tesseract Tech & Cloud Systems | Tesseract Infosystems',
-    description: 'Tesseract Infosystems (Tesseract Tech) designs and deploys custom software platforms, cloud-native architectures, and high-performance enterprise AI systems.',
+    description: 'Tesseract Infosystems (Tesseract Tech) designs and deploys custom software platforms, cloud-native architectures, AI & automation solutions, and high-performance enterprise systems.',
     url: 'https://tesseractinfosystems.com',
     siteName: 'Tesseract Infosystems',
+    images: [
+      {
+        url: '/Logo%20Hd.png',
+        width: 1200,
+        height: 630,
+        alt: 'Tesseract InfoSystems Logo',
+      },
+    ],
     locale: 'en_US',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Tesseract Tech & Cloud Systems | Tesseract Infosystems',
-    description: 'Tesseract Infosystems (Tesseract Tech) designs and deploys custom software platforms, cloud-native architectures, and high-performance enterprise AI systems.',
+    description: 'Tesseract Infosystems (Tesseract Tech) designs and deploys custom software platforms, cloud-native architectures, AI & automation solutions, and high-performance enterprise systems.',
+    images: ['/Logo%20Hd.png'],
     creator: '@tesseractsys',
   },
   icons: {
     icon: [
       { url: '/favicon.ico', sizes: 'any' },
       { url: '/favicon-48x48.png', sizes: '48x48', type: 'image/png' },
-      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
-      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon-96x96.png', sizes: '96x96', type: 'image/png' },
       { url: '/android-chrome-192x192.png', sizes: '192x192', type: 'image/png' },
       { url: '/android-chrome-512x512.png', sizes: '512x512', type: 'image/png' },
     ],
@@ -99,51 +107,24 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const orgSchema = getOrganizationSchema();
+  const siteSchema = getWebSiteSchema();
+  const localBizSchema = getLocalBusinessSchema();
+
   return (
     <html lang="en" className={`${outfit.variable} ${inter.variable} ${firaCode.variable} scrollbar-none`}>
       <body className="antialiased">
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "ProfessionalService",
-              "name": "Tesseract Infosystems",
-              "image": "https://tesseractinfosystems.com/Logo%20Hd.png",
-              "@id": "https://tesseractinfosystems.com/#organization",
-              "url": "https://tesseractinfosystems.com",
-              "telephone": "+91 20 5555 0199",
-              "email": "contact@tesseractinfosystems.com",
-              "address": {
-                "@type": "PostalAddress",
-                "streetAddress": "Ozarde Estate, Tc College Road",
-                "addressLocality": "Baramati, Pune",
-                "postalCode": "413102",
-                "addressCountry": "IN"
-              },
-              "geo": {
-                "@type": "GeoCoordinates",
-                "latitude": 18.1565,
-                "longitude": 74.5771
-              },
-              "openingHoursSpecification": {
-                "@type": "OpeningHoursSpecification",
-                "dayOfWeek": [
-                  "Monday",
-                  "Tuesday",
-                  "Wednesday",
-                  "Thursday",
-                  "Friday"
-                ],
-                "opens": "09:00",
-                "closes": "18:00"
-              },
-              "sameAs": [
-                "https://www.linkedin.com/company/tesseractsys",
-                "https://github.com/tesseractsys"
-              ]
-            })
-          }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(siteSchema) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(localBizSchema) }}
         />
         <ClientLayout>{children}</ClientLayout>
       </body>
