@@ -119,41 +119,24 @@ export default function ChatWidget() {
         throw new Error(errorData?.error || `HTTP ${response.status} error`);
       }
 
-      if (!response.body) {
-        throw new Error('No readable stream received from server.');
-      }
+      const data = await response.json();
+      let replyText = data?.reply || data?.error || '';
 
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder();
-      let accumulatedText = '';
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-
-        const chunk = decoder.decode(value, { stream: true });
-
-        if (chunk.includes('[ERROR]:')) {
-          const errText = chunk.replace('[ERROR]:', '').trim();
-          throw new Error(errText);
-        }
-
-        accumulatedText += chunk;
-
-        setMessages((prev) =>
-          prev.map((m) =>
-            m.id === botMsgId ? { ...m, text: accumulatedText } : m
-          )
-        );
-
-        scrollToBottom();
+      if (typeof replyText === 'string' && replyText.startsWith('{') && replyText.endsWith('}')) {
+        try {
+          const parsed = JSON.parse(replyText);
+          if (parsed.reply) replyText = parsed.reply;
+        } catch (_) { }
       }
 
       setMessages((prev) =>
         prev.map((m) =>
-          m.id === botMsgId ? { ...m, isStreaming: false } : m
+          m.id === botMsgId
+            ? { ...m, text: replyText, isStreaming: false }
+            : m
         )
       );
+      scrollToBottom();
     } catch (err: any) {
       console.error('Streaming Chat error:', err);
       const errMsg = err?.message || 'Failed to connect to Gemini AI service.';
