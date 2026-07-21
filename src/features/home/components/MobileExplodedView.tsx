@@ -15,10 +15,8 @@ interface LayerConfig {
   shadowColor: string;
   logos: string[];
   techNames: string[];
-  // Exploded offsets
   exX: number;
   exY: number;
-  // Final locked list Y offset
   lockedY: number;
 }
 
@@ -123,17 +121,8 @@ function interpolate(value: number, inputMin: number, inputMax: number, outputMi
 export default function MobileExplodedView({ scrollProgress }: MobileExplodedViewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Phase ranges:
-  // Phase 1 (Stacked Isometric): 0.0 -> 0.20
-  // Phase 2 (Exploding): 0.20 -> 0.60
-  // Phase 3 (Reassembling Flat): 0.60 -> 0.90
-  // Phase 4 (Locked Flat): 0.90 -> 1.0
-
-  // Central core properties
   const coreOpacity = interpolate(scrollProgress, 0.20, 0.35, 0, 1) - interpolate(scrollProgress, 0.60, 0.70, 0, 1);
   const coreScale = interpolate(scrollProgress, 0.20, 0.35, 0.3, 1);
-
-  // SVG lines opacity
   const linesOpacity = interpolate(scrollProgress, 0.25, 0.40, 0, 0.4) - interpolate(scrollProgress, 0.58, 0.68, 0, 0.4);
 
   return (
@@ -141,7 +130,6 @@ export default function MobileExplodedView({ scrollProgress }: MobileExplodedVie
       ref={containerRef}
       className="relative w-full aspect-square max-w-[350px] mx-auto flex items-center justify-center select-none font-sans overflow-visible h-[420px]"
     >
-      {/* Background Central Gyroscope Core (Visible only in Exploded Phase 2) */}
       <div
         className="absolute w-24 h-24 rounded-full flex items-center justify-center z-0 pointer-events-none transition-all duration-75"
         style={{
@@ -156,7 +144,6 @@ export default function MobileExplodedView({ scrollProgress }: MobileExplodedVie
         <div className="absolute w-3 h-3 rounded-full bg-white shadow-[0_0_12px_#06b6d4] animate-pulse" />
       </div>
 
-      {/* SVG Connecting Traces (Visible only in Exploded Phase 2) */}
       <svg
         className="absolute inset-0 w-full h-full pointer-events-none z-0 transition-opacity duration-75"
         viewBox="0 0 350 420"
@@ -185,42 +172,28 @@ export default function MobileExplodedView({ scrollProgress }: MobileExplodedVie
           </linearGradient>
         </defs>
 
-        {/* Central coordinates are at 175, 210 */}
-        {/* Layer 1 Line (Frontend) */}
         <line x1="175" y1="210" x2="85" y2="80" stroke="url(#grad-lt)" strokeWidth="1.5" strokeDasharray="4 4" />
-        {/* Layer 2 Line (Backend) */}
         <line x1="175" y1="210" x2="270" y2="140" stroke="url(#grad-rt)" strokeWidth="1.5" strokeDasharray="4 4" />
-        {/* Layer 3 Line (Database) */}
         <line x1="175" y1="210" x2="75" y2="250" stroke="url(#grad-ll)" strokeWidth="1.5" strokeDasharray="4 4" />
-        {/* Layer 4 Line (DevOps) */}
         <line x1="175" y1="210" x2="275" y2="310" stroke="url(#grad-lr)" strokeWidth="1.5" strokeDasharray="4 4" />
-        {/* Layer 5 Line (Cloud) */}
         <line x1="175" y1="210" x2="175" y2="370" stroke="url(#grad-bc)" strokeWidth="1.5" strokeDasharray="4 4" />
       </svg>
 
-      {/* Isometric 3D Layer Wrapper */}
       <div className="relative w-full h-full flex items-center justify-center" style={{ perspective: 1000 }}>
         {LAYERS.map((layer) => {
           const RenderIcon = layer.icon;
 
-          // 1. Calculate isometric rotation transition (Phase 2 -> Phase 3 -> Phase 4)
-          // Starts at rx=45, rz=-45 (Isometric), transitions to rx=0, rz=0 (Flat) between 0.60 and 0.85 progress.
           const rx = interpolate(scrollProgress, 0.60, 0.82, 45, 0);
           const rz = interpolate(scrollProgress, 0.60, 0.82, -45, 0);
 
-          // 2. Calculate translations
           let x = 0;
           let y = 0;
           let z = 0;
 
           if (scrollProgress <= 0.20) {
-            // Phase 1: Stacked Isometric
-            // Offset vertically along isometric Z axis
             z = (3 - layer.id) * 16;
             y = (layer.id - 3) * 8;
           } else if (scrollProgress <= 0.60) {
-            // Phase 2: Exploding
-            // Interpolate from stacked offsets to exploded offsets
             const factor = (scrollProgress - 0.20) / 0.40;
             const startZ = (3 - layer.id) * 16;
             const startY = (layer.id - 3) * 8;
@@ -228,21 +201,14 @@ export default function MobileExplodedView({ scrollProgress }: MobileExplodedVie
             x = layer.exX * factor;
             y = startY + (layer.exY - startY) * factor;
           } else {
-            // Phase 3 & 4: Reassembling & Locked Flat
-            // Interpolate from exploded offsets to flat vertical grid coordinates (lockedY)
             const factor = (scrollProgress - 0.60) / 0.30;
             x = layer.exX * (1 - Math.min(1, factor));
             y = interpolate(scrollProgress, 0.60, 0.90, layer.exY, layer.lockedY);
           }
 
-          // 3. Scale calculation
-          // Slight scaling effect: stacks together slightly smaller, scales to normal flat layout
           const sc = scrollProgress <= 0.60
             ? 0.82 + (layer.id * 0.02)
             : interpolate(scrollProgress, 0.60, 0.90, 0.9, 1.0);
-
-          // 4. Content visibility states:
-          // In isometric phase, title is hidden or simple. In flat locked phase, full details are shown.
           const showDetails = scrollProgress >= 0.75;
           const detailsOpacity = interpolate(scrollProgress, 0.72, 0.90, 0, 1);
 
@@ -258,7 +224,6 @@ export default function MobileExplodedView({ scrollProgress }: MobileExplodedVie
               }}
             >
               <div className="flex items-center gap-2.5 text-left w-full overflow-hidden">
-                {/* Category Icon */}
                 <div
                   className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
                   style={{ backgroundColor: `${layer.color}15`, border: `1px solid ${layer.color}35` }}
@@ -266,7 +231,6 @@ export default function MobileExplodedView({ scrollProgress }: MobileExplodedVie
                   <RenderIcon className="w-4 h-4" style={{ color: layer.color }} />
                 </div>
 
-                {/* Layer Text Details */}
                 <div className="flex-1 min-w-0 flex flex-col justify-center">
                   {!showDetails ? (
                     <span className="text-[9px] font-mono font-bold tracking-wider text-white truncate">
@@ -287,7 +251,6 @@ export default function MobileExplodedView({ scrollProgress }: MobileExplodedVie
                   )}
                 </div>
 
-                {/* Tech Logos inside Card (Visible in Lock State) */}
                 {showDetails && (
                   <div className="flex items-center gap-1.5 pl-2 shrink-0 border-l border-white/5" style={{ opacity: detailsOpacity }}>
                     {layer.logos.map((logo, logoIdx) => (

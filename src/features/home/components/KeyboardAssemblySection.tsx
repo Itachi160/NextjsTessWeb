@@ -8,14 +8,12 @@ import { useUIStore } from '../../../store/uiStore';
 import MagneticButton from '../../../components/MagneticButton';
 import { isSlowConnection, isLowEndDevice } from '../../../utils/performance';
 
-// Image configuration helper
 const getFramePath = (index: number, isSlow: boolean) => {
   const mappedIndex = isSlow ? index * 2 : index;
   const paddedIndex = String(mappedIndex).padStart(3, '0');
   return encodeURI(`/Keyboard Assemble Animation/Video 4_${paddedIndex}.webp`);
 };
 
-// Global static cache to prevent re-preloading images when component remounts on page switches
 let cachedImages: HTMLImageElement[] = [];
 let cachedImagesLoaded = false;
 let cachedFrameCount = 0;
@@ -24,7 +22,7 @@ export default function KeyboardAssemblySection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const isIntersectingRef = useRef(false);
-  const drawFrameRef = useRef<(latest: number) => void>(() => {});
+  const drawFrameRef = useRef<(latest: number) => void>(() => { });
 
   const { totalFrames, isSlow } = useMemo(() => {
     const slow = isSlowConnection() || isLowEndDevice();
@@ -54,7 +52,6 @@ export default function KeyboardAssemblySection() {
   const [activeSection, setActiveSection] = useState<'overview' | 'tactility' | 'latency' | 'orchestration' | 'deploy'>('overview');
   const [shouldPreload, setShouldPreload] = useState(false);
 
-  // Sync cache state on client mount to prevent hydration mismatch
   useEffect(() => {
     if (cachedImagesLoaded && cachedFrameCount === totalFrames) {
       setImagesLoaded(true);
@@ -64,21 +61,17 @@ export default function KeyboardAssemblySection() {
     }
   }, [totalFrames]);
 
-  // Viewport intersection observer to control preloading and active animation states
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
-    // Trigger animations only when visible in viewport to save CPU cycles
     const animObserver = new IntersectionObserver(([entry]) => {
       isIntersectingRef.current = entry.isIntersecting;
     }, { threshold: 0.01 });
-
-    // Preload images 1200px in advance (while user is reading Hero/About sections)
     const preloadObserver = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
         setShouldPreload(true);
-        preloadObserver.disconnect(); // Disconnect once preload is triggered
+        preloadObserver.disconnect();
       }
     }, { threshold: 0.01, rootMargin: '1200px 0px 1200px 0px' });
 
@@ -91,7 +84,6 @@ export default function KeyboardAssemblySection() {
     };
   }, []);
 
-  // Preload all frames when close to viewport or cached using a chunked queue
   useEffect(() => {
     if (cachedImagesLoaded && cachedFrameCount === totalFrames) {
       setImagesLoaded(true);
@@ -106,7 +98,6 @@ export default function KeyboardAssemblySection() {
     let loadedCount = 0;
     const tempImages: HTMLImageElement[] = [];
 
-    // Pre-initialize array with empty/unloaded images to maintain correct index mapping
     for (let i = 0; i < totalFrames; i++) {
       tempImages[i] = new Image();
     }
@@ -115,8 +106,7 @@ export default function KeyboardAssemblySection() {
       if (isAborted) return;
       loadedCount++;
       const progress = Math.round((loadedCount / totalFrames) * 100);
-      
-      // Throttle state updates to steps of 5% to avoid React render thrashing
+
       if (progress % 5 === 0 || progress === 100) {
         setLoadProgress(progress);
       }
@@ -130,7 +120,6 @@ export default function KeyboardAssemblySection() {
       }
     };
 
-    // Load initial critical frames immediately (first 12 frames)
     const initialBatchSize = 12;
     for (let i = 0; i < Math.min(initialBatchSize, totalFrames); i++) {
       tempImages[i].src = getFramePath(i, isSlow);
@@ -141,7 +130,6 @@ export default function KeyboardAssemblySection() {
       };
     }
 
-    // Load the rest sequentially in chunks to avoid clogging the network
     const remainingIndices = Array.from(
       { length: totalFrames - initialBatchSize },
       (_, i) => i + initialBatchSize
@@ -152,7 +140,7 @@ export default function KeyboardAssemblySection() {
     const loadNext = () => {
       if (isAborted || queueIndex >= remainingIndices.length) return;
       const currentIdx = remainingIndices[queueIndex++];
-      
+
       const img = tempImages[currentIdx];
       img.src = getFramePath(currentIdx, isSlow);
       img.onload = () => {
@@ -166,7 +154,6 @@ export default function KeyboardAssemblySection() {
       };
     };
 
-    // Spawn concurrent queue listeners
     for (let c = 0; c < concurrentLimit; c++) {
       loadNext();
     }
@@ -181,7 +168,6 @@ export default function KeyboardAssemblySection() {
     offset: ['start start', 'end end'],
   });
 
-  // High-performance canvas drawing loop synced directly to scroll progress
   useEffect(() => {
     if (!imagesLoaded || imagesArray.length === 0) return;
 
@@ -195,8 +181,13 @@ export default function KeyboardAssemblySection() {
 
     let rect = canvas.getBoundingClientRect();
 
+    let cachedDpr = Math.min(window.devicePixelRatio || 1, window.innerWidth < 768 ? 1.5 : 2.0);
+    let smoothingSet = false;
+
     const handleResize = () => {
       rect = canvas.getBoundingClientRect();
+      cachedDpr = Math.min(window.devicePixelRatio || 1, window.innerWidth < 768 ? 1.5 : 2.0);
+      smoothingSet = false;
     };
     window.addEventListener('resize', handleResize, { passive: true });
 
@@ -217,7 +208,7 @@ export default function KeyboardAssemblySection() {
         setActiveSection(newSection);
       }
 
-      if (Math.abs(latest - lastValue) < 0.0005) return;
+      if (latest === lastValue) return;
       lastValue = latest;
 
       const rawFrame = latest < 0.85
@@ -233,16 +224,21 @@ export default function KeyboardAssemblySection() {
       const img2 = imagesArray[nextFrameIndex];
 
       if (img1 && img1.complete) {
-        const dpr = Math.min(window.devicePixelRatio || 1, window.innerWidth < 768 ? 1.5 : 2.0);
+        const dpr = cachedDpr;
 
         if (canvas.width !== rect.width * dpr || canvas.height !== rect.height * dpr) {
           canvas.width = rect.width * dpr;
           canvas.height = rect.height * dpr;
           ctx.setTransform(1, 0, 0, 1, 0, 0);
           ctx.scale(dpr, dpr);
+          smoothingSet = false;
         }
 
-        ctx.clearRect(0, 0, rect.width, rect.height);
+        if (!smoothingSet) {
+          ctx.imageSmoothingEnabled = true;
+          ctx.imageSmoothingQuality = 'high';
+          smoothingSet = true;
+        }
 
         const imgRatio = img1.width / img1.height;
         const canvasRatio = rect.width / rect.height;
@@ -262,18 +258,13 @@ export default function KeyboardAssemblySection() {
           drawX = (rect.width - drawW) / 2;
         }
 
-        ctx.imageSmoothingEnabled = true;
-        ctx.imageSmoothingQuality = 'high';
-
         ctx.globalAlpha = 1.0;
         ctx.drawImage(img1, drawX, drawY, drawW, drawH);
-
         if (ratio > 0.005 && img2 && img2.complete && frameIndex !== nextFrameIndex) {
           ctx.globalAlpha = ratio;
           ctx.drawImage(img2, drawX, drawY, drawW, drawH);
+          ctx.globalAlpha = 1.0;
         }
-
-        ctx.globalAlpha = 1.0;
       }
     };
 
@@ -290,7 +281,6 @@ export default function KeyboardAssemblySection() {
     };
   }, [imagesLoaded, imagesArray, scrollYProgress, totalFrames]);
 
-  // Redraw when the section re-enters the viewport
   useEffect(() => {
     const container = containerRef.current;
     if (!container || !imagesLoaded) return;
@@ -339,7 +329,6 @@ export default function KeyboardAssemblySection() {
       className="relative w-full bg-[#050505]"
       style={{ height: '580vh' }}
     >
-      {/* ═══ Loading Screen Overlay ═══ */}
       {!imagesLoaded && (
         <div className="absolute inset-0 bg-[#03050d] z-[50] flex flex-col items-center justify-center font-sans">
           <div className="glass-card-glow max-w-md w-full p-8 rounded-3xl text-center flex flex-col items-center gap-6">
@@ -357,7 +346,6 @@ export default function KeyboardAssemblySection() {
               </p>
             </div>
 
-            {/* Progress line */}
             <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
               <div
                 className="h-full bg-gradient-to-r from-cyber-blue via-cyber-cyan to-cyber-purple transition-all duration-300 shadow-[0_0_10px_#06b6d4]"
@@ -372,9 +360,7 @@ export default function KeyboardAssemblySection() {
         </div>
       )}
 
-      {/* ═══ Sticky Viewport Container ═══ */}
       <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center">
-        {/* Subtle background grids */}
         <div className="absolute inset-0 pointer-events-none opacity-[0.02]"
           style={{
             backgroundImage: 'linear-gradient(rgba(255,255,255,0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.4) 1px, transparent 1px)',
@@ -384,20 +370,15 @@ export default function KeyboardAssemblySection() {
           }}
         />
 
-        {/* Ambient background glows */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full pointer-events-none opacity-40 blur-[80px]"
           style={{ background: 'radial-gradient(circle, rgba(0,80,255,0.06) 0%, rgba(6,182,212,0.02) 40%, transparent 70%)' }}
         />
-
-        {/* ═══ Core Image Sequence Canvas ═══ */}
         <div className="relative w-full h-full flex items-center justify-center max-w-6xl mx-auto p-4 md:p-12 z-10 pointer-events-none md:translate-y-0 -translate-y-24">
           <canvas
             ref={canvasRef}
             className="w-full h-full object-contain filter drop-shadow-[0_0_35px_rgba(0,0,0,0.8)]"
           />
         </div>
-
-        {/* ═══ SCROLLING STORYTELLING BEATS OVERLAYS ═══ */}
 
         <motion.div
           className="absolute inset-x-6 top-1/2 -translate-y-1/2 flex flex-col items-center justify-center text-center max-w-3xl mx-auto z-20 font-sans"
@@ -429,7 +410,6 @@ export default function KeyboardAssemblySection() {
           </div>
         </motion.div>
 
-        {/* 2. High End System Design Beat (Left Card) */}
         <motion.div
           className="absolute left-4 right-4 bottom-8 md:bottom-auto md:left-16 md:right-auto md:top-1/2 md:-translate-y-1/2 max-w-sm md:max-w-md w-auto z-20 font-sans"
           style={{ opacity: sec2Opacity, x: sec2X, visibility: sec2Visibility, pointerEvents: sec2PointerEvents }}
@@ -462,7 +442,6 @@ export default function KeyboardAssemblySection() {
           </div>
         </motion.div>
 
-        {/* 3. Data Engineering Beat (Right Card) */}
         <motion.div
           className="absolute left-4 right-4 bottom-8 md:bottom-auto md:right-16 md:left-auto md:top-1/2 md:-translate-y-1/2 max-w-sm md:max-w-md w-auto z-20 font-sans"
           style={{ opacity: sec3Opacity, x: sec3X, visibility: sec3Visibility, pointerEvents: sec3PointerEvents }}
@@ -495,7 +474,6 @@ export default function KeyboardAssemblySection() {
           </div>
         </motion.div>
 
-        {/* 4. AI & Intelligent Automation Beat (Left Card) */}
         <motion.div
           className="absolute left-4 right-4 bottom-8 md:bottom-auto md:left-16 md:right-auto md:top-1/2 md:-translate-y-1/2 max-w-sm md:max-w-md w-auto z-20 font-sans"
           style={{ opacity: sec4Opacity, x: sec4X, visibility: sec4Visibility, pointerEvents: sec4PointerEvents }}
@@ -528,7 +506,6 @@ export default function KeyboardAssemblySection() {
           </div>
         </motion.div>
 
-        {/* 5. Cloud-Native Engineering Beat (Centered) */}
         <motion.div
           className="absolute inset-x-4 bottom-6 md:bottom-auto md:inset-x-6 md:top-1/2 md:-translate-y-1/2 flex flex-col items-center justify-center text-center max-w-3xl mx-auto z-20 font-sans"
           style={{ opacity: sec5Opacity, y: sec5Y, visibility: sec5Visibility, pointerEvents: sec5PointerEvents }}
@@ -553,7 +530,7 @@ export default function KeyboardAssemblySection() {
             </p>
 
             <div className="flex flex-col sm:flex-row items-center gap-4 mt-8">
-              {/* Primary Action Button */}
+
               <MagneticButton strength={0.2}>
                 <a
                   href="/contact"
@@ -567,7 +544,6 @@ export default function KeyboardAssemblySection() {
                 </a>
               </MagneticButton>
 
-              {/* Secondary Action Link */}
               <a
                 href="/solutions"
                 onClick={(e) => handlePageNav('/solutions', e)}

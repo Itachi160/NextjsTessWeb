@@ -9,7 +9,6 @@ import MagneticButton from '../../../components/MagneticButton';
 import { useUIStore } from '../../../store/uiStore';
 import TextScramble from '../../../components/TextScramble';
 
-// Floating tech icons for the hero background
 const HERO_TECHS = [
   { name: 'React', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg', x: '8%', y: '18%', size: 40, depth: 0.8, delay: 0 },
   { name: 'Python', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg', x: '88%', y: '22%', size: 36, depth: 0.5, delay: 1 },
@@ -21,7 +20,6 @@ const HERO_TECHS = [
   { name: 'C++', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg', x: '75%', y: '82%', size: 30, depth: 0.5, delay: 1.8 },
 ];
 
-// Stats counter data — defined outside component, never changes
 const STATS = [
   { label: 'Enterprise Pilots', value: 2, suffix: '' },
   { label: 'SLA Core Uptime', value: 99.9, suffix: '%', decimals: 1 },
@@ -35,10 +33,8 @@ export default function HeroSection() {
   const heroRef = useRef<HTMLDivElement>(null);
   const mousePos = useRef({ x: 0, y: 0 });
   const floatingRefs = useRef<(HTMLDivElement | null)[]>([]);
-  // DOM refs for counter digits — direct DOM writes bypass React re-renders entirely
   const counterRefs = useRef<(HTMLSpanElement | null)[]>([]);
 
-  // Mouse parallax — passive listener + overwrite:auto prevents tween queuing
   useEffect(() => {
     let rectCache: DOMRect | null = null;
     const hero = heroRef.current;
@@ -72,7 +68,7 @@ export default function HeroSection() {
           y: mousePos.current.y * 30 * tech.depth,
           duration: 1.2,
           ease: 'power2.out',
-          overwrite: 'auto', // Prevents tween queue buildup on rapid mouse movement
+          overwrite: 'auto',
         });
       });
     };
@@ -91,7 +87,6 @@ export default function HeroSection() {
     };
   }, []);
 
-  // Stats counter — RAF loop writing directly to DOM refs (zero React state updates)
   useEffect(() => {
     if (!preloaderDone) return;
     const duration = 2000;
@@ -130,15 +125,12 @@ export default function HeroSection() {
       className="relative min-h-screen w-full flex flex-col items-center justify-center overflow-hidden px-6"
     >
 
-
-      {/* ═══ Ambient Red/Noir Nebula Glow ═══ */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] rounded-full pointer-events-none"
         style={{ background: 'radial-gradient(circle, rgba(239,35,60,0.05) 0%, transparent 70%)' }}
       />
       <div className="absolute top-[30%] left-[20%] w-[400px] h-[400px] rounded-full bg-[#ef233c]/[0.02] blur-[120px] pointer-events-none" />
       <div className="absolute bottom-[20%] right-[15%] w-[350px] h-[350px] rounded-full bg-[#ef233c]/[0.03] blur-[100px] pointer-events-none" />
 
-      {/* ═══ Grid pattern overlay ═══ */}
       <div
         className="absolute inset-0 pointer-events-none opacity-[0.03]"
         style={{
@@ -148,8 +140,6 @@ export default function HeroSection() {
           WebkitMaskImage: 'radial-gradient(circle at center, black 30%, transparent 75%)',
         }}
       />
-
-      {/* Floating tech icons with parallax */}
       {HERO_TECHS.map((tech, i) => (
         <div
           key={tech.name}
@@ -178,7 +168,6 @@ export default function HeroSection() {
         </div>
       ))}
 
-      {/* Main Content */}
       <motion.div
         className="max-w-4xl w-full mx-auto flex flex-col items-center gap-8 z-10 mt-16"
         animate={{
@@ -187,14 +176,13 @@ export default function HeroSection() {
         }}
         transition={{ duration: 1.2, ease: 'easeOut' }}
       >
-        {/* Left: Text */}
         <motion.div
           className="flex flex-col items-center gap-6 text-center w-full"
           variants={containerVariants}
           initial="hidden"
           animate={preloaderDone ? "visible" : "hidden"}
         >
-          {/* Pill Badge */}
+
           <motion.div
             variants={itemVariants}
             className="flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#ef233c]/20 bg-white/[0.03] backdrop-blur-md text-[11px] font-bold uppercase tracking-widest"
@@ -209,7 +197,6 @@ export default function HeroSection() {
             <ArrowRight className="w-3 h-3 text-[#ef233c]" />
           </motion.div>
 
-          {/* Heading with gradient text */}
           <motion.h1
             variants={itemVariants}
             className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight leading-[1.08] w-full"
@@ -223,7 +210,7 @@ export default function HeroSection() {
               </span>
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-red-200 to-[#ef233c] inline-block relative">
                 <TextScramble text="Cloud Innovation" trigger={preloaderDone} delay={700} />
-                {/* Underline swirl accent */}
+
                 <svg className="absolute w-full h-3 -bottom-2 left-0 opacity-60 text-[#ef233c]" viewBox="0 0 100 10" preserveAspectRatio="none">
                   <path d="M0 5 Q 50 10 100 5" stroke="currentColor" strokeWidth="2" fill="none" />
                 </svg>
@@ -243,9 +230,8 @@ export default function HeroSection() {
             />
           </motion.p>
 
-          {/* CTA Buttons */}
           <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center gap-5 mt-4">
-            {/* Primary: Spinning border CTA */}
+
             <MagneticButton strength={0.2}>
               <Link
                 href="/contact"
@@ -259,7 +245,6 @@ export default function HeroSection() {
               </Link>
             </MagneticButton>
 
-            {/* Secondary: Ghost button */}
             <MagneticButton strength={0.2}>
               <Link
                 href="/services"
@@ -275,7 +260,6 @@ export default function HeroSection() {
         </motion.div>
       </motion.div>
 
-      {/* Stats Counter Bar */}
       <motion.div
         className="w-full max-w-5xl mx-auto mt-20 z-10"
         initial={{ opacity: 0, y: 30 }}
@@ -286,7 +270,6 @@ export default function HeroSection() {
           {STATS.map((stat, i) => (
             <div key={stat.label} className="text-center">
               <div className="text-2xl md:text-3xl font-black text-white">
-                {/* Direct DOM ref — no React re-renders during animation */}
                 <span ref={(el) => { counterRefs.current[i] = el; }}>0</span>
                 <span className="text-cyber-cyan">{stat.suffix}</span>
               </div>
@@ -296,7 +279,6 @@ export default function HeroSection() {
         </div>
       </motion.div>
 
-      {/* Scroll indicator */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-40 z-10">
         <span className="text-[10px] tracking-widest uppercase text-gray-500 font-mono">Scroll</span>
         <div className="w-5 h-9 border border-white/15 rounded-full flex justify-center p-1.5">

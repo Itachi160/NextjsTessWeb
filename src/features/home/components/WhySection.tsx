@@ -35,7 +35,7 @@ function Counter({ target, suffix = '', duration = 1500, decimals = 0 }: MetricP
 
     let start = 0;
     const end = target;
-    const steps = 24; // Reduced from 60 to prevent React render thrashing
+    const steps = 24;
     const stepTime = duration / steps;
     const increment = end / steps;
 
@@ -62,7 +62,6 @@ function Counter({ target, suffix = '', duration = 1500, decimals = 0 }: MetricP
   );
 }
 
-// 1. Radar Scanning Animation for Active Pilots
 function ActivePilotsAnimation() {
   return (
     <div
@@ -70,23 +69,20 @@ function ActivePilotsAnimation() {
       style={{ willChange: 'transform', transform: 'translate3d(0,0,0)' }}
     >
       <svg className="w-9 h-9" viewBox="0 0 100 100">
-        {/* Concentric rings */}
+
         <circle cx="50" cy="50" r="45" fill="none" stroke="rgba(59, 130, 246, 0.1)" strokeWidth="1" />
         <circle cx="50" cy="50" r="30" fill="none" stroke="rgba(59, 130, 246, 0.1)" strokeWidth="1" />
         <circle cx="50" cy="50" r="15" fill="none" stroke="rgba(59, 130, 246, 0.1)" strokeWidth="1" />
-        
-        {/* Coordinate axis */}
+
         <line x1="5" y1="50" x2="95" y2="50" stroke="rgba(59, 130, 246, 0.08)" strokeWidth="1" />
         <line x1="50" y1="5" x2="50" y2="95" stroke="rgba(59, 130, 246, 0.08)" strokeWidth="1" />
 
-        {/* 2 Pulsing Target Nodes (Representing the 2 pilot projects) */}
         <circle cx="35" cy="40" r="3" fill="#3b82f6" className="animate-ping" style={{ animationDuration: '2s' }} />
         <circle cx="35" cy="40" r="2.5" fill="#3b82f6" />
-        
+
         <circle cx="65" cy="60" r="3" fill="#06b6d4" className="animate-ping" style={{ animationDuration: '2.5s', animationDelay: '0.5s' }} />
         <circle cx="65" cy="60" r="2.5" fill="#06b6d4" />
 
-        {/* Rotating radar sweep */}
         <g style={{ transformOrigin: '50px 50px', animation: 'radar-sweep 4s linear infinite' }}>
           <line x1="50" y1="50" x2="50" y2="5" stroke="#3b82f6" strokeWidth="1.5" strokeLinecap="round" />
           <polygon points="50,50 50,5 35,7 45,30" fill="rgba(59, 130, 246, 0.15)" />
@@ -102,7 +98,6 @@ function ActivePilotsAnimation() {
   );
 }
 
-// 2. Orbiting Tech Nodes Animation for Training Stacks
 function TrainingStacksAnimation() {
   return (
     <div
@@ -110,32 +105,27 @@ function TrainingStacksAnimation() {
       style={{ willChange: 'transform', transform: 'translate3d(0,0,0)' }}
     >
       <svg className="w-9 h-9" viewBox="0 0 100 100">
-        {/* Core node */}
+
         <circle cx="50" cy="50" r="6" fill="#06b6d4" />
         <circle cx="50" cy="50" r="10" fill="none" stroke="rgba(6, 182, 212, 0.25)" strokeWidth="1" />
 
-        {/* Orbit ring */}
         <circle cx="50" cy="50" r="30" fill="none" stroke="rgba(6, 182, 212, 0.1)" strokeWidth="1" strokeDasharray="3 3" />
 
-        {/* 5 Orbiting skill nodes (FE, BE, CLOUD, AI, DB) */}
         <g style={{ transformOrigin: '50px 50px', animation: 'orbit-rotate 8s linear infinite' }}>
-          {/* Node 1 */}
+
           <line x1="50" y1="50" x2="50" y2="20" stroke="rgba(6, 182, 212, 0.2)" strokeWidth="1" />
           <circle cx="50" cy="20" r="4.5" fill="#06b6d4" />
-          
-          {/* Node 2 */}
+
+
           <line x1="50" y1="50" x2="78.5" y2="40.7" stroke="rgba(6, 182, 212, 0.2)" strokeWidth="1" />
           <circle cx="78.5" cy="40.7" r="4" fill="#a855f7" />
 
-          {/* Node 3 */}
           <line x1="50" y1="50" x2="67.6" y2="74.3" stroke="rgba(6, 182, 212, 0.2)" strokeWidth="1" />
           <circle cx="67.6" cy="74.3" r="4" fill="#3b82f6" />
 
-          {/* Node 4 */}
           <line x1="50" y1="50" x2="32.4" y2="74.3" stroke="rgba(6, 182, 212, 0.2)" strokeWidth="1" />
           <circle cx="32.4" cy="74.3" r="4" fill="#ec4899" />
 
-          {/* Node 5 */}
           <line x1="50" y1="50" x2="21.5" y2="40.7" stroke="rgba(6, 182, 212, 0.2)" strokeWidth="1" />
           <circle cx="21.5" cy="40.7" r="4" fill="#10b981" />
         </g>
@@ -150,7 +140,6 @@ function TrainingStacksAnimation() {
   );
 }
 
-// 3. Oscilloscope Sine Wave for Client SLA
 function SlaUptimeAnimation() {
   return (
     <div
@@ -158,16 +147,15 @@ function SlaUptimeAnimation() {
       style={{ willChange: 'transform', transform: 'translate3d(0,0,0)' }}
     >
       <svg className="w-10 h-10" viewBox="0 0 100 100" preserveAspectRatio="none">
-        {/* Grid lines */}
+
         <line x1="0" y1="25" x2="100" y2="25" stroke="rgba(168, 85, 247, 0.05)" strokeWidth="1" />
         <line x1="0" y1="50" x2="100" y2="50" stroke="rgba(168, 85, 247, 0.1)" strokeWidth="1" />
         <line x1="0" y1="75" x2="100" y2="75" stroke="rgba(168, 85, 247, 0.05)" strokeWidth="1" />
-        
+
         <line x1="25" y1="0" x2="25" y2="100" stroke="rgba(168, 85, 247, 0.05)" strokeWidth="1" />
         <line x1="50" y1="0" x2="50" y2="100" stroke="rgba(168, 85, 247, 0.05)" strokeWidth="1" />
         <line x1="75" y1="0" x2="75" y2="100" stroke="rgba(168, 85, 247, 0.05)" strokeWidth="1" />
 
-        {/* Telemetry wave */}
         <g style={{ animation: 'wave-slide 2.5s linear infinite' }}>
           <path
             d="M -40 50 Q -20 15, 0 50 T 40 50 T 80 50 T 120 50 T 160 50"
@@ -197,7 +185,6 @@ function SlaUptimeAnimation() {
   );
 }
 
-// 4. Staggered Growth Bars for Incubated Talent
 function TalentMeterAnimation() {
   return (
     <div
@@ -205,10 +192,9 @@ function TalentMeterAnimation() {
       style={{ willChange: 'transform', transform: 'translate3d(0,0,0)' }}
     >
       <svg className="w-9 h-9" viewBox="0 0 100 100">
-        {/* Core framework container */}
+
         <rect x="15" y="15" width="70" height="70" rx="6" fill="none" stroke="rgba(236, 72, 153, 0.1)" strokeWidth="1.5" />
-        
-        {/* Rising bars (5 channels) */}
+
         <rect x="25" y="55" width="6" height="20" rx="1.5" fill="#ec4899" style={{ animation: 'bar-grow 1.4s ease-in-out infinite', transformOrigin: 'bottom' }} />
         <rect x="37" y="40" width="6" height="35" rx="1.5" fill="#a855f7" style={{ animation: 'bar-grow 1.4s ease-in-out infinite', animationDelay: '0.2s', transformOrigin: 'bottom' }} />
         <rect x="49" y="25" width="6" height="50" rx="1.5" fill="#06b6d4" style={{ animation: 'bar-grow 1.4s ease-in-out infinite', animationDelay: '0.4s', transformOrigin: 'bottom' }} />
@@ -281,10 +267,9 @@ export default function WhySection() {
 
   return (
     <section id="why" className="relative py-24 px-6 max-w-7xl mx-auto">
-      {/* Aurora glow overlay */}
+
       <div className="absolute top-1/4 right-0 w-80 h-80 rounded-full bg-cyber-blue/5 blur-[120px] pointer-events-none" />
 
-      {/* Header */}
       <ScrollReveal direction="up" className="text-center mb-20">
         <h2 className="text-xs uppercase font-mono tracking-widest text-cyber-cyan font-semibold mb-3">
           Our Credentials
@@ -294,7 +279,6 @@ export default function WhySection() {
         </h3>
       </ScrollReveal>
 
-      {/* Stats Dashboard Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 w-full">
         {metrics.map((metric, idx) => {
           const RenderAnimation = metric.animation;
@@ -305,22 +289,19 @@ export default function WhySection() {
                 onMouseLeave={() => setCursorType('default')}
                 className={`glass-card p-8 rounded-3xl border ${metric.borderColor} relative overflow-hidden group transition-all duration-300 hover:scale-105 hover:bg-space-dark/50 ${metric.glowColor}`}
               >
-                {/* SVG Illustration Container */}
+
                 <div className="flex justify-between items-start mb-6">
                   <RenderAnimation />
                 </div>
 
-                {/* Number Count */}
                 <h4 className="text-4xl font-extrabold text-white tracking-tight font-sans">
                   <Counter target={metric.target} suffix={metric.suffix} decimals={metric.decimals} />
                 </h4>
 
-                {/* Title */}
                 <h5 className="text-sm font-bold text-gray-200 mt-3 group-hover:text-cyber-cyan transition-colors">
                   {metric.title}
                 </h5>
 
-                {/* Desc */}
                 <p className="text-gray-400 text-xs mt-3 leading-relaxed">
                   {metric.desc}
                 </p>
@@ -330,7 +311,6 @@ export default function WhySection() {
         })}
       </div>
 
-      {/* Special Security Banner */}
       <ScrollReveal direction="up" delay={0.3}>
         <div className="mt-12 glass-card p-6 rounded-3xl border border-cyber-cyan/30 flex flex-col md:flex-row items-center justify-between gap-6 max-w-4xl mx-auto shadow-[0_0_20px_rgba(6,182,212,0.05)]">
           <div className="flex items-center gap-4">

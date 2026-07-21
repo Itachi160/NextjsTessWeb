@@ -22,12 +22,10 @@ export default function CinematicTransition() {
       return;
     }
 
-    // Cycle through telemetry log texts rapidly
     const logInterval = setInterval(() => {
       setLogIndex((prev) => (prev < LOGS.length - 1 ? prev + 1 : prev));
     }, 180);
 
-    // Scramble hex values
     const hexInterval = setInterval(() => {
       const hex = Array.from({ length: 4 })
         .map(() => Math.floor(Math.random() * 16).toString(16).toUpperCase())
@@ -51,7 +49,6 @@ export default function CinematicTransition() {
           transition={{ duration: 0.25 }}
           className="fixed inset-0 w-full h-full z-[99999] bg-[#03050d]/98 backdrop-blur-2xl flex items-center justify-center overflow-hidden"
         >
-          {/* Holographic matrix background grids */}
           <div className="absolute inset-0 pointer-events-none opacity-[0.025]"
             style={{
               backgroundImage: 'radial-gradient(circle, #06b6d4 1px, transparent 1px)',
@@ -59,7 +56,6 @@ export default function CinematicTransition() {
             }}
           />
 
-          {/* Glowing laser swipe line */}
           <motion.div
             initial={{ translateY: '-100vh' }}
             animate={{ translateY: '100vh' }}
@@ -68,9 +64,7 @@ export default function CinematicTransition() {
           />
 
           <div className="flex flex-col items-center gap-6 relative z-20">
-            {/* Spinning gyroscopic loader */}
             <div className="relative w-56 h-56 flex items-center justify-center">
-              {/* Outer circular animated SVG track */}
               <motion.svg
                 animate={{ rotate: 360 }}
                 transition={{ repeat: Infinity, duration: 4.5, ease: 'linear' }}
@@ -95,7 +89,6 @@ export default function CinematicTransition() {
                 </defs>
               </motion.svg>
 
-              {/* Inner counter-rotating circular animated SVG track */}
               <motion.svg
                 animate={{ rotate: -360 }}
                 transition={{ repeat: Infinity, duration: 3, ease: 'linear' }}
@@ -120,7 +113,6 @@ export default function CinematicTransition() {
                 </defs>
               </motion.svg>
 
-              {/* Orbiting glowing dot */}
               <motion.div
                 animate={{ rotate: 360 }}
                 transition={{ repeat: Infinity, duration: 3, ease: 'linear' }}
@@ -129,7 +121,6 @@ export default function CinematicTransition() {
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3.5 h-3.5 rounded-full bg-cyber-cyan shadow-[0_0_12px_#06b6d4] animate-pulse" />
               </motion.div>
 
-              {/* Orbiting purple glowing dot on a second axis */}
               <motion.div
                 animate={{ rotate: -360 }}
                 transition={{ repeat: Infinity, duration: 2.2, ease: 'linear' }}
@@ -138,7 +129,6 @@ export default function CinematicTransition() {
                 <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-2.5 h-2.5 rounded-full bg-cyber-purple shadow-[0_0_10px_#a855f7]" />
               </motion.div>
 
-              {/* Central Logo Container */}
               <motion.div
                 animate={{ scale: [1, 1.08, 1] }}
                 transition={{ repeat: Infinity, duration: 1.5, ease: 'easeInOut' }}
@@ -148,7 +138,6 @@ export default function CinematicTransition() {
               </motion.div>
             </div>
 
-            {/* Readouts panel */}
             <div className="flex flex-col items-center gap-1 font-mono text-center select-none">
               <span className="text-[10px] tracking-widest text-cyber-cyan uppercase font-bold animate-pulse">
                 HOLOGRAPHIC COMPILER ACTIVE

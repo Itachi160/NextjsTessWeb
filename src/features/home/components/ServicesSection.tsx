@@ -26,10 +26,9 @@ export default function ServicesSection() {
 
   return (
     <section id="services" className="relative py-24 px-6 max-w-7xl mx-auto flex flex-col items-center">
-      {/* Background glow */}
+
       <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] rounded-full bg-cyber-cyan/5 blur-[120px] pointer-events-none" />
 
-      {/* Header */}
       <ScrollReveal direction="up" className="text-center mb-16">
         <h2 className="text-xs uppercase font-mono tracking-widest text-cyber-cyan font-semibold mb-3">
           Our Capability Framework
@@ -42,19 +41,18 @@ export default function ServicesSection() {
         </h3>
       </ScrollReveal>
 
-      {/* Cards Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full">
         {services.map((service, idx) => {
           const IconComp = service.icon;
           const colIndex = idx % 4;
-          const revealProps = 
-            colIndex === 0 
+          const revealProps =
+            colIndex === 0
               ? { direction: 'right' as const, zDepth: 60, distance: 140 }
               : colIndex === 1
-              ? { direction: 'up' as const, zDepth: 80, distance: 140 }
-              : colIndex === 2
-              ? { direction: 'down' as const, zDepth: 80, distance: 140 }
-              : { direction: 'left' as const, zDepth: 60, distance: 140 };
+                ? { direction: 'up' as const, zDepth: 80, distance: 140 }
+                : colIndex === 2
+                  ? { direction: 'down' as const, zDepth: 80, distance: 140 }
+                  : { direction: 'left' as const, zDepth: 60, distance: 140 };
 
           return (
             <ScrollReveal key={service.title} {...revealProps} delay={(idx % 4) * 0.08} scale>

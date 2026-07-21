@@ -59,10 +59,8 @@ export default function TestimonialsSection() {
   return (
     <section id="testimonials" className="relative py-24 px-6 max-w-5xl mx-auto flex flex-col items-center">
 
-      {/* Background neon glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full bg-cyber-purple/5 blur-[120px] pointer-events-none" />
 
-      {/* Header */}
       <ScrollReveal direction="up" className="text-center mb-16">
         <h2 className="text-xs uppercase font-mono tracking-widest text-cyber-purple font-semibold mb-3 flex items-center justify-center gap-1.5">
           <MessageSquare className="w-3.5 h-3.5" />
@@ -73,7 +71,6 @@ export default function TestimonialsSection() {
         </h3>
       </ScrollReveal>
 
-      {/* 3D Glass Carousel Container */}
       <ScrollReveal direction="up" delay={0.2}>
         <div className="relative w-full max-w-3xl min-h-[350px] flex items-center justify-center">
           <AnimatePresence mode="wait">
@@ -91,15 +88,13 @@ export default function TestimonialsSection() {
                   className={`glass-card p-8 md:p-12 rounded-3xl border ${item.border} ${item.shadow} flex flex-col gap-6 relative w-full`}
                   style={{ transformStyle: 'preserve-3d', perspective: 1000, willChange: 'transform, opacity' }}
                 >
-                  {/* Quote Icon overlay */}
+
                   <Quote className="absolute top-8 right-8 w-20 h-20 text-white/5 pointer-events-none" />
 
-                  {/* Quote details */}
                   <p className="text-gray-300 text-sm md:text-base leading-relaxed italic relative z-10 font-medium">
                     "{item.quote}"
                   </p>
 
-                  {/* Author Info */}
                   <div className="flex justify-between items-center mt-4 pt-6 border-t border-white/5 relative z-10">
                     <div>
                       <h4 className="text-white font-extrabold text-sm md:text-base">{item.name}</h4>
@@ -113,7 +108,6 @@ export default function TestimonialsSection() {
         </div>
       </ScrollReveal>
 
-      {/* Carousel Navigation Controllers */}
       <div className="flex items-center gap-4 mt-10">
         <button
           onClick={handlePrev}
@@ -124,7 +118,6 @@ export default function TestimonialsSection() {
           <ArrowLeft className="w-5 h-5" />
         </button>
 
-        {/* Indicator dots */}
         <div className="flex gap-2">
           {testimonials.map((_, idx) => (
             <span

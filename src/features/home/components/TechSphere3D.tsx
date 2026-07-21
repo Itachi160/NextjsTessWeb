@@ -52,11 +52,9 @@ function TechSphere3D({ onSelect, selectedTech, scrollProgress }: TechSphere3DPr
     }
   }, []);
 
-  // Fibonacci sphere distribution positions
   const basePositions = useRef<{ x: number; y: number; z: number }[]>([]);
   const [isIntersecting, setIsIntersecting] = useState(false);
 
-  // Viewport intersection observer to eliminate background rendering load
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
@@ -109,7 +107,7 @@ function TechSphere3D({ onSelect, selectedTech, scrollProgress }: TechSphere3DPr
       canvas.style.width = `${width}px`;
       canvas.style.height = `${height}px`;
 
-      ctx.setTransform(1, 0, 0, 1, 0, 0); // Reset scale factor on resize/minimize
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.scale(dpr, dpr);
 
       updateRectCache();
@@ -118,7 +116,6 @@ function TechSphere3D({ onSelect, selectedTech, scrollProgress }: TechSphere3DPr
     resize();
     window.addEventListener('resize', resize);
 
-    // Orbiter definitions — small glowing dots on varied orbital planes
     const orbiters = [
       { angle: 0, speed: 0.006, radiusFraction: 1.22, tiltX: 0.3, tiltY: 0, size: 2.8, color: '#06b6d4', glowSize: 8 },
       { angle: Math.PI * 0.7, speed: -0.004, radiusFraction: 1.38, tiltX: 0, tiltY: -0.25, size: 2.2, color: '#a855f7', glowSize: 6 },
@@ -138,9 +135,6 @@ function TechSphere3D({ onSelect, selectedTech, scrollProgress }: TechSphere3DPr
       }
       ctx.clearRect(0, 0, width, height);
 
-
-
-      // Auto rotation angles
       if (!hovering.current) {
         autoAngle.current += 0.003;
       } else {
@@ -154,10 +148,8 @@ function TechSphere3D({ onSelect, selectedTech, scrollProgress }: TechSphere3DPr
       const cosX = Math.cos(ax), sinX = Math.sin(ax);
 
       const getRotated = (x: number, y: number, z: number) => {
-        // Rotate Y
         const rx = x * cosY - z * sinY;
         const rz = x * sinY + z * cosY;
-        // Rotate X
         const ry = y * cosX - rz * sinX;
         const finalZ = y * sinX + rz * cosX;
         return { x: rx, y: ry, z: finalZ };
@@ -165,11 +157,9 @@ function TechSphere3D({ onSelect, selectedTech, scrollProgress }: TechSphere3DPr
 
       const dynamicRadius = Math.max(10, Math.min(width, height) * 0.36);
 
-      // 1. Draw structured spinning 3D holographic grid lines (Globe coordinate grid)
       ctx.lineWidth = 0.8;
-      ctx.strokeStyle = 'rgba(6, 182, 212, 0.08)'; // Cyan Grid lines
+      ctx.strokeStyle = 'rgba(6, 182, 212, 0.08)';
 
-      // Longitudes
       const lonRings = 8;
       for (let rIdx = 0; rIdx < lonRings; rIdx++) {
         const lonAngle = (rIdx * Math.PI) / lonRings;
@@ -190,7 +180,6 @@ function TechSphere3D({ onSelect, selectedTech, scrollProgress }: TechSphere3DPr
         ctx.stroke();
       }
 
-      // Latitudes
       const latLines = 5;
       for (let latIdx = 1; latIdx <= latLines; latIdx++) {
         const latAngle = -Math.PI / 2 + (latIdx * Math.PI) / (latLines + 1);
@@ -212,10 +201,8 @@ function TechSphere3D({ onSelect, selectedTech, scrollProgress }: TechSphere3DPr
         ctx.stroke();
       }
 
-      // 2. Draw solid planetary tracks
-      // Orbit Ring 1 (XZ tilted)
       ctx.beginPath();
-      ctx.strokeStyle = 'rgba(168, 85, 247, 0.08)'; // Purple track
+      ctx.strokeStyle = 'rgba(168, 85, 247, 0.08)';
       ctx.lineWidth = 1;
       const t1Radius = dynamicRadius * 1.18;
       for (let i = 0; i <= 60; i++) {
@@ -233,16 +220,15 @@ function TechSphere3D({ onSelect, selectedTech, scrollProgress }: TechSphere3DPr
       }
       ctx.stroke();
 
-      // Orbit Ring 2 (YZ tilted)
       ctx.beginPath();
-      ctx.strokeStyle = 'rgba(6, 182, 212, 0.07)'; // Cyan track
+      ctx.strokeStyle = 'rgba(6, 182, 212, 0.07)';
       ctx.lineWidth = 1;
       const t2Radius = dynamicRadius * 1.35;
       for (let i = 0; i <= 60; i++) {
         const theta = (i * Math.PI * 2) / 60;
         const rz = Math.cos(theta) * t2Radius;
         const ry = Math.sin(theta) * t2Radius;
-        const rx = ry * -0.25; // tilt
+        const rx = ry * -0.25;
 
         const p = getRotated(rx, ry, rz);
         const scale = fov / (fov + p.z);
@@ -253,12 +239,10 @@ function TechSphere3D({ onSelect, selectedTech, scrollProgress }: TechSphere3DPr
       }
       ctx.stroke();
 
-      // 3. Central gyroscopic reactor core
       const coreScale = fov / (fov + 0);
       const csx = centerX();
       const csy = centerY();
 
-      // Core glow
       ctx.beginPath();
       const coreGrad = ctx.createRadialGradient(csx, csy, 0, csx, csy, 35 * coreScale);
       coreGrad.addColorStop(0, 'rgba(6, 182, 212, 0.2)');
@@ -268,14 +252,11 @@ function TechSphere3D({ onSelect, selectedTech, scrollProgress }: TechSphere3DPr
       ctx.arc(csx, csy, 35 * coreScale, 0, Math.PI * 2);
       ctx.fill();
 
-      // Core rings
       ctx.strokeStyle = 'rgba(168, 85, 247, 0.4)';
       ctx.lineWidth = 1;
       ctx.beginPath();
       ctx.arc(csx, csy, 14 * coreScale, Date.now() * 0.001, Date.now() * 0.001 + Math.PI * 1.3);
       ctx.stroke();
-
-      // Pulsing central orb
       const orbPulse = 4.0 + Math.sin(Date.now() * 0.0035) * 1.0;
       ctx.beginPath();
       ctx.arc(csx, csy, orbPulse * coreScale, 0, Math.PI * 2);
@@ -285,7 +266,6 @@ function TechSphere3D({ onSelect, selectedTech, scrollProgress }: TechSphere3DPr
       ctx.fill();
       ctx.shadowBlur = 0;
 
-      // 4. Draw glowing orbiters
       orbiters.forEach((orb) => {
         orb.angle += orb.speed;
 
@@ -293,12 +273,10 @@ function TechSphere3D({ onSelect, selectedTech, scrollProgress }: TechSphere3DPr
         const orbRadius = dynamicRadius * orb.radiusFraction;
 
         if (Math.abs(orb.tiltX) > Math.abs(orb.tiltY)) {
-          // XZ-tilted orbit
           ox = Math.cos(orb.angle) * orbRadius;
           oz = Math.sin(orb.angle) * orbRadius;
           oy = ox * orb.tiltX;
         } else {
-          // YZ-tilted orbit
           oz = Math.cos(orb.angle) * orbRadius;
           oy = Math.sin(orb.angle) * orbRadius;
           ox = oy * orb.tiltY;
@@ -309,7 +287,6 @@ function TechSphere3D({ onSelect, selectedTech, scrollProgress }: TechSphere3DPr
         const osx = centerX() + op.x * oScale;
         const osy = centerY() + op.y * oScale;
 
-        // Draw orbiter glow
         ctx.beginPath();
         ctx.arc(osx, osy, orb.size * oScale, 0, Math.PI * 2);
         ctx.fillStyle = orb.color;
@@ -318,7 +295,6 @@ function TechSphere3D({ onSelect, selectedTech, scrollProgress }: TechSphere3DPr
         ctx.fill();
         ctx.shadowBlur = 0;
 
-        // Draw subtle trailing halo
         ctx.beginPath();
         ctx.arc(osx, osy, (orb.size + 3) * oScale, 0, Math.PI * 2);
         const haloGrad = ctx.createRadialGradient(osx, osy, 0, osx, osy, (orb.size + 3) * oScale);
@@ -328,20 +304,16 @@ function TechSphere3D({ onSelect, selectedTech, scrollProgress }: TechSphere3DPr
         ctx.fill();
       });
 
-      // 4. Position HTML elements inside 3D space
       basePositions.current.forEach((p, idx) => {
         const el = itemRefs.current[idx];
         if (!el) return;
 
         const rotated = getRotated(p.x, p.y, p.z);
         const scaleFactor = fov / (fov + rotated.z * dynamicRadius);
-        
-        // Translate relative to center of canvas parent bounding rect
+
         const sx = centerX() + rotated.x * dynamicRadius * scaleFactor;
         const sy = centerY() - rotated.y * dynamicRadius * scaleFactor;
         const sz = rotated.z * dynamicRadius;
-
-        // Project coordinate factors
         const norm = (rotated.z + 1) / 2; // 0 to 1
         const sc = 0.55 + norm * 0.55;
         const op = Math.max(0.15, norm);
@@ -350,7 +322,6 @@ function TechSphere3D({ onSelect, selectedTech, scrollProgress }: TechSphere3DPr
         el.style.opacity = `${op}`;
         el.style.zIndex = `${Math.round(sz + dynamicRadius + 40)}`;
 
-        // Hide or disable if too deep in the back
         if (rotated.z < -0.6) {
           el.style.pointerEvents = 'none';
           el.style.visibility = 'hidden';
@@ -366,7 +337,6 @@ function TechSphere3D({ onSelect, selectedTech, scrollProgress }: TechSphere3DPr
     render();
 
     const applyScrollProgress = (progress: number) => {
-      // Full rotation completes within the ecosystem section scroll range
       scrollAngle.current = progress * Math.PI * 2;
     };
 
@@ -429,14 +399,12 @@ function TechSphere3D({ onSelect, selectedTech, scrollProgress }: TechSphere3DPr
       onTouchStart={() => { hovering.current = true; updateRectCache(); }}
       onTouchEnd={() => { hovering.current = false; mouseOffset.current = { x: 0, y: 0 }; }}
     >
-      {/* Central lighting glows */}
+
       <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[60%] rounded-full bg-cyber-cyan/5 blur-[50px] pointer-events-none" />
       <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[70%] h-[70%] rounded-full border border-white/[0.012] pointer-events-none" />
 
-      {/* Background canvas rendering coordinates & rings */}
       <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none z-10" />
 
-      {/* Tech elements overlay */}
       {TECH_ITEMS.map((tech, i) => {
         const isSelected = selectedTech?.name === tech.name;
         return (
@@ -469,7 +437,7 @@ function TechSphere3D({ onSelect, selectedTech, scrollProgress }: TechSphere3DPr
                 }
               }}
             />
-            {/* Tooltip */}
+
             <span className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[9px] font-mono font-bold text-gray-400 whitespace-nowrap opacity-0 pointer-events-none"
               style={{ opacity: isSelected ? 1 : undefined }}
             >

@@ -22,8 +22,8 @@ function LenisScrollTriggerSync() {
     if (!lenis) return;
 
     ScrollTrigger.scrollerProxy(document.documentElement, {
-      scrollTop(value) {
-        if (arguments.length) {
+      scrollTop(value?: number) {
+        if (typeof value === 'number') {
           lenis.scrollTo(value, { immediate: true });
         }
         return lenis.scroll;

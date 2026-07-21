@@ -6,7 +6,7 @@ import { useUIStore } from '../store/uiStore';
 import MagneticButton from '../components/MagneticButton';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const CONTACT_EMAIL = atob('Y29udGFjdEB0ZXNzZXJhY3RzeXMuY29t'); // contact@tesseractsys.com
+const CONTACT_EMAIL = atob('Y29udGFjdEB0ZXNzZXJhY3RzeXMuY29t');
 
 export default function Contact() {
   const setCursorType = useUIStore((state) => state.setCursorType);
@@ -183,8 +183,8 @@ export default function Contact() {
                             type="button"
                             onClick={() => setSelectedStack(stack.id as any)}
                             className={`flex items-center gap-2 px-4 py-3 rounded-xl border text-left text-xs uppercase font-extrabold tracking-wider transition-all duration-300 ${isSelected
-                                ? 'bg-gradient-to-r from-cyber-blue/15 to-cyber-cyan/15 border-cyber-cyan text-cyber-cyan shadow-[0_0_15px_rgba(6,182,212,0.15)] font-black'
-                                : 'bg-white/[0.01] border-white/5 text-gray-400 hover:border-white/20 hover:text-white'
+                              ? 'bg-gradient-to-r from-cyber-blue/15 to-cyber-cyan/15 border-cyber-cyan text-cyber-cyan shadow-[0_0_15px_rgba(6,182,212,0.15)] font-black'
+                              : 'bg-white/[0.01] border-white/5 text-gray-400 hover:border-white/20 hover:text-white'
                               }`}
                           >
                             <StackIcon className={`w-4 h-4 shrink-0 ${isSelected ? 'text-cyber-cyan' : 'text-gray-500'}`} />

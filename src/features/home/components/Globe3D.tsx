@@ -44,7 +44,6 @@ function Globe3D({ onSelect, selectedOffice }: Globe3DProps) {
   }, []);
   const [isIntersecting, setIsIntersecting] = useState(false);
 
-  // Viewport intersection observer to eliminate background rendering load
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
@@ -77,7 +76,6 @@ function Globe3D({ onSelect, selectedOffice }: Globe3DProps) {
       width = rect?.width || 450;
       height = rect?.height || 450;
 
-      // Ensure we don't have invalid 0 or negative dimensions
       width = Math.max(10, width);
       height = Math.max(10, height);
 
@@ -87,9 +85,9 @@ function Globe3D({ onSelect, selectedOffice }: Globe3DProps) {
       canvas.style.width = `${width}px`;
       canvas.style.height = `${height}px`;
 
-      ctx.setTransform(1, 0, 0, 1, 0, 0); // Reset scale transformation matrix first
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.scale(dpr, dpr);
-      
+
       updateRectCache();
     };
 
@@ -103,10 +101,8 @@ function Globe3D({ onSelect, selectedOffice }: Globe3DProps) {
       }
       ctx.clearRect(0, 0, width, height);
 
-      // Direct scroll binding in the render loop to achieve zero lag
       scrollAngle.current = window.scrollY * 0.0035;
 
-      // Auto rotate Y
       if (!hovering.current) {
         autoAngle.current += 0.002;
       } else {
@@ -120,10 +116,9 @@ function Globe3D({ onSelect, selectedOffice }: Globe3DProps) {
       const cosX = Math.cos(ax), sinX = Math.sin(ax);
 
       const getRotated = (x: number, y: number, z: number) => {
-        // Y-Axis rotation
+
         const rx = x * cosY - z * sinY;
         const rz = x * sinY + z * cosY;
-        // X-Axis rotation
         const ry = y * cosX - rz * sinX;
         const finalZ = y * sinX + rz * cosX;
         return { x: rx, y: ry, z: finalZ };
@@ -134,7 +129,6 @@ function Globe3D({ onSelect, selectedOffice }: Globe3DProps) {
       const backSegments: Segment[] = [];
       const frontSegments: Segment[] = [];
 
-      // 1. Generate grid lines - meridians
       const meridiansCount = 10;
       const latPointsCount = 20;
       for (let m = 0; m < meridiansCount; m++) {
@@ -163,7 +157,6 @@ function Globe3D({ onSelect, selectedOffice }: Globe3DProps) {
         }
       }
 
-      // 2. Generate grid lines - parallels
       const parallelsCount = 7;
       const lngPointsCount = 30;
       for (let pIdx = 1; pIdx < parallelsCount; pIdx++) {
@@ -192,7 +185,6 @@ function Globe3D({ onSelect, selectedOffice }: Globe3DProps) {
         }
       }
 
-      // 3. Draw back segments (dim, thin)
       ctx.beginPath();
       ctx.strokeStyle = 'rgba(6, 182, 212, 0.05)';
       ctx.lineWidth = 0.8;
@@ -202,20 +194,17 @@ function Globe3D({ onSelect, selectedOffice }: Globe3DProps) {
       });
       ctx.stroke();
 
-      // 4. Draw outer atmosphere boundary
       ctx.beginPath();
       ctx.arc(width / 2, height / 2, dynamicRadius, 0, Math.PI * 2);
       ctx.strokeStyle = 'rgba(6, 182, 212, 0.12)';
       ctx.lineWidth = 1;
       ctx.stroke();
 
-      // Subtle inner globe radial shade
       ctx.beginPath();
       ctx.arc(width / 2, height / 2, dynamicRadius * 0.99, 0, Math.PI * 2);
       ctx.fillStyle = 'rgba(3, 5, 13, 0.4)';
       ctx.fill();
 
-      // 5. Draw front segments (bright, thicker)
       ctx.beginPath();
       ctx.strokeStyle = 'rgba(6, 182, 212, 0.18)';
       ctx.lineWidth = 1.1;
@@ -225,7 +214,6 @@ function Globe3D({ onSelect, selectedOffice }: Globe3DProps) {
       });
       ctx.stroke();
 
-      // 6. Draw glowing core effect on canvas
       ctx.beginPath();
       const grad = ctx.createRadialGradient(width / 2, height / 2, 0, width / 2, height / 2, dynamicRadius * 0.6);
       grad.addColorStop(0, 'rgba(6, 182, 212, 0.06)');
@@ -234,7 +222,6 @@ function Globe3D({ onSelect, selectedOffice }: Globe3DProps) {
       ctx.arc(width / 2, height / 2, dynamicRadius * 0.6, 0, Math.PI * 2);
       ctx.fill();
 
-      // 7. Update office markers (HTML elements overlay)
       OFFICES.forEach((office, idx) => {
         const el = officeRefs.current[idx];
         if (!el) return;
@@ -251,8 +238,7 @@ function Globe3D({ onSelect, selectedOffice }: Globe3DProps) {
         const sy = height / 2 - p.y * dynamicRadius;
         const sz = p.z * dynamicRadius;
 
-        // Project coordinates and scale factor based on depth z
-        const norm = (p.z + 1) / 2; // 0 to 1
+        const norm = (p.z + 1) / 2;
         const scaleFactor = 0.65 + norm * 0.55;
         const opacityFactor = Math.max(0.1, norm);
 
@@ -260,7 +246,6 @@ function Globe3D({ onSelect, selectedOffice }: Globe3DProps) {
         el.style.opacity = `${opacityFactor}`;
         el.style.zIndex = `${Math.round(sz + dynamicRadius + 20)}`;
 
-        // Hide or disable if too deep in the back
         if (p.z < -0.3) {
           el.style.pointerEvents = 'none';
           el.style.visibility = 'hidden';
@@ -302,14 +287,12 @@ function Globe3D({ onSelect, selectedOffice }: Globe3DProps) {
       onMouseEnter={() => { hovering.current = true; updateRectCache(); }}
       onMouseLeave={() => { hovering.current = false; mouseOffset.current = { x: 0, y: 0 }; }}
     >
-      {/* Outer Atmosphere Glow Effect */}
+
       <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[82%] h-[82%] rounded-full bg-cyber-cyan/5 blur-[50px] pointer-events-none" />
       <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[86%] h-[86%] rounded-full border border-white/[0.02] pointer-events-none" />
 
-      {/* Interactive Canvas Grid */}
       <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none" />
 
-      {/* Interactive HTML Location Markers */}
       {OFFICES.map((office, idx) => {
         const isSelected = selectedOffice?.name === office.name;
         return (
@@ -326,10 +309,8 @@ function Globe3D({ onSelect, selectedOffice }: Globe3DProps) {
               }`}
             style={{ willChange: 'transform, opacity' }}
           >
-            {/* Pulsing core dot */}
             <span className={`w-2 h-2 rounded-full ${isSelected ? 'bg-cyber-purple animate-ping' : 'bg-cyber-cyan animate-pulse'}`} />
 
-            {/* Faint text label of city */}
             <span
               className={`absolute left-7 px-2 py-0.5 rounded font-mono text-[9px] font-bold border whitespace-nowrap
                 transition-all duration-300

@@ -93,8 +93,7 @@ export default function Projects() {
 
   return (
     <div className="pt-32 pb-24 px-6 max-w-7xl mx-auto flex flex-col gap-16 relative z-10">
-      
-      {/* Title */}
+
       <div className="flex flex-col gap-4">
         <span className="text-xs uppercase font-mono tracking-widest text-cyber-cyan font-bold">Case Studies</span>
         <h1 className="text-4xl md:text-6xl font-black text-white leading-none">
@@ -105,17 +104,15 @@ export default function Projects() {
         </h1>
       </div>
 
-      {/* Categories Filter Tabs */}
       <div className="flex flex-wrap gap-3">
         {(['All', 'Cloud', 'AI', 'Security', 'Software'] as const).map((cat) => (
           <button
             key={cat}
             onClick={() => setActiveCategory(cat)}
-            className={`px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 border ${
-              activeCategory === cat
+            className={`px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 border ${activeCategory === cat
                 ? 'bg-cyber-cyan text-white border-cyber-cyan shadow-[0_0_15px_rgba(6,182,212,0.4)]'
                 : 'bg-white/5 text-gray-400 border-white/5 hover:border-cyber-cyan hover:text-cyber-cyan'
-            }`}
+              }`}
             onMouseEnter={() => setCursorType('hover')}
             onMouseLeave={() => setCursorType('default')}
           >
@@ -124,7 +121,6 @@ export default function Projects() {
         ))}
       </div>
 
-      {/* Grid portfolio */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {filteredProjects.map((project) => {
           const Icon = project.icon;
@@ -137,7 +133,7 @@ export default function Projects() {
               className="glass-card rounded-3xl border border-white/5 p-8 relative overflow-hidden flex flex-col justify-between h-[360px] group transition-all duration-300 hover:border-cyber-cyan/35 hover:scale-[1.02] cursor-pointer"
             >
               <div className={`absolute inset-0 bg-gradient-to-br ${project.gradient} opacity-10 group-hover:opacity-25 transition-opacity duration-300`} />
-              
+
               <div className="flex justify-between items-start relative z-10">
                 <div>
                   <span className="text-[10px] uppercase font-mono text-cyber-cyan tracking-widest bg-cyber-cyan/15 border border-cyber-cyan/30 px-2 py-0.5 rounded">
@@ -169,7 +165,6 @@ export default function Projects() {
         })}
       </div>
 
-      {/* Case Study Details Dialog Modal */}
       <AnimatePresence>
         {selectedProject && (
           <div className="fixed inset-0 z-[110] flex items-center justify-center p-6 bg-space-darkest/80 backdrop-blur-md">
@@ -179,7 +174,7 @@ export default function Projects() {
               exit={{ scale: 0.95, opacity: 0 }}
               className="glass-card max-w-2xl w-full rounded-3xl border border-cyber-cyan/40 p-8 relative overflow-hidden flex flex-col gap-6"
             >
-              {/* Close button */}
+
               <button
                 onClick={() => setSelectedProject(null)}
                 className="absolute top-6 right-6 w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-gray-400 hover:text-white hover:border-cyber-cyan transition-all"
@@ -189,7 +184,6 @@ export default function Projects() {
                 <X className="w-4 h-4" />
               </button>
 
-              {/* Title */}
               <div>
                 <span className="text-[10px] uppercase font-mono text-cyber-cyan tracking-widest bg-cyber-cyan/10 border border-cyber-cyan/20 px-2.5 py-1 rounded-full">
                   {selectedProject.category} Case Study
@@ -197,7 +191,6 @@ export default function Projects() {
                 <h3 className="text-2xl font-black text-white mt-4">{selectedProject.title}</h3>
               </div>
 
-              {/* Content */}
               <div className="flex flex-col gap-5 max-h-[400px] overflow-y-auto pr-2">
                 <div>
                   <h4 className="text-xs uppercase font-mono text-gray-500 mb-1">Corporate Bottleneck</h4>
@@ -220,7 +213,6 @@ export default function Projects() {
                 </div>
               </div>
 
-              {/* Footer row */}
               <div className="flex flex-wrap gap-2 pt-4 border-t border-white/5">
                 {selectedProject.tech.map((t) => (
                   <span key={t} className="text-[9px] font-mono font-bold text-gray-400 bg-white/5 border border-white/10 px-2 py-0.5 rounded">

@@ -23,7 +23,6 @@ function RoadmapStep({ step, idx, scrollYProgress, setCursorType }: RoadmapStepP
   const startVal = idx === 0 ? 0 : (idx - 0.5) / 7;
   const endVal = idx === 0 ? 0.02 : idx / 7;
 
-  // Transform scroll progress to highlight styles
   const borderGlow = useTransform(
     scrollYProgress,
     [startVal, endVal],
@@ -66,7 +65,6 @@ function RoadmapStep({ step, idx, scrollYProgress, setCursorType }: RoadmapStepP
     { clamp: true }
   );
 
-  // Hacking Morph Effect: Morph number to icon as the scroll line hits the dot
   const numberOpacity = useTransform(scrollYProgress, [startVal, endVal], [1, 0], { clamp: true });
   const iconOpacity = useTransform(scrollYProgress, [startVal, endVal], [0, 1], { clamp: true });
   const iconScale = useTransform(scrollYProgress, [startVal, endVal], [0.6, 1.0], { clamp: true });
@@ -81,9 +79,9 @@ function RoadmapStep({ step, idx, scrollYProgress, setCursorType }: RoadmapStepP
       transition={{ duration: 0.5, delay: idx * 0.05 }}
       className="flex gap-4 md:gap-8 relative items-start group"
     >
-      {/* Ripple container */}
+
       <div className="relative shrink-0">
-        {/* Ripple ring effect */}
+
         <motion.div
           style={{
             opacity: useTransform(scrollYProgress, [startVal, endVal], [0, 0.6]),
@@ -92,7 +90,6 @@ function RoadmapStep({ step, idx, scrollYProgress, setCursorType }: RoadmapStepP
           className="absolute inset-0 border border-cyber-cyan/40 rounded-lg md:rounded-xl pointer-events-none"
         />
 
-        {/* Left side node structure */}
         <motion.div
           style={{
             borderColor: borderGlow,
@@ -103,13 +100,12 @@ function RoadmapStep({ step, idx, scrollYProgress, setCursorType }: RoadmapStepP
           onMouseEnter={() => setCursorType('hover')}
           onMouseLeave={() => setCursorType('default')}
         >
-          {/* Glowing core when inside step */}
-          <motion.div 
+
+          <motion.div
             style={{ opacity: glowOpacity }}
-            className="absolute -inset-0.5 rounded-lg md:rounded-xl bg-gradient-to-br from-cyber-blue to-cyber-cyan pointer-events-none" 
+            className="absolute -inset-0.5 rounded-lg md:rounded-xl bg-gradient-to-br from-cyber-blue to-cyber-cyan pointer-events-none"
           />
 
-          {/* Cyber laser scanning line when active */}
           <motion.div
             style={{ opacity: iconOpacity }}
             className="absolute left-0 right-0 h-0.5 bg-cyber-cyan shadow-[0_0_8px_#06b6d4] z-20 pointer-events-none"
@@ -117,7 +113,6 @@ function RoadmapStep({ step, idx, scrollYProgress, setCursorType }: RoadmapStepP
             transition={{ repeat: Infinity, duration: 1.5, ease: 'easeInOut' }}
           />
 
-          {/* Cyber binary coordinate code text background (fades in when active) */}
           <motion.div
             style={{ opacity: useTransform(scrollYProgress, [startVal, endVal], [0, 0.25]) }}
             className="absolute inset-0 font-mono text-[5px] md:text-[6px] text-cyber-cyan/50 leading-none overflow-hidden select-none pointer-events-none p-0.5 flex flex-col justify-around items-center"
@@ -126,7 +121,6 @@ function RoadmapStep({ step, idx, scrollYProgress, setCursorType }: RoadmapStepP
             <div className="tracking-tighter">1010</div>
           </motion.div>
 
-          {/* Target Lock Corners (Hacking Effect) */}
           <motion.div
             style={{ opacity: iconOpacity }}
             className="absolute inset-1 pointer-events-none"
@@ -137,15 +131,13 @@ function RoadmapStep({ step, idx, scrollYProgress, setCursorType }: RoadmapStepP
             <div className="absolute bottom-0 right-0 w-1.5 h-1.5 border-b border-r border-cyber-cyan" />
           </motion.div>
 
-          {/* Normal Number */}
-          <motion.span 
+          <motion.span
             style={{ color: numColor, opacity: numberOpacity }}
             className="text-xs md:text-base font-black font-mono transition-colors z-10"
           >
             {step.number}
           </motion.span>
 
-          {/* Hacker Icon when Active */}
           <motion.div
             style={{ opacity: iconOpacity, scale: iconScale }}
             className="absolute z-10 text-cyber-cyan flex items-center justify-center"
@@ -155,9 +147,8 @@ function RoadmapStep({ step, idx, scrollYProgress, setCursorType }: RoadmapStepP
         </motion.div>
       </div>
 
-      {/* Right side content */}
       <div className="pt-1 md:pt-1.5">
-        <motion.h4 
+        <motion.h4
           style={{ color: titleColor }}
           className="text-sm md:text-base font-black transition-colors flex items-center gap-2"
         >
@@ -187,20 +178,17 @@ export default function ProcessSection() {
     { number: 8, title: 'Operations & support', icon: LifeBuoy, desc: 'Monitoring metrics (latencies, logs, CPU loads) and providing 24/7 incident responses.', color: 'text-orange-500' }
   ];
 
-  // Track scroll progress of this specific container
   const listRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: listRef,
     offset: ['start center', 'end center']
   });
 
-  // Transform scroll progress to height percentage of the progress line
   const height = useTransform(scrollYProgress, [0, 1], ['0%', '100%'], { clamp: true });
 
   return (
     <section ref={containerRef} id="process" className="relative py-24 px-6 max-w-4xl mx-auto">
-      
-      {/* Header */}
+
       <ScrollReveal direction="up" className="text-center mb-20">
         <h2 className="text-xs uppercase font-mono tracking-widest text-cyber-cyan font-semibold mb-3">
           Roadmap to Delivery
@@ -210,25 +198,21 @@ export default function ProcessSection() {
         </h3>
       </ScrollReveal>
 
-      {/* Roadmap List Container */}
       <div ref={listRef} className="relative">
-        
-        {/* Track container representing centers of circle 1 to circle 8 */}
+
         <div className="absolute left-[18px] md:left-[22px] top-5 md:top-6 bottom-5 md:bottom-6 w-1 pointer-events-none">
-          {/* Background Track Line */}
+
           <div className="absolute inset-0 bg-white/10 rounded-full" />
 
-          {/* Glowing Progress Line */}
           <motion.div
             className="absolute top-0 left-0 right-0 bg-gradient-to-b from-cyber-cyan via-cyber-blue to-cyber-purple rounded-full shadow-[0_0_12px_#06b6d4]"
             style={{ height, originY: 0 }}
           />
         </div>
 
-        {/* Steps */}
         <div className="flex flex-col gap-12">
           {steps.map((step, idx) => (
-            <RoadmapStep 
+            <RoadmapStep
               key={step.number}
               step={step}
               idx={idx}

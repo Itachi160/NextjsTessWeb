@@ -1,12 +1,4 @@
-/**
- * Performance Optimization Utilities
- * Collection of helper functions to improve rendering performance
- */
 
-/**
- * Throttle function execution using requestAnimationFrame
- * Ensures function runs at most once per frame (~60fps)
- */
 export function rafThrottle<T extends (...args: any[]) => any>(fn: T): T {
   let rafId: number | null = null;
   let lastArgs: any[] = [];
@@ -25,10 +17,6 @@ export function rafThrottle<T extends (...args: any[]) => any>(fn: T): T {
   return throttled as T;
 }
 
-/**
- * Debounce function execution
- * Delays function execution until after wait milliseconds have elapsed
- */
 export function debounce<T extends (...args: any[]) => any>(
   fn: T,
   wait: number
@@ -47,9 +35,6 @@ export function debounce<T extends (...args: any[]) => any>(
   };
 }
 
-/**
- * Check if device is mobile based on screen size and pointer type
- */
 export function isMobileDevice(): boolean {
   return (
     window.matchMedia('(max-width: 768px)').matches ||
@@ -57,23 +42,14 @@ export function isMobileDevice(): boolean {
   );
 }
 
-/**
- * Check if user prefers reduced motion
- */
 export function prefersReducedMotion(): boolean {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
-/**
- * Get optimal device pixel ratio (capped for performance)
- */
 export function getOptimalDPR(max: number = 2): number {
   return Math.min(window.devicePixelRatio || 1, max);
 }
 
-/**
- * Lazy load images with IntersectionObserver
- */
 export function lazyLoadImage(
   img: HTMLImageElement,
   src: string,
@@ -93,9 +69,6 @@ export function lazyLoadImage(
   return () => observer.disconnect();
 }
 
-/**
- * Create an optimized scroll listener with passive event listener
- */
 export function addOptimizedScrollListener(
   callback: (event: Event) => void,
   throttle: boolean = true
@@ -107,9 +80,6 @@ export function addOptimizedScrollListener(
   return () => window.removeEventListener('scroll', handler as any);
 }
 
-/**
- * Create an optimized resize listener with debounce
- */
 export function addOptimizedResizeListener(
   callback: (event: Event) => void,
   wait: number = 150
@@ -121,41 +91,28 @@ export function addOptimizedResizeListener(
   return () => window.removeEventListener('resize', handler);
 }
 
-/**
- * Force GPU acceleration on element
- */
 export function enableGPUAcceleration(element: HTMLElement): void {
   element.style.transform = 'translateZ(0)';
   element.style.backfaceVisibility = 'hidden';
   element.style.willChange = 'transform';
 }
 
-/**
- * Remove GPU acceleration hints when animation is complete
- */
+
 export function disableGPUAcceleration(element: HTMLElement): void {
   element.style.willChange = 'auto';
 }
 
-/**
- * Batch DOM reads to prevent layout thrashing
- */
 export function batchDOMReads<T>(reads: (() => T)[]): T[] {
   return reads.map((read) => read());
 }
 
-/**
- * Batch DOM writes to prevent layout thrashing
- */
 export function batchDOMWrites(writes: (() => void)[]): void {
   requestAnimationFrame(() => {
     writes.forEach((write) => write());
   });
 }
 
-/**
- * Performance monitoring utility
- */
+
 export class PerformanceMonitor {
   private marks: Map<string, number> = new Map();
 
@@ -180,12 +137,6 @@ export class PerformanceMonitor {
   }
 }
 
-/**
- * Report Web Vitals for monitoring
- * Note: This function is commented out because it requires 'web-vitals' package
- * To enable: 1) Install with: npm install web-vitals
- *           2) Uncomment the function below
- */
 /*
 export function reportWebVitals(onPerfEntry?: (metric: any) => void): void {
   if (onPerfEntry && typeof onPerfEntry === 'function') {
@@ -205,37 +156,31 @@ export function reportWebVitals(onPerfEntry?: (metric: any) => void): void {
 }
 */
 
-/**
- * Detect if connection is slow (3G, 2G, or user has saveData enabled)
- */
+
 export function isSlowConnection(): boolean {
   if (typeof navigator === 'undefined') return false;
   const conn = (navigator as any).connection || (navigator as any).mozConnection || (navigator as any).webkitConnection;
   if (!conn) return false;
-  
+
   if (conn.saveData) return true;
-  
+
   const slowTypes = ['slow-2g', '2g', '3g'];
   if (slowTypes.includes(conn.effectiveType)) return true;
-  
+
   if (conn.downlink && conn.downlink < 1.5) return true;
-  
+
   return false;
 }
 
-/**
- * Detect if device has a slow CPU (low hardware concurrency or memory)
- */
 export function isLowEndDevice(): boolean {
   if (typeof navigator === 'undefined') return false;
-  
-  // hardwareConcurrency <= 4 indicates entry-level CPU (e.g. Galaxy A14, Moto G54, Redmi Note)
+
   const cores = navigator.hardwareConcurrency || 4;
   if (cores <= 4) return true;
-  
+
   const deviceMemory = (navigator as any).deviceMemory || 8;
   if (deviceMemory <= 4) return true;
-  
+
   return false;
 }
 

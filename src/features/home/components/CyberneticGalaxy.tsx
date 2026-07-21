@@ -29,7 +29,6 @@ export interface PathwayTrack {
   branches: TechBranch[];
 }
 
-/* ─────────────── Data ─────────────── */
 
 export const GALAXY_TRACKS: PathwayTrack[] = [
   {
@@ -164,7 +163,6 @@ const SIDE_LOGOS = [
   { name: 'React', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg', trackId: 'fe' }
 ];
 
-/* ─────────────── Sub-component: SVG elements for ONE track ─────────────── */
 
 interface TrackSVGProps {
   track: PathwayTrack;
@@ -194,7 +192,7 @@ function TrackSVG({
   const beamDash = useTransform(progress, [0.25, 0.55], [350, 0]);
   const beamOpacity = useTransform(progress, [0.25, 0.40], [0, 0.6]);
   const pulseOffset = useTransform(scrollYProgress, [0, 1], [0, -600]);
-  
+
   const stationX = useTransform(progress, [0.28, 0.58], [xStart - track.stationX, 0]);
   const stationY = useTransform(progress, [0.28, 0.58], [yStart - track.stationY, 0]);
   const stationScale = useTransform(progress, [0.28, 0.52], [0, 1]);
@@ -210,7 +208,6 @@ function TrackSVG({
 
   return (
     <motion.g style={{ pointerEvents }}>
-      {/* ── Energy beam: glowing laser pipe ── */}
       <motion.line
         x1={xStart} y1={yStart} x2={track.stationX} y2={track.stationY}
         stroke={`url(#beam-grad-${track.id})`}
@@ -220,7 +217,6 @@ function TrackSVG({
         strokeDasharray="350 350"
         style={{ strokeDashoffset: beamDash }}
       />
-      {/* ── Energy beam: running pulse line ── */}
       <motion.line
         x1={xStart} y1={yStart} x2={track.stationX} y2={track.stationY}
         stroke="#ffffff"
@@ -229,11 +225,8 @@ function TrackSVG({
         strokeDasharray="15 15"
         style={{ strokeDashoffset: pulseOffset }}
       />
-
-      {/* ── Station reactor ── */}
       <g transform={`translate(${track.stationX}, ${track.stationY})`}>
         <motion.g style={{ x: stationX, y: stationY, opacity: stationOpacity, scale: stationScale }}>
-          {/* hover hit area */}
           <circle r="36" fill="transparent" className="cursor-pointer pointer-events-auto"
             onMouseEnter={() => onHover(track)}
             onMouseLeave={() => onHover(null)}
@@ -243,15 +236,12 @@ function TrackSVG({
             opacity={isActive ? 0.6 : 0.15} strokeDasharray="4 4" />
           <circle r="22" fill="none" stroke={track.hexColor} strokeWidth="1"
             opacity={isActive ? 0.8 : 0.3} />
-
-          {/* Active Hover Halo */}
           <circle r="28" fill="none" stroke={track.hexColor} strokeWidth="1.5"
             opacity={isActive ? 0.8 : 0}
             filter="url(#laser-glow)"
             className="animate-pulse"
           />
 
-          {/* reactor shapes */}
           {track.id === 'ai' && (
             <g>
               <path d="M -14 6 C -14 -12 14 -12 14 6 Z" fill="rgba(236,72,153,0.12)" stroke="#ec4899" strokeWidth="1.5" />
@@ -297,8 +287,6 @@ function TrackSVG({
           )}
         </motion.g>
       </g>
-
-      {/* ── Branch lines & dots ── */}
       {track.branches.map((b, bIdx) => (
         <g key={bIdx}>
           <motion.path
@@ -325,7 +313,7 @@ function TrackSVG({
   );
 }
 
-/* ─────────────── Sub-component: HTML overlay for ONE track ─────────────── */
+
 
 interface TrackOverlayProps {
   track: PathwayTrack;
@@ -348,13 +336,11 @@ function TrackOverlay({
   const xStart = track.id === 'db' ? feTrack?.hexX ?? centerCoords.x : centerCoords.x;
   const yStart = track.id === 'db' ? feTrack?.hexY ?? centerCoords.y : centerCoords.y;
 
-  // Phase 2: hexagons slide out and scale (0.26 to 0.56)
   const currentHexX = useTransform(progress, [0.26, 0.56], [xStart, track.hexX]);
   const currentHexY = useTransform(progress, [0.26, 0.56], [yStart, track.hexY]);
   const hexScale = useTransform(progress, [0.26, 0.50], [0, 1]);
   const hexOpacity = useTransform(progress, [0.26, 0.50], [0, 1]);
 
-  // Phase 3: tech label opacity (0.70 to 0.95)
   const branchLabelOpacity = useTransform(progress, [0.70, 0.95], [0, isActive ? 1 : (isMobile ? 0.55 : 0.75)]);
 
 
@@ -362,7 +348,6 @@ function TrackOverlay({
     <div
       className="absolute inset-0 w-full h-full pointer-events-none z-30"
     >
-      {/* ── Hexagon label ── */}
       <motion.div
         className="absolute cursor-pointer flex flex-col items-center gap-1.5"
         style={{
@@ -403,7 +388,6 @@ function TrackOverlay({
         </div>
       </motion.div>
 
-      {/* ── Tech labels at branch endpoints ── */}
       {track.branches.map((b, bIdx) => {
         const alignLeft = b.x < track.stationX;
         return (
@@ -496,38 +480,30 @@ interface TrackSlideProps {
 }
 
 function TrackSlide({ progress, track, index }: TrackSlideProps) {
-  // Sector scroll bounds: phone loads in [0, 0.15], then each track gets 0.17 range
-  // This ensures phone is fully visible before any card appears
-  const CARD_START = 0.15; // Cards begin after phone is loaded
-  const CARD_SPAN = 0.17;  // Each card gets 0.17 of progress (slower scroll)
+  const CARD_START = 0.15;
+  const CARD_SPAN = 0.17;
   const p0 = CARD_START + index * CARD_SPAN;
-  const p1 = p0 + 0.05;   // Fully entered, details/branches start exploding
-  const p2 = p0 + 0.12;   // Start exiting
-  const p3 = p0 + CARD_SPAN; // Fully exited
+  const p1 = p0 + 0.05;
+  const p2 = p0 + 0.12;
+  const p3 = p0 + CARD_SPAN;
 
-  // Responsive motion transforms
   const y = useTransform(progress, [p0, p1, p2, p3], [240, 0, 0, -240]);
   const opacity = useTransform(progress, [p0, p1, p2, p3], [0, 1, 1, 0]);
   const scale = useTransform(progress, [p0, p1, p2, p3], [0.85, 1, 1, 0.85]);
-  
-  // Radial explosion of sub-branches happens slowly after card settles [p1, p2 - 0.02]
   const branchProgress = useTransform(progress, [p1, p2 - 0.02, p2, p3], [0, 1, 1, 1]);
-  
-  // Details (description, syllabus, stacks) fade in during Phase 2 [p1, p1 + 0.04]
+
   const detailsOpacity = useTransform(progress, [p0, p1, p1 + 0.04, p2, p3], [0, 0, 1, 1, 1]);
 
-  // Pointer events: active only when card is in focus range
   const pointerEvents = useTransform(progress, p => (p >= p0 && p < p3) ? 'auto' : 'none');
 
-  const cx = 170;     // Mockup width is 260 => center inside 340px container is 170
-  const cy = 220;     // Mockup height is 440 => center is 220
+  const cx = 170;
+  const cy = 220;
 
   return (
     <motion.div
       className="absolute inset-0 w-full h-full pointer-events-none z-20 overflow-visible"
       style={{ opacity, pointerEvents }}
     >
-      {/* ── Connecting Trace Lines layer ── */}
       <svg className="absolute inset-0 w-full h-full pointer-events-none z-10 overflow-visible">
         {track.branches.map((_, j) => {
           const isLeft = j % 2 === 0;
@@ -548,7 +524,6 @@ function TrackSlide({ progress, track, index }: TrackSlideProps) {
         })}
       </svg>
 
-      {/* ── Sub-branch tech bubbles layer ── */}
       {track.branches.map((b, j) => {
         const isLeft = j % 2 === 0;
         const bx = isLeft ? 10 : 330;
@@ -568,22 +543,20 @@ function TrackSlide({ progress, track, index }: TrackSlideProps) {
         );
       })}
 
-      {/* ── Main Pathway Info Card ── */}
       <motion.div
         className="absolute w-[228px] h-[340px] rounded-2xl border bg-[#060a17]/95 backdrop-blur-md p-3.5 shadow-[0_12px_40px_rgba(0,0,0,0.6)] flex flex-col justify-between overflow-hidden z-20 pointer-events-auto"
         style={{
           borderColor: `${track.hexColor}35`,
           boxShadow: `0 8px 32px rgba(0, 0, 0, 0.4), 0 0 20px ${track.hexColor}10`,
-          left: '56px', // Centering inside the 340px container: (340 - 228) / 2 = 56
-          top: '50px',  // Centering inside the 440px container: (440 - 340) / 2 = 50
+          left: '56px',
+          top: '50px',
           y,
           scale,
           willChange: 'transform'
         }}
       >
         <div className="flex flex-col gap-2.5 text-left font-sans h-full justify-start">
-          
-          {/* Header row */}
+
           <div className="flex items-center gap-2 shrink-0">
             <div className="w-8 h-8 rounded-lg border flex items-center justify-center shrink-0"
               style={{
@@ -605,14 +578,11 @@ function TrackSlide({ progress, track, index }: TrackSlideProps) {
             </div>
           </div>
 
-          {/* Description & Syllabus details: dynamically fading in */}
           <motion.div style={{ opacity: detailsOpacity }} className="flex flex-col gap-2.5 overflow-hidden">
-            {/* Description */}
             <p className="text-[8.5px] text-gray-300 leading-relaxed mt-1">
               {track.description}
             </p>
 
-            {/* Syllabus Steps */}
             <div className="mt-1">
               <span className="text-[6.5px] uppercase font-mono text-gray-500 tracking-wider block mb-1 font-bold">
                 ACADEMY SYLLABUS
@@ -629,9 +599,8 @@ function TrackSlide({ progress, track, index }: TrackSlideProps) {
           </motion.div>
         </div>
 
-        {/* Stacks Footer list: dynamically fading in */}
-        <motion.div 
-          style={{ opacity: detailsOpacity }} 
+        <motion.div
+          style={{ opacity: detailsOpacity }}
           className="pt-2 border-t border-white/5 flex flex-wrap gap-1.5 items-center shrink-0"
         >
           <span className="text-[6.5px] uppercase font-mono text-gray-500 tracking-wider mr-1 font-bold">CORE STACKS:</span>
@@ -648,32 +617,26 @@ function TrackSlide({ progress, track, index }: TrackSlideProps) {
 }
 
 function MobileExplodedMatrix({ scrollYProgress, tracks, activeTrack, setActiveTrack }: MobileExplodedMatrixProps) {
-  // Translate global scroll progress into sticky animations [0.15, 0.88]
-  // Start animation immediately as section pins to eliminate dead scroll zone
+
   const progress = useTransform(scrollYProgress, [0.15, 0.88], [0, 1]);
 
-  // Butter-smooth spring mapping on mobile progress to prevent fast scroll skipping
   const smoothProgress = useSpring(progress, {
     damping: 35,
     stiffness: 90,
     restDelta: 0.0001
   });
 
-  // Central Mockup Bezel animations — phone loads FIRST before any cards
   const mockupOpacity = useTransform(smoothProgress, [0.0, 0.08], [0, 1]);
   const mockupScale = useTransform(smoothProgress, [0.0, 0.08], [0.85, 1]);
 
-  // Central Core/Orb animations (visible behind card layers)
   const coreOpacity = useTransform(smoothProgress, [0.06, 0.12], [0, 0.75]);
   const coreScale = useTransform(smoothProgress, [0.06, 0.12], [0.5, 1]);
 
-  // Ensure logical display order for mobile storytelling: AI -> FE -> BE -> OPS -> DB
   const orderedTracks = useMemo(() => {
     const order = ['ai', 'fe', 'be', 'ops', 'db'];
     return order.map(id => tracks.find(t => t.id === id)).filter(Boolean) as PathwayTrack[];
   }, [tracks]);
 
-  // Sync scroll sector with activeTrack state for ambient glow updates
   useEffect(() => {
     const unsubscribe = smoothProgress.on("change", (latest) => {
       if (latest < 0.05 || latest > 0.95) {
@@ -695,8 +658,7 @@ function MobileExplodedMatrix({ scrollYProgress, tracks, activeTrack, setActiveT
 
   return (
     <div className="w-[340px] flex flex-col gap-6 items-center select-none py-10 overflow-visible relative min-h-[480px]">
-      
-      {/* Central Phone Device Mockup Container */}
+
       <motion.div
         className="absolute w-[260px] h-[440px] rounded-[36px] bg-gradient-to-b from-[#070b19]/95 to-black border-2 border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.8),_inset_0_0_30px_rgba(255,255,255,0.05)] z-0 flex flex-col overflow-hidden"
         style={{
@@ -705,16 +667,12 @@ function MobileExplodedMatrix({ scrollYProgress, tracks, activeTrack, setActiveT
           top: 0
         }}
       >
-        {/* Notch speaker */}
         <div className="w-24 h-4 rounded-full bg-black mx-auto mt-2 border border-white/5 flex items-center justify-center shrink-0">
           <div className="w-8 h-1 rounded-full bg-white/20" />
         </div>
-        
-        {/* Screen Content */}
         <div className="flex-1 w-full relative overflow-visible">
           <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:100%_12px] opacity-20 pointer-events-none" />
-          
-          {/* Pinned central core orb inside mockup (displays in background) */}
+
           <motion.div
             className="absolute inset-0 m-auto w-24 h-24 rounded-full flex items-center justify-center pointer-events-none"
             style={{
@@ -731,7 +689,6 @@ function MobileExplodedMatrix({ scrollYProgress, tracks, activeTrack, setActiveT
         </div>
       </motion.div>
 
-      {/* Render the 5 sequential TrackSlides */}
       <div className="relative w-full h-[440px] flex items-center justify-center overflow-visible" style={{ perspective: 1000 }}>
         {orderedTracks.map((track, index) => (
           <TrackSlide
@@ -742,12 +699,11 @@ function MobileExplodedMatrix({ scrollYProgress, tracks, activeTrack, setActiveT
           />
         ))}
       </div>
-      
+
     </div>
   );
 }
 
-/* ═══════════════ Main Component ═══════════════ */
 
 type Breakpoint = 'smallPhone' | 'standardPhone' | 'tablet' | 'desktop';
 
@@ -815,7 +771,6 @@ export default function CyberneticGalaxy() {
     return classes[breakpoint];
   }, [breakpoint]);
 
-  // Transform coordinates for mobile breakpoints to prevent crowding and overlap
   const responsiveTracks = useMemo(() => {
     return GALAXY_TRACKS.map(track => {
       const overrides = {
@@ -997,29 +952,24 @@ export default function CyberneticGalaxy() {
     offset: ["start end", "end end"]
   });
 
-  // Scale the animations precisely while sticky ([0.10, 0.90])
   const progress = useTransform(scrollYProgress, [0.10, 0.90], [0, 1]);
 
-  // Core assembly transforms (Phase 1: 0.0 to 0.25)
   const coreScale = useTransform(progress, [0.0, 0.25], [0, 1]);
   const coreOpacity = useTransform(progress, [0.0, 0.25], [0, 1]);
 
   const activeTrack = hoveredTrack || selectedTrack;
 
-  // Background stars with deterministic positions (to prevent hydration mismatch)
   const backgroundStars = useMemo(() =>
     Array.from({ length: 50 }).map((_, i) => {
-      // Deterministic pseudo-random generation based on index
       const xSeed = Math.sin(i + 1) * 10000;
       const ySeed = Math.cos(i + 1) * 10000;
-      // Round to 2 decimal places to prevent floating-point precision hydration discrepancies across OS platforms
       const cx = Math.round(Math.abs(xSeed - Math.floor(xSeed)) * 100000) / 100;
       const cy = Math.round(Math.abs(ySeed - Math.floor(ySeed)) * 65000) / 100;
       const r = Math.round(((Math.abs(Math.sin(i * 99)) * 1.0) + 0.4) * 100) / 100;
       const opacity = Math.round(((Math.abs(Math.cos(i * 123)) * 0.6) + 0.1) * 100) / 100;
       return { id: i, cx, cy, r, opacity };
     })
-  , []);
+    , []);
 
   return (
     <section
@@ -1027,14 +977,13 @@ export default function CyberneticGalaxy() {
       id="career-pathway"
       className="relative h-[800vh] md:h-[600vh] lg:h-[550vh] w-full bg-transparent text-white"
     >
-      {/* Sticky container — locks on screen for the full scroll */}
+
       <div className="sticky top-0 h-screen w-full overflow-hidden z-20">
 
-        {/* ── Background ambient glowing nebulas ── */}
         <div className="absolute inset-0 pointer-events-none z-0">
           <div className="absolute top-[20%] left-[15%] w-[450px] h-[450px] rounded-full bg-cyber-cyan/[0.03] blur-[120px] animate-[pulse_6s_ease-in-out_infinite]" />
           <div className="absolute bottom-[20%] right-[15%] w-[550px] h-[550px] rounded-full bg-cyber-purple/[0.03] blur-[150px] animate-[pulse_8s_ease-in-out_infinite]" />
-          
+
           <AnimatePresence>
             {activeTrack && (
               <motion.div
@@ -1053,9 +1002,7 @@ export default function CyberneticGalaxy() {
         </div>
 
         {breakpoint !== 'desktop' ? (
-          /* ── Mobile Layout with Exploded Matrix Mockup ── */
           <div className="relative w-full h-full flex flex-col items-center justify-start px-4 pt-24 pb-12 gap-4 overflow-hidden overflow-x-hidden z-10 select-none">
-            {/* Telemetry Header */}
             <div className="flex flex-col gap-1.5 font-mono text-center items-center">
               <div className="flex items-center gap-2 px-3 py-1 w-fit rounded-full border border-cyber-cyan/30 bg-cyber-cyan/10 shadow-[0_0_12px_rgba(6,182,212,0.1)] ring-1 ring-cyber-cyan/5">
                 <span className="w-1.5 h-1.5 rounded-full bg-cyber-cyan animate-ping" />
@@ -1071,7 +1018,6 @@ export default function CyberneticGalaxy() {
               </p>
             </div>
 
-            {/* Mobile Exploded View Canvas */}
             <div className="w-full flex-1 flex items-center justify-center min-h-[460px] overflow-visible relative">
               <MobileExplodedMatrix
                 scrollYProgress={scrollYProgress}
@@ -1082,14 +1028,10 @@ export default function CyberneticGalaxy() {
             </div>
           </div>
         ) : (
-          /* ── Desktop Desktop Layout ── */
           <div className="relative w-full h-full flex flex-col-reverse lg:flex-row items-center justify-center px-4 lg:px-12 pt-24 pb-8 lg:pt-24 lg:pb-10 gap-4 lg:gap-8 max-w-7xl mx-auto select-none z-10">
-            
-            {/* ── Left Column: Sci-fi HUD Control Panel ── */}
             <div className="w-full lg:w-[380px] shrink-0 z-30 flex flex-col gap-3 lg:gap-5 justify-center lg:h-full pointer-events-none">
               <div className="pointer-events-auto flex flex-col gap-3 lg:gap-5 w-full">
-                
-                {/* Telemetry Header */}
+
                 <div className="flex flex-col gap-1.5 font-mono">
                   <div className="flex items-center gap-2 px-3 py-1 w-fit rounded-full border border-cyber-cyan/30 bg-cyber-cyan/10 shadow-[0_0_12px_rgba(6,182,212,0.1)] ring-1 ring-cyber-cyan/5">
                     <span className="w-1.5 h-1.5 rounded-full bg-cyber-cyan animate-ping" />
@@ -1105,7 +1047,6 @@ export default function CyberneticGalaxy() {
                   </p>
                 </div>
 
-                {/* Dynamic Viewport Card */}
                 <div className="relative h-[38vh] lg:h-auto min-h-[220px] lg:min-h-[320px] w-full">
                   <AnimatePresence mode="wait">
                     {activeTrack ? (
@@ -1122,7 +1063,6 @@ export default function CyberneticGalaxy() {
                           background: 'linear-gradient(135deg, rgba(7,11,25,0.85) 0%, rgba(3,5,13,0.92) 100%)'
                         }}
                       >
-                        {/* Grid structure lines */}
                         <div className="absolute inset-0 pointer-events-none opacity-[0.03]"
                           style={{
                             backgroundImage: `radial-gradient(circle at 100% 0%, ${activeTrack.hexColor} 0%, transparent 60%),
@@ -1130,8 +1070,7 @@ export default function CyberneticGalaxy() {
                             backgroundSize: '100% 100%, 100% 8px'
                           }}
                         />
-                        
-                        {/* Top content */}
+
                         <div>
                           <div className="flex items-center gap-3">
                             <div className="w-10 h-10 rounded-lg border flex items-center justify-center shrink-0 shadow-lg"
@@ -1175,7 +1114,6 @@ export default function CyberneticGalaxy() {
                           </div>
                         </div>
 
-                        {/* Bottom tech tag list */}
                         <div className="mt-5 pt-3.5 border-t border-white/5 flex flex-wrap gap-1.5 items-center shrink-0">
                           <span className="text-[7.5px] uppercase font-mono text-gray-500 tracking-wider mr-1.5 font-bold">CORE STACKS:</span>
                           {activeTrack.techs.map((tech) => (
@@ -1194,14 +1132,13 @@ export default function CyberneticGalaxy() {
                         exit={{ opacity: 0, filter: 'blur(5px)' }}
                         className="glass-card p-4 lg:p-6 rounded-xl border border-white/[0.04] bg-space-darkest/75 text-left flex flex-col justify-between h-full overflow-y-auto"
                       >
-                        {/* Grid background mesh */}
                         <div className="absolute inset-0 pointer-events-none opacity-[0.02]"
                           style={{
                             backgroundImage: 'radial-gradient(circle, #06b6d4 1px, transparent 1px)',
                             backgroundSize: '20px 20px'
                           }}
                         />
-                        
+
                         <div className="flex flex-col items-start gap-3 relative z-10">
                           <div className="w-10 h-10 rounded-lg border border-cyber-cyan/25 bg-cyber-cyan/5 flex items-center justify-center shrink-0">
                             <Compass className="w-5 h-5 text-cyber-cyan/60 animate-pulse" />
@@ -1233,18 +1170,15 @@ export default function CyberneticGalaxy() {
 
               </div>
             </div>
-            
-            {/* ── Right Column: Aspect-Locked Galaxy Vector Workspace ── */}
+
             <div className="flex-1 w-full relative flex items-center justify-center z-20">
               <div className={`relative w-full ${aspectClass} max-w-full lg:max-w-[850px] border border-white/[0.03] rounded-xl lg:rounded-2xl bg-space-darkest/10 shadow-[inset_0_0_40px_rgba(0,0,0,0.5)]`}>
-                
-                {/* Grid corner indicators */}
+
                 <div className="absolute top-3 left-3 w-4 h-4 border-t border-l border-white/10 rounded-tl pointer-events-none" />
                 <div className="absolute top-3 right-3 w-4 h-4 border-t border-r border-white/10 rounded-tr pointer-events-none" />
                 <div className="absolute bottom-3 left-3 w-4 h-4 border-b border-l border-white/10 rounded-bl pointer-events-none" />
                 <div className="absolute bottom-3 right-3 w-4 h-4 border-b border-r border-white/10 rounded-br pointer-events-none" />
 
-                {/* ── SVG Canvas ── */}
                 <svg viewBox={`0 0 ${viewBoxDims.w} ${viewBoxDims.h}`} className="absolute inset-0 w-full h-full pointer-events-none z-20">
                   <defs>
                     {responsiveTracks.map((t) => {
@@ -1260,18 +1194,18 @@ export default function CyberneticGalaxy() {
                         </linearGradient>
                       );
                     })}
-                    
+
                     <radialGradient id="core-glow-grad" cx="50%" cy="50%" r="50%">
                       <stop offset="0%" stopColor="#ffffff" stopOpacity="1" />
                       <stop offset="25%" stopColor="#22d3ee" stopOpacity="0.85" />
                       <stop offset="60%" stopColor="#a855f7" stopOpacity="0.25" />
                       <stop offset="100%" stopColor="#03050d" stopOpacity="0" />
                     </radialGradient>
-                    
+
                     <pattern id="hud-grid" width="40" height="40" patternUnits="userSpaceOnUse">
                       <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(6,182,212,0.02)" strokeWidth="0.75" />
                     </pattern>
-                    
+
                     <filter id="laser-glow" x="-30%" y="-30%" width="160%" height="160%">
                       <feGaussianBlur stdDeviation="6" result="blur" />
                       <feMerge>
@@ -1281,19 +1215,14 @@ export default function CyberneticGalaxy() {
                     </filter>
                   </defs>
 
-                  {/* Stars Background */}
                   {backgroundStars.map((s) => (
                     <circle key={s.id} cx={(s.cx / 1000) * viewBoxDims.w} cy={(s.cy / 650) * viewBoxDims.h} r={s.r} fill="#fff" opacity={s.opacity} />
                   ))}
-
-                  {/* Grid Overlay */}
                   <rect width="100%" height="100%" fill="url(#hud-grid)" />
 
-                  {/* Cybernetic Bezel radar circles */}
                   <circle cx={centerCoords.x} cy={centerCoords.y} r={bezelRadii.r1} fill="none" stroke="rgba(6,182,212,0.02)" strokeWidth="1" />
                   <circle cx={centerCoords.x} cy={centerCoords.y} r={bezelRadii.r2} fill="none" stroke="rgba(168,85,247,0.015)" strokeWidth="1" strokeDasharray="6 6" />
 
-                  {/* Dynamic Tracks Elements (Beams + Stations + Branches) */}
                   {responsiveTracks.map((track, idx) => (
                     <TrackSVG
                       key={track.id}
@@ -1312,27 +1241,20 @@ export default function CyberneticGalaxy() {
                     />
                   ))}
 
-                  {/* Central Reactor Core (Phase 1) */}
                   <g transform={`translate(${centerCoords.x}, ${centerCoords.y})`}>
                     <motion.g style={{ scale: coreScale, opacity: coreOpacity }}>
-                      {/* Concentric rotating bezel rings */}
                       <circle r="60" fill="none" stroke="rgba(34,211,238,0.15)" strokeWidth="1" strokeDasharray="10 5" className="animate-[spin_20s_linear_infinite]" />
                       <circle r="48" fill="none" stroke="rgba(168,85,247,0.2)" strokeWidth="1.5" strokeDasharray="5 10" className="animate-[spin_10s_linear_infinite_reverse]" />
-                      
-                      {/* Glowing Core Orb */}
+
                       <circle r="36" fill="url(#core-glow-grad)" opacity="0.9" />
-                      
-                      {/* Core Frame and mechanical ticks */}
+
                       <circle r="20" fill="rgba(3, 5, 13, 0.92)" stroke="#22d3ee" strokeWidth="1.5" />
                       <circle r="14" fill="none" stroke="#ffffff" strokeWidth="0.8" strokeDasharray="4 2" className="animate-[spin_6s_linear_infinite]" />
-                      
-                      {/* Central pointer node */}
                       <circle r="4" fill="#ffffff" filter="url(#laser-glow)" />
                     </motion.g>
                   </g>
                 </svg>
 
-                {/* HTML Labels & Hexagon Overlays */}
                 {responsiveTracks.map((track) => (
                   <TrackOverlay
                     key={`ov-${track.id}`}
@@ -1349,7 +1271,6 @@ export default function CyberneticGalaxy() {
                   />
                 ))}
 
-                {/* Sidebar Logo Selection Icons */}
                 <div className="absolute right-4 top-1/2 -translate-y-1/2 hidden lg:flex flex-col gap-3.5 pointer-events-auto z-40">
                   {SIDE_LOGOS.map((logo) => {
                     const matched = responsiveTracks.find(t => t.id === logo.trackId);
@@ -1378,7 +1299,7 @@ export default function CyberneticGalaxy() {
 
               </div>
             </div>
-            
+
           </div>
         )}
 

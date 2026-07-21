@@ -18,9 +18,6 @@ interface ProjectItem {
   image: string;
 }
 
-// Defined OUTSIDE the component — this array never changes, so keeping it inside
-// the component caused it to be re-created on every render, triggering
-// unnecessary child re-renders.
 const projects: ProjectItem[] = [
   {
     id: 1,
@@ -169,7 +166,7 @@ export default function ProjectsSection() {
       className="relative z-10 overflow-hidden"
       style={{ background: '#03050d' }}
     >
-      {/* Top edge glow */}
+
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyber-cyan/20 to-transparent" />
 
       <div className="h-screen flex items-center w-full">
@@ -178,7 +175,6 @@ export default function ProjectsSection() {
           className="flex items-center gap-6 md:gap-8 px-6 md:pl-12 md:pr-24 overflow-visible w-max will-change-transform"
         >
 
-          {/* Title card */}
           <div className="w-[200px] sm:w-[240px] md:w-[440px] shrink-0 flex flex-col justify-center gap-3 sm:gap-4 md:gap-5 pr-2 md:pr-8">
             <h2 className="text-[10px] sm:text-xs uppercase font-mono tracking-widest text-cyber-cyan font-semibold">
               Solutions Showcase
@@ -195,7 +191,6 @@ export default function ProjectsSection() {
             </div>
           </div>
 
-          {/* Project Cards */}
           {projects.map((project) => {
             const Icon = project.icon;
             return (
@@ -205,10 +200,9 @@ export default function ProjectsSection() {
                 onMouseLeave={() => setCursorType('default')}
                 className="w-[280px] md:w-[440px] h-[370px] sm:h-[420px] md:h-[520px] shrink-0 glass-card rounded-2xl md:rounded-3xl border border-white/[0.06] relative overflow-hidden flex flex-col group transition-all duration-500 hover:border-cyber-cyan/30"
               >
-                {/* Gradient overlay */}
+
                 <div className={`absolute inset-0 bg-gradient-to-br ${project.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none`} />
 
-                {/* Image area */}
                 <div className="h-[130px] sm:h-[160px] md:h-[200px] relative overflow-hidden rounded-t-2xl md:rounded-t-3xl">
                   <Image
                     src={project.image}
@@ -227,7 +221,6 @@ export default function ProjectsSection() {
                   </div>
                 </div>
 
-                {/* Content */}
                 <div className="flex flex-col justify-between flex-grow p-4 sm:p-5 md:p-6 relative z-10">
                   <div>
                     <div className="flex justify-between items-start">
@@ -257,12 +250,9 @@ export default function ProjectsSection() {
             );
           })}
 
-          {/* Trailing padding so the last card can scroll fully into view */}
           <div className="w-6 md:w-12 shrink-0" aria-hidden="true" />
         </div>
       </div>
-
-      {/* Bottom edge glow */}
       <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyber-purple/20 to-transparent" />
     </section>
   );

@@ -94,12 +94,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${outfit.variable} ${inter.variable} ${firaCode.variable} scrollbar-none`}>
-      <head>
-        <link rel="icon" href="/favicon.png" type="image/png" />
-        <link rel="apple-touch-icon" href="/favicon.png" />
-        {/* Preconnect to JSdelivr CDN for icons, matching index.html */}
-        <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
-        <link rel="preload" as="image" href="/Logo Hd.webp" fetchPriority="high" />
+      <body className="antialiased">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -143,8 +138,6 @@ export default function RootLayout({
             })
           }}
         />
-      </head>
-      <body className="antialiased">
         <ClientLayout>{children}</ClientLayout>
       </body>
     </html>

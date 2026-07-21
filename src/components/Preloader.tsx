@@ -39,7 +39,7 @@ export default function Preloader() {
   const innerSparksRefs = useRef<(SVGCircleElement | null)[]>([]);
 
   const dotGrid = useMemo(() => {
-    const dots = [];
+    const dots: { x: number; y: number }[] = [];
     const size = 11;
     const spacing = 12;
     const start = center - Math.floor(size / 2) * spacing;

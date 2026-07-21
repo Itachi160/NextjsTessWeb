@@ -106,11 +106,9 @@ export default function Solutions() {
 
   return (
     <div className="pt-32 pb-24 px-6 max-w-7xl mx-auto flex flex-col gap-12 relative z-10 font-mono">
-      {/* Background gradients */}
       <div className="absolute top-[10%] right-0 w-80 h-80 bg-cyber-purple/5 blur-[100px] pointer-events-none" />
       <div className="absolute bottom-[20%] left-0 w-80 h-80 bg-cyber-cyan/5 blur-[120px] pointer-events-none" />
 
-      {/* Header title */}
       <div className="flex flex-col gap-3 max-w-3xl">
         <span className="text-[10px] uppercase font-mono tracking-[0.2em] text-cyber-cyan font-bold flex items-center gap-2">
           <Layers className="w-3.5 h-3.5" />
@@ -127,7 +125,6 @@ export default function Solutions() {
         </p>
       </div>
 
-      {/* 2x2 CORECTLY ALIGNED GRID - ALL INFORMATION VISIBLE BY DEFAULT */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-2">
         {SOLUTIONS_DATA.map((sol) => {
           const SolIcon = sol.icon;
@@ -136,16 +133,13 @@ export default function Solutions() {
               key={sol.id}
               className="glass-card p-6 md:p-8 rounded-2xl border border-white/5 bg-[#03050d]/40 flex flex-col justify-between gap-6 relative overflow-hidden transition-all duration-300 hover:border-cyber-cyan/30 hover:shadow-[0_10px_25px_rgba(6,182,212,0.02)]"
             >
-              {/* Outer grid circuit pattern */}
               <div className="absolute inset-0 cyber-grid opacity-[0.01] pointer-events-none" />
-              
-              {/* LED Status Node indicator */}
+
               <div className="absolute top-4 right-4 flex items-center gap-1.5 font-mono text-[8px] text-gray-500 uppercase">
                 <span className="w-1.5 h-1.5 rounded-full bg-cyber-cyan" />
                 <span>{sol.id}</span>
               </div>
 
-              {/* Title & Icon */}
               <div className="flex items-center gap-4">
                 <div className="w-10 h-10 rounded-xl border border-white/10 flex items-center justify-center text-cyber-cyan bg-white/[0.02]">
                   <SolIcon className="w-4 h-4" />
@@ -158,12 +152,9 @@ export default function Solutions() {
                 </div>
               </div>
 
-              {/* Description */}
               <p className="text-gray-300 text-xs font-sans font-normal leading-relaxed text-left">
                 {sol.shortDesc}
               </p>
-
-              {/* Metrics pills (Sleek and compact) */}
               <div className="grid grid-cols-3 gap-2 font-mono">
                 {sol.metrics.map((m, idx) => (
                   <div key={idx} className="bg-white/[0.01] border border-white/5 p-2 rounded-lg text-center">
@@ -173,7 +164,6 @@ export default function Solutions() {
                 ))}
               </div>
 
-              {/* Core Deliverables Checklists */}
               <div className="flex flex-col gap-2 font-sans font-normal text-left pt-4 border-t border-white/5">
                 {sol.features.map((f, idx) => (
                   <div key={idx} className="flex items-center gap-2 text-xs text-gray-300">
@@ -183,7 +173,6 @@ export default function Solutions() {
                 ))}
               </div>
 
-              {/* Technologies & CTA Link */}
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-4 border-t border-white/5">
                 <div className="flex flex-wrap gap-1">
                   {sol.techs.map((t) => (
@@ -192,7 +181,7 @@ export default function Solutions() {
                     </span>
                   ))}
                 </div>
-                
+
                 <MagneticButton strength={0.12} className="self-end sm:self-center">
                   <a
                     href="/contact"

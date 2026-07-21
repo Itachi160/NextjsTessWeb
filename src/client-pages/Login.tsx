@@ -10,7 +10,6 @@ import { validateCredentials } from '../utils/auth';
 
 const NeuralBackground = dynamic(() => import('../components/three/NeuralBackground'), { ssr: false });
 
-/* ─────────── Typing Terminal Text ─────────── */
 function TypingText({ text, speed = 60, delay = 0 }: { text: string; speed?: number; delay?: number }) {
   const [displayed, setDisplayed] = useState('');
   const [showCursor, setShowCursor] = useState(true);
@@ -25,7 +24,6 @@ function TypingText({ text, speed = 60, delay = 0 }: { text: string; speed?: num
           i++;
           timeout = setTimeout(type, speed);
         } else {
-          // Blink cursor after done
           const blink = setInterval(() => setShowCursor(prev => !prev), 530);
           return () => clearInterval(blink);
         }
@@ -38,12 +36,11 @@ function TypingText({ text, speed = 60, delay = 0 }: { text: string; speed?: num
   return <>{displayed}<span className={`${showCursor ? 'opacity-100' : 'opacity-0'} transition-opacity`}>▋</span></>;
 }
 
-/* ─────────── HUD Corner Brackets ─────────── */
 function HUDCorners() {
   const cornerStyle = "absolute w-5 h-5 pointer-events-none";
   return (
     <>
-      {/* Top-left */}
+
       <motion.div
         className={`${cornerStyle} top-2 left-2`}
         animate={{ opacity: [0.3, 0.8, 0.3] }}
@@ -53,7 +50,7 @@ function HUDCorners() {
           <path d="M1 8 L1 1 L8 1" />
         </svg>
       </motion.div>
-      {/* Top-right */}
+
       <motion.div
         className={`${cornerStyle} top-2 right-2`}
         animate={{ opacity: [0.3, 0.8, 0.3] }}
@@ -63,7 +60,7 @@ function HUDCorners() {
           <path d="M12 1 L19 1 L19 8" />
         </svg>
       </motion.div>
-      {/* Bottom-left */}
+
       <motion.div
         className={`${cornerStyle} bottom-2 left-2`}
         animate={{ opacity: [0.3, 0.8, 0.3] }}
@@ -73,7 +70,7 @@ function HUDCorners() {
           <path d="M1 12 L1 19 L8 19" />
         </svg>
       </motion.div>
-      {/* Bottom-right */}
+
       <motion.div
         className={`${cornerStyle} bottom-2 right-2`}
         animate={{ opacity: [0.3, 0.8, 0.3] }}
@@ -87,7 +84,6 @@ function HUDCorners() {
   );
 }
 
-/* ─────────── Live Status Bar ─────────── */
 function StatusBar() {
   const [latency, setLatency] = useState(12);
   const [uptime, setUptime] = useState('99.97');
@@ -138,7 +134,6 @@ function FocusRipple({ active, color = '#06b6d4' }: { active: boolean; color?: s
   );
 }
 
-/* ═══════════ MAIN LOGIN COMPONENT ═══════════ */
 
 export default function Login() {
   const router = useRouter();
@@ -149,17 +144,14 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [isFocused, setIsFocused] = useState<'email' | 'password' | null>(null);
 
-  // Auth states
   const [status, setStatus] = useState<'idle' | 'authenticating' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
 
-  // Orbiting particles canvas ref
   const orbitRef = useRef<HTMLCanvasElement>(null);
 
   const handleMouseEnter = () => setCursorType('hover');
   const handleMouseLeave = () => setCursorType('default');
 
-  // Back to home transition
   const handleBack = () => {
     setIsTransitioning(true);
     setTimeout(() => {
@@ -183,10 +175,8 @@ export default function Login() {
     setStatus('authenticating');
     setErrorMessage('');
 
-    // Validate against hashed credentials (no plaintext in source)
     const isValid = await validateCredentials(email, password);
 
-    // Brief delay to show the authenticating animation
     setTimeout(() => {
       if (isValid) {
         setStatus('success');
@@ -212,7 +202,6 @@ export default function Login() {
     }
   }, [status]);
 
-  /* ─── Orbiting Particles via Canvas ─── */
   useEffect(() => {
     const canvas = orbitRef.current;
     if (!canvas) return;
@@ -234,8 +223,6 @@ export default function Login() {
     };
     resize();
     window.addEventListener('resize', resize);
-
-    // Pre-render glowing particles onto off-screen canvases to eliminate GC overhead
     const createGlowCanvas = (color: number[]): HTMLCanvasElement => {
       const c = document.createElement('canvas');
       c.width = 32;
@@ -256,7 +243,6 @@ export default function Login() {
     const cyanGlow = createGlowCanvas([6, 182, 212]);
     const purpleGlow = createGlowCanvas([168, 85, 247]);
 
-    // Generate particles
     const particles = Array.from({ length: 30 }).map((_, i) => ({
       angle: (i / 30) * Math.PI * 2,
       speed: 0.003 + Math.random() * 0.004,
@@ -288,11 +274,9 @@ export default function Login() {
         const glowCanvas = p.color[0] === 6 ? cyanGlow : purpleGlow;
         const glowSize = p.size * 4;
 
-        // Render glow using pre-compiled cached texture
         ctx.globalAlpha = p.opacity;
         ctx.drawImage(glowCanvas, x - glowSize, y - glowSize, glowSize * 2, glowSize * 2);
 
-        // Core dot
         ctx.globalAlpha = Math.min(1.0, p.opacity + 0.3);
         ctx.beginPath();
         ctx.arc(x, y, p.size, 0, Math.PI * 2);
@@ -313,22 +297,18 @@ export default function Login() {
   }, []);
 
   return (
-    <div 
+    <div
       className="min-h-screen w-full text-white flex items-center justify-center px-6 relative overflow-hidden font-sans select-none"
       style={{
         background: 'radial-gradient(circle at center, #070c1e 0%, #03050d 100%)'
       }}
     >
-      {/* Three.js neural background for premium depth */}
       <NeuralBackground />
 
-      {/* Grid Pattern overlay */}
       <div className="absolute inset-0 cyber-grid opacity-[0.02] pointer-events-none" />
 
-      {/* Subtle backdrop glows */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-cyber-cyan/5 blur-[120px] pointer-events-none" />
 
-      {/* Return Home Button */}
       <button
         onClick={handleBack}
         onMouseEnter={handleMouseEnter}
@@ -339,17 +319,14 @@ export default function Login() {
         <span>Return to Home</span>
       </button>
 
-      {/* Main Login Card Wrapper with Orbiting Particles */}
       <div className="relative w-full max-w-[460px] z-10">
 
-        {/* ═══ Effect 3: Orbiting Particle Ring (Canvas) ═══ */}
         <canvas
           ref={orbitRef}
           className="absolute -inset-12 pointer-events-none z-0"
           style={{ width: 'calc(100% + 96px)', height: 'calc(100% + 96px)' }}
         />
 
-        {/* ═══ Effect 1: Spinning Conic Gradient Border ═══ */}
         <div className="absolute -inset-[1px] rounded-2xl overflow-hidden pointer-events-none z-[1]" style={{ isolation: 'isolate' }}>
           <motion.div
             className="absolute -inset-[150%] z-0 will-change-transform"
@@ -362,12 +339,10 @@ export default function Login() {
               background: 'conic-gradient(from 0deg, transparent 0%, #06b6d4 8%, #06b6d4 12%, transparent 20%, transparent 45%, #a855f7 53%, #a855f7 57%, transparent 65%, transparent 100%)',
             }}
           />
-          {/* Inner mask to keep only the border ring visible */}
           <div className="absolute inset-[1.5px] rounded-2xl bg-[#03050d] z-[1]" />
         </div>
 
-        {/* ═══ Main Card ═══ */}
-        <div 
+        <div
           className="p-10 rounded-2xl border border-white/[0.06] shadow-2xl relative overflow-hidden z-[2]"
           style={{
             background: '#03050d',
@@ -377,19 +352,16 @@ export default function Login() {
             isolation: 'isolate',
           }}
         >
-          {/* Dedicated Backdrop Blur Layer to prevent Chromium layer rasterization thrashing */}
-          <div 
-            className="absolute inset-0 bg-[#03050d]/95 md:bg-[#03050d]/85 backdrop-blur-none md:backdrop-blur-2xl rounded-2xl z-0 pointer-events-none" 
+          <div
+            className="absolute inset-0 bg-[#03050d]/95 md:bg-[#03050d]/85 backdrop-blur-none md:backdrop-blur-2xl rounded-2xl z-0 pointer-events-none"
             style={{
               backfaceVisibility: 'hidden',
               WebkitBackfaceVisibility: 'hidden',
             }}
           />
-          
-          {/* ═══ Effect 5: HUD Corner Brackets ═══ */}
+
           <HUDCorners />
 
-          {/* ═══ Effect 2: Holographic Scan Line ═══ */}
           <motion.div
             className="absolute left-0 right-0 h-[1px] top-0 pointer-events-none z-30 will-change-transform"
             style={{
@@ -402,7 +374,6 @@ export default function Login() {
             transition={{ duration: 4, repeat: Infinity, ease: 'linear', repeatDelay: 1.5 }}
           />
 
-          {/* Subtle interior radial glow */}
           <div
             className="absolute inset-0 pointer-events-none opacity-[0.04] rounded-2xl z-[1]"
             style={{
@@ -412,204 +383,188 @@ export default function Login() {
 
           <div className="relative z-10 flex flex-col justify-start">
             <AnimatePresence mode="wait">
-            {/* 1. AUTHENTICATING HANDSHAKE SCREEN */}
-            {status === 'authenticating' && (
-              <motion.div
-                key="auth-screen"
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0 }}
-                className="flex flex-col justify-center items-center py-12 min-h-[320px] text-center"
-              >
-                {/* Rotating ring loader */}
-                <div className="relative w-16 h-16 mb-6">
-                  <motion.div
-                    className="absolute inset-0 rounded-full border-2 border-transparent"
-                    style={{ borderTopColor: '#06b6d4', borderRightColor: '#06b6d4' }}
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 1.2, repeat: Infinity, ease: 'linear' }}
-                  />
-                  <motion.div
-                    className="absolute inset-1.5 rounded-full border-2 border-transparent"
-                    style={{ borderBottomColor: '#a855f7', borderLeftColor: '#a855f7' }}
-                    animate={{ rotate: -360 }}
-                    transition={{ duration: 1.8, repeat: Infinity, ease: 'linear' }}
-                  />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <Shield className="w-5 h-5 text-cyber-cyan/70" />
-                  </div>
-                </div>
-                <h4 className="text-sm font-black tracking-widest text-cyber-cyan uppercase font-mono">
-                  Verifying Identity Key
-                </h4>
-                <p className="text-gray-400 text-xs mt-3 max-w-[260px] leading-relaxed">
-                  Establishing a zero-trust encrypted session tunnel to our core servers. Please wait...
-                </p>
-                {/* Progress dots */}
-                <div className="flex gap-1.5 mt-5">
-                  {[0, 1, 2, 3, 4].map(i => (
-                    <motion.div
-                      key={i}
-                      className="w-1.5 h-1.5 rounded-full bg-cyber-cyan"
-                      animate={{ opacity: [0.2, 1, 0.2] }}
-                      transition={{ duration: 1.2, repeat: Infinity, delay: i * 0.2 }}
-                    />
-                  ))}
-                </div>
-              </motion.div>
-            )}
-
-            {/* 2. SUCCESS SECURE GATEWAY OPEN SCREEN */}
-            {status === 'success' && (
-              <motion.div
-                key="success-screen"
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0 }}
-                className="flex flex-col justify-center items-center py-12 min-h-[320px] text-center"
-              >
+              {status === 'authenticating' && (
                 <motion.div
-                  className="w-14 h-14 rounded-full bg-cyber-green/10 border border-cyber-green/30 flex items-center justify-center shadow-[0_0_20px_rgba(16,185,129,0.2)] mb-6"
-                  initial={{ scale: 0 }}
-                  animate={{ scale: [0, 1.2, 1] }}
-                  transition={{ duration: 0.5, ease: 'easeOut' }}
+                  key="auth-screen"
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="flex flex-col justify-center items-center py-12 min-h-[320px] text-center"
                 >
-                  <CheckCircle2 className="w-7 h-7 text-cyber-green" />
-                </motion.div>
-                <h3 className="text-xl font-black text-white">Access Granted</h3>
-                <span className="text-[10px] font-mono tracking-wider text-cyber-green mt-1.5 uppercase font-bold">
-                  Session Established
-                </span>
-                <p className="text-gray-400 text-xs mt-3.5 max-w-[260px] leading-relaxed">
-                  Handshake verified. Welcome to Tesseract Infosystems.
-                </p>
-              </motion.div>
-            )}
-
-            {/* 3. NORMAL INPUT FORM */}
-            {(status === 'idle' || status === 'error') && (
-              <motion.div
-                key="form-screen"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="flex flex-col text-center"
-              >
-                {/* Logo & Branding */}
-                <div className="flex flex-col items-center gap-3 mb-8">
-                  <motion.div
-                    className="w-12 h-12 flex items-center justify-center relative"
-                    animate={{ filter: ['drop-shadow(0 0 8px rgba(6,182,212,0.3))', 'drop-shadow(0 0 16px rgba(6,182,212,0.5))', 'drop-shadow(0 0 8px rgba(6,182,212,0.3))'] }}
-                    transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-                  >
-                    <img 
-                      src="/Logo Hd.webp" 
-                      alt="Logo" 
-                      className="w-full h-full object-contain filter invert brightness-[2.5]" 
+                  <div className="relative w-16 h-16 mb-6">
+                    <motion.div
+                      className="absolute inset-0 rounded-full border-2 border-transparent"
+                      style={{ borderTopColor: '#06b6d4', borderRightColor: '#06b6d4' }}
+                      animate={{ rotate: 360 }}
+                      transition={{ duration: 1.2, repeat: Infinity, ease: 'linear' }}
                     />
-                  </motion.div>
-                  <div>
-                    <h2 className="text-sm font-black tracking-[0.25em] text-glow-cyan bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-cyber-cyan uppercase">
-                      Tesseract Infosystems
-                    </h2>
-                    {/* ═══ Effect 4: Typing Terminal Header ═══ */}
-                    <p className="text-[10px] uppercase font-mono tracking-widest text-gray-500 mt-1 h-4">
-                      <TypingText text="Enterprise Gateway Terminal" speed={55} delay={400} />
-                    </p>
-                  </div>
-                </div>
-
-                {/* Form Fields */}
-                <form onSubmit={handleSubmit} className="flex flex-col gap-5 text-left">
-                  
-                  {/* Email field */}
-                  <div className="flex flex-col gap-2 relative">
-                    <label className="text-[9px] font-mono font-bold tracking-wider text-gray-400 uppercase">
-                      Secure Email Identifier
-                    </label>
-                    <div className="relative">
-                      {/* ═══ Effect 6: Focus Ripple ═══ */}
-                      <FocusRipple active={isFocused === 'email'} />
-                      <Mail className={`absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 transition-colors duration-300 z-10
-                        ${isFocused === 'email' ? 'text-cyber-cyan' : 'text-gray-500'}`} />
-                      <input
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        onFocus={() => setIsFocused('email')}
-                        onBlur={() => setIsFocused(null)}
-                        className={`w-full bg-white/[0.02] border rounded-xl pl-10 pr-4 py-3 font-mono text-xs text-white placeholder-gray-600 transition-all duration-300 outline-none relative z-[1]
-                          ${isFocused === 'email'
-                            ? 'border-cyber-cyan/60 shadow-[0_0_12px_rgba(6,182,212,0.15)] bg-white/[0.04]'
-                            : 'border-white/10'
-                          }`}
-                        placeholder="identity@tesseractsys.com"
-                      />
+                    <motion.div
+                      className="absolute inset-1.5 rounded-full border-2 border-transparent"
+                      style={{ borderBottomColor: '#a855f7', borderLeftColor: '#a855f7' }}
+                      animate={{ rotate: -360 }}
+                      transition={{ duration: 1.8, repeat: Infinity, ease: 'linear' }}
+                    />
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <Shield className="w-5 h-5 text-cyber-cyan/70" />
                     </div>
                   </div>
-
-                  {/* Password field */}
-                  <div className="flex flex-col gap-2 relative">
-                    <div className="flex justify-between items-center">
-                      <label className="text-[9px] font-mono font-bold tracking-wider text-gray-400 uppercase">
-                        Station Decrypt Key
-                      </label>
-                      <a href="#" className="text-[9px] font-mono text-cyber-cyan hover:text-white transition-colors uppercase">
-                        Forgot Key?
-                      </a>
-                    </div>
-                    <div className="relative">
-                      {/* ═══ Effect 6: Focus Ripple ═══ */}
-                      <FocusRipple active={isFocused === 'password'} color="#a855f7" />
-                      <Lock className={`absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 transition-colors duration-300 z-10
-                        ${isFocused === 'password' ? 'text-cyber-cyan' : 'text-gray-500'}`} />
-                      <input
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        onFocus={() => setIsFocused('password')}
-                        onBlur={() => setIsFocused(null)}
-                        className={`w-full bg-white/[0.02] border rounded-xl pl-10 pr-4 py-3 font-mono text-xs text-white placeholder-gray-600 transition-all duration-300 outline-none relative z-[1]
-                          ${isFocused === 'password'
-                            ? 'border-cyber-cyan/60 shadow-[0_0_12px_rgba(6,182,212,0.15)] bg-white/[0.04]'
-                            : 'border-white/10'
-                          }`}
-                        placeholder="••••••••••••"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Error Notification */}
-                  <AnimatePresence>
-                    {status === 'error' && (
+                  <h4 className="text-sm font-black tracking-widest text-cyber-cyan uppercase font-mono">
+                    Verifying Identity Key
+                  </h4>
+                  <p className="text-gray-400 text-xs mt-3 max-w-[260px] leading-relaxed">
+                    Establishing a zero-trust encrypted session tunnel to our core servers. Please wait...
+                  </p>
+                  <div className="flex gap-1.5 mt-5">
+                    {[0, 1, 2, 3, 4].map(i => (
                       <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        exit={{ opacity: 0, height: 0 }}
-                        className="flex items-center gap-2.5 px-4 py-3 border border-rose-500/20 bg-rose-500/5 rounded-xl text-xs text-rose-400 font-bold overflow-hidden"
-                      >
-                        <span className="w-1.5 h-1.5 rounded-full bg-rose-400 shrink-0" />
-                        <span>{errorMessage}</span>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                        key={i}
+                        className="w-1.5 h-1.5 rounded-full bg-cyber-cyan"
+                        animate={{ opacity: [0.2, 1, 0.2] }}
+                        transition={{ duration: 1.2, repeat: Infinity, delay: i * 0.2 }}
+                      />
+                    ))}
+                  </div>
+                </motion.div>
+              )}
 
-                  {/* Submit button */}
-                  <button
-                    type="submit"
-                    onMouseEnter={handleMouseEnter}
-                    onMouseLeave={handleMouseLeave}
-                    className="btn-cyber-primary cyber-sheen w-full py-3.5 rounded-xl text-xs font-bold font-mono tracking-wider uppercase text-white shadow-xl cursor-pointer relative overflow-hidden transition-all mt-2"
+              {status === 'success' && (
+                <motion.div
+                  key="success-screen"
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="flex flex-col justify-center items-center py-12 min-h-[320px] text-center"
+                >
+                  <motion.div
+                    className="w-14 h-14 rounded-full bg-cyber-green/10 border border-cyber-green/30 flex items-center justify-center shadow-[0_0_20px_rgba(16,185,129,0.2)] mb-6"
+                    initial={{ scale: 0 }}
+                    animate={{ scale: [0, 1.2, 1] }}
+                    transition={{ duration: 0.5, ease: 'easeOut' }}
                   >
-                    Compile & Connect
-                  </button>
-                </form>
+                    <CheckCircle2 className="w-7 h-7 text-cyber-green" />
+                  </motion.div>
+                  <h3 className="text-xl font-black text-white">Access Granted</h3>
+                  <span className="text-[10px] font-mono tracking-wider text-cyber-green mt-1.5 uppercase font-bold">
+                    Session Established
+                  </span>
+                  <p className="text-gray-400 text-xs mt-3.5 max-w-[260px] leading-relaxed">
+                    Handshake verified. Welcome to Tesseract Infosystems.
+                  </p>
+                </motion.div>
+              )}
 
-                {/* ═══ Effect 7: Live Status Bar ═══ */}
-                <StatusBar />
-              </motion.div>
-            )}
-          </AnimatePresence>
+              {(status === 'idle' || status === 'error') && (
+                <motion.div
+                  key="form-screen"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="flex flex-col text-center"
+                >
+                  <div className="flex flex-col items-center gap-3 mb-8">
+                    <motion.div
+                      className="w-12 h-12 flex items-center justify-center relative"
+                      animate={{ filter: ['drop-shadow(0 0 8px rgba(6,182,212,0.3))', 'drop-shadow(0 0 16px rgba(6,182,212,0.5))', 'drop-shadow(0 0 8px rgba(6,182,212,0.3))'] }}
+                      transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+                    >
+                      <img
+                        src="/Logo Hd.webp"
+                        alt="Logo"
+                        className="w-full h-full object-contain filter invert brightness-[2.5]"
+                      />
+                    </motion.div>
+                    <div>
+                      <h2 className="text-sm font-black tracking-[0.25em] text-glow-cyan bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-cyber-cyan uppercase">
+                        Tesseract Infosystems
+                      </h2>
+                      <p className="text-[10px] uppercase font-mono tracking-widest text-gray-500 mt-1 h-4">
+                        <TypingText text="Enterprise Gateway Terminal" speed={55} delay={400} />
+                      </p>
+                    </div>
+                  </div>
+
+                  <form onSubmit={handleSubmit} className="flex flex-col gap-5 text-left">
+                    <div className="flex flex-col gap-2 relative">
+                      <label className="text-[9px] font-mono font-bold tracking-wider text-gray-400 uppercase">
+                        Secure Email Identifier
+                      </label>
+                      <div className="relative">
+                        <FocusRipple active={isFocused === 'email'} />
+                        <Mail className={`absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 transition-colors duration-300 z-10
+                        ${isFocused === 'email' ? 'text-cyber-cyan' : 'text-gray-500'}`} />
+                        <input
+                          type="email"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          onFocus={() => setIsFocused('email')}
+                          onBlur={() => setIsFocused(null)}
+                          className={`w-full bg-white/[0.02] border rounded-xl pl-10 pr-4 py-3 font-mono text-xs text-white placeholder-gray-600 transition-all duration-300 outline-none relative z-[1]
+                          ${isFocused === 'email'
+                              ? 'border-cyber-cyan/60 shadow-[0_0_12px_rgba(6,182,212,0.15)] bg-white/[0.04]'
+                              : 'border-white/10'
+                            }`}
+                          placeholder="identity@tesseractsys.com"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col gap-2 relative">
+                      <div className="flex justify-between items-center">
+                        <label className="text-[9px] font-mono font-bold tracking-wider text-gray-400 uppercase">
+                          Station Decrypt Key
+                        </label>
+                        <a href="#" className="text-[9px] font-mono text-cyber-cyan hover:text-white transition-colors uppercase">
+                          Forgot Key?
+                        </a>
+                      </div>
+                      <div className="relative">
+                        <FocusRipple active={isFocused === 'password'} color="#a855f7" />
+                        <Lock className={`absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 transition-colors duration-300 z-10
+                        ${isFocused === 'password' ? 'text-cyber-cyan' : 'text-gray-500'}`} />
+                        <input
+                          type="password"
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          onFocus={() => setIsFocused('password')}
+                          onBlur={() => setIsFocused(null)}
+                          className={`w-full bg-white/[0.02] border rounded-xl pl-10 pr-4 py-3 font-mono text-xs text-white placeholder-gray-600 transition-all duration-300 outline-none relative z-[1]
+                          ${isFocused === 'password'
+                              ? 'border-cyber-cyan/60 shadow-[0_0_12px_rgba(6,182,212,0.15)] bg-white/[0.04]'
+                              : 'border-white/10'
+                            }`}
+                          placeholder="••••••••••••"
+                        />
+                      </div>
+                    </div>
+
+                    <AnimatePresence>
+                      {status === 'error' && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: 'auto' }}
+                          exit={{ opacity: 0, height: 0 }}
+                          className="flex items-center gap-2.5 px-4 py-3 border border-rose-500/20 bg-rose-500/5 rounded-xl text-xs text-rose-400 font-bold overflow-hidden"
+                        >
+                          <span className="w-1.5 h-1.5 rounded-full bg-rose-400 shrink-0" />
+                          <span>{errorMessage}</span>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+
+                    <button
+                      type="submit"
+                      onMouseEnter={handleMouseEnter}
+                      onMouseLeave={handleMouseLeave}
+                      className="btn-cyber-primary cyber-sheen w-full py-3.5 rounded-xl text-xs font-bold font-mono tracking-wider uppercase text-white shadow-xl cursor-pointer relative overflow-hidden transition-all mt-2"
+                    >
+                      Compile & Connect
+                    </button>
+                  </form>
+
+                  <StatusBar />
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
       </div>
