@@ -104,14 +104,14 @@ export default function Preloader() {
         if (dotGridRef.current) dotGridRef.current.style.opacity = '0';
       }
 
-      else if (elapsedBoot < 1800) {
+      else if (elapsedBoot < 1400) {
         if (logoImageRef.current) logoImageRef.current.style.opacity = '0';
         const localT = elapsedBoot - 100;
         innerCirclesRefs.current.forEach((circle, idx) => {
           if (!circle) return;
 
-          const patchStart = idx * 220;
-          const patchDuration = 350;
+          const patchStart = idx * 160;
+          const patchDuration = 280;
           const spark = innerSparksRefs.current[idx];
 
           if (localT < patchStart) {
@@ -155,7 +155,7 @@ export default function Preloader() {
         });
       }
 
-      else if (elapsedBoot < 3000) {
+      else if (elapsedBoot < 2200) {
         if (logoImageRef.current) logoImageRef.current.style.opacity = '0';
         innerCirclesRefs.current.forEach((circle) => {
           if (circle) {
@@ -171,20 +171,20 @@ export default function Preloader() {
 
         if (outerCircleRef.current) {
           outerCircleRef.current.style.opacity = '1';
-          const lp = (elapsedBoot - 1800) / 1200;
+          const lp = (elapsedBoot - 1400) / 800;
           const easedLp = easeOutCubic(lp);
           outerCircleRef.current.setAttribute('stroke-dashoffset', String(outerPerimeter * (1 - easedLp)));
           outerCircleRef.current.style.filter = `drop-shadow(0 0 ${8 * easedLp}px #ef2d56)`;
         }
       }
 
-      else if (elapsedBoot < 3800) {
+      else if (elapsedBoot < 2800) {
         if (logoImageRef.current) logoImageRef.current.style.opacity = '0';
         if (outerCircleRef.current) {
           outerCircleRef.current.setAttribute('stroke-dashoffset', '0');
         }
 
-        const lp = (elapsedBoot - 3000) / 800;
+        const lp = (elapsedBoot - 2200) / 600;
         const targetSpeed = 120;
         currentSpeed = targetSpeed * easeInQuad(lp);
         rotationAngle += currentSpeed * (dt / 1000);
@@ -201,7 +201,7 @@ export default function Preloader() {
         });
       }
 
-      else if (elapsedBoot < 5000) {
+      else if (elapsedBoot < 3800) {
         rotationAngle += 120 * (dt / 1000);
         if (outerCircleRef.current) {
           outerCircleRef.current.style.transform = `rotate(${rotationAngle}deg)`;
@@ -213,7 +213,7 @@ export default function Preloader() {
           }
         });
 
-        const lp = (elapsedBoot - 3800) / 1200;
+        const lp = (elapsedBoot - 2800) / 1000;
         const easedOpacity = easeOutQuad(lp);
         const easedScale = 0.88 + 0.12 * easeOutCubic(lp);
         const easedMask = easeOutCubic(lp) * 100;
@@ -230,7 +230,7 @@ export default function Preloader() {
         }
       }
 
-      else if (elapsedBoot < 6000) {
+      else if (elapsedBoot < 4400) {
         rotationAngle += 120 * (dt / 1000);
         if (outerCircleRef.current) {
           outerCircleRef.current.style.transform = `rotate(${rotationAngle}deg)`;
@@ -242,7 +242,7 @@ export default function Preloader() {
           }
         });
 
-        const breatheT = elapsedBoot - 5000;
+        const breatheT = elapsedBoot - 3800;
         const breatheScale = 1.0 + 0.015 * Math.sin(breatheT * 0.003);
         const breatheGlow = 0.6 + 0.4 * Math.sin(breatheT * 0.003);
 
@@ -282,7 +282,7 @@ export default function Preloader() {
           }
         }
 
-        const localT = elapsedBoot - 6000;
+        const localT = elapsedBoot - 4400;
         const fadeDuration = 800;
         const fp = Math.min(1, localT / fadeDuration);
         const easedFp = easeOutQuad(fp);
@@ -319,7 +319,7 @@ export default function Preloader() {
     const safetyTimer = setTimeout(() => {
       setPreloaderDone(true);
       setTimelineStage('boot');
-    }, 7500);
+    }, 12000);
 
     return () => clearTimeout(safetyTimer);
   }, [setPreloaderDone]);
