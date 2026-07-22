@@ -2,7 +2,7 @@
 
 import { useRef, useEffect, useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import { Database, Server, Cpu, Play, ChevronRight, Activity } from 'lucide-react';
 import { useUIStore } from '../../../store/uiStore';
 import MagneticButton from '../../../components/MagneticButton';
@@ -50,7 +50,7 @@ export default function KeyboardAssemblySection() {
   const [loadProgress, setLoadProgress] = useState(0);
   const [imagesArray, setImagesArray] = useState<HTMLImageElement[]>([]);
   const [activeSection, setActiveSection] = useState<'overview' | 'tactility' | 'latency' | 'orchestration' | 'deploy'>('overview');
-  const [shouldPreload, setShouldPreload] = useState(false);
+  const [shouldPreload, setShouldPreload] = useState(true);
 
   useEffect(() => {
     if (cachedImagesLoaded && cachedFrameCount === totalFrames) {
@@ -68,19 +68,11 @@ export default function KeyboardAssemblySection() {
     const animObserver = new IntersectionObserver(([entry]) => {
       isIntersectingRef.current = entry.isIntersecting;
     }, { threshold: 0.01 });
-    const preloadObserver = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
-        setShouldPreload(true);
-        preloadObserver.disconnect();
-      }
-    }, { threshold: 0.01, rootMargin: '1200px 0px 1200px 0px' });
 
     animObserver.observe(container);
-    preloadObserver.observe(container);
 
     return () => {
       animObserver.disconnect();
-      preloadObserver.disconnect();
     };
   }, []);
 
@@ -109,6 +101,10 @@ export default function KeyboardAssemblySection() {
 
       if (progress % 5 === 0 || progress === 100) {
         setLoadProgress(progress);
+      }
+
+      if (tempImages[0] && tempImages[0].complete && imagesArray.length === 0) {
+        setImagesArray([...tempImages]);
       }
 
       if (loadedCount === totalFrames) {
@@ -297,69 +293,44 @@ export default function KeyboardAssemblySection() {
     return () => observer.disconnect();
   }, [imagesLoaded, scrollYProgress]);
 
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.12, 0.18], [1, 1, 0]);
-  const heroY = useTransform(scrollYProgress, [0, 0.12, 0.18], [0, -30, -50]);
-  const heroVisibility = useTransform(scrollYProgress, (v) => v > 0.18 ? 'hidden' : 'visible');
-  const heroPointerEvents = useTransform(scrollYProgress, (v) => v > 0.18 ? 'none' : 'auto');
+  const smoothScrollYProgress = useSpring(scrollYProgress, {
+    damping: 32,
+    stiffness: 95,
+    restDelta: 0.0001
+  });
 
-  const sec2Opacity = useTransform(scrollYProgress, [0.18, 0.23, 0.40, 0.45], [0, 1, 1, 0]);
-  const sec2X = useTransform(scrollYProgress, [0.18, 0.23, 0.40, 0.45], [-50, 0, 0, -50]);
-  const sec2Visibility = useTransform(scrollYProgress, (v) => (v < 0.18 || v > 0.45) ? 'hidden' : 'visible');
-  const sec2PointerEvents = useTransform(scrollYProgress, (v) => (v < 0.18 || v > 0.45) ? 'none' : 'auto');
+  const heroOpacity = useTransform(smoothScrollYProgress, [0, 0.12, 0.18], [1, 1, 0]);
+  const heroY = useTransform(smoothScrollYProgress, [0, 0.12, 0.18], [0, -30, -50]);
+  const heroVisibility = useTransform(smoothScrollYProgress, (v: number) => v > 0.18 ? 'hidden' : 'visible');
+  const heroPointerEvents = useTransform(smoothScrollYProgress, (v: number) => v > 0.18 ? 'none' : 'auto');
 
-  const sec3Opacity = useTransform(scrollYProgress, [0.45, 0.50, 0.65, 0.70], [0, 1, 1, 0]);
-  const sec3X = useTransform(scrollYProgress, [0.45, 0.50, 0.65, 0.70], [50, 0, 0, 50]);
-  const sec3Visibility = useTransform(scrollYProgress, (v) => (v < 0.45 || v > 0.70) ? 'hidden' : 'visible');
-  const sec3PointerEvents = useTransform(scrollYProgress, (v) => (v < 0.45 || v > 0.70) ? 'none' : 'auto');
+  const sec2Opacity = useTransform(smoothScrollYProgress, [0.18, 0.23, 0.40, 0.45], [0, 1, 1, 0]);
+  const sec2X = useTransform(smoothScrollYProgress, [0.18, 0.23, 0.40, 0.45], [-50, 0, 0, -50]);
+  const sec2Visibility = useTransform(smoothScrollYProgress, (v: number) => (v < 0.18 || v > 0.45) ? 'hidden' : 'visible');
+  const sec2PointerEvents = useTransform(smoothScrollYProgress, (v: number) => (v < 0.18 || v > 0.45) ? 'none' : 'auto');
 
-  const sec4Opacity = useTransform(scrollYProgress, [0.70, 0.75, 0.84, 0.88], [0, 1, 1, 0]);
-  const sec4X = useTransform(scrollYProgress, [0.70, 0.75, 0.84, 0.88], [-50, 0, 0, -50]);
-  const sec4Visibility = useTransform(scrollYProgress, (v) => (v < 0.70 || v > 0.88) ? 'hidden' : 'visible');
-  const sec4PointerEvents = useTransform(scrollYProgress, (v) => (v < 0.70 || v > 0.88) ? 'none' : 'auto');
+  const sec3Opacity = useTransform(smoothScrollYProgress, [0.45, 0.50, 0.65, 0.70], [0, 1, 1, 0]);
+  const sec3X = useTransform(smoothScrollYProgress, [0.45, 0.50, 0.65, 0.70], [50, 0, 0, 50]);
+  const sec3Visibility = useTransform(smoothScrollYProgress, (v: number) => (v < 0.45 || v > 0.70) ? 'hidden' : 'visible');
+  const sec3PointerEvents = useTransform(smoothScrollYProgress, (v: number) => (v < 0.45 || v > 0.70) ? 'none' : 'auto');
 
-  const sec5Opacity = useTransform(scrollYProgress, [0.88, 0.93, 1.0], [0, 1, 1]);
-  const sec5Y = useTransform(scrollYProgress, [0.88, 0.93, 1.0], [50, 0, 0]);
-  const sec5Visibility = useTransform(scrollYProgress, (v) => v < 0.88 ? 'hidden' : 'visible');
-  const sec5PointerEvents = useTransform(scrollYProgress, (v) => v < 0.88 ? 'none' : 'auto');
+  const sec4Opacity = useTransform(smoothScrollYProgress, [0.70, 0.75, 0.84, 0.88], [0, 1, 1, 0]);
+  const sec4X = useTransform(smoothScrollYProgress, [0.70, 0.75, 0.84, 0.88], [-50, 0, 0, -50]);
+  const sec4Visibility = useTransform(smoothScrollYProgress, (v: number) => (v < 0.70 || v > 0.88) ? 'hidden' : 'visible');
+  const sec4PointerEvents = useTransform(smoothScrollYProgress, (v: number) => (v < 0.70 || v > 0.88) ? 'none' : 'auto');
+
+  const sec5Opacity = useTransform(smoothScrollYProgress, [0.88, 0.93, 1.0], [0, 1, 1]);
+  const sec5Y = useTransform(smoothScrollYProgress, [0.88, 0.93, 1.0], [50, 0, 0]);
+  const sec5Visibility = useTransform(smoothScrollYProgress, (v: number) => v < 0.88 ? 'hidden' : 'visible');
+  const sec5PointerEvents = useTransform(smoothScrollYProgress, (v: number) => v < 0.88 ? 'none' : 'auto');
 
   return (
     <div
       ref={containerRef}
       id="matrix-scrollytelling"
       className="relative w-full bg-[#050505]"
-      style={{ height: '580vh' }}
+      style={{ height: isSlow ? '440vh' : '550vh' }}
     >
-      {!imagesLoaded && (
-        <div className="absolute inset-0 bg-[#03050d] z-[50] flex flex-col items-center justify-center font-sans">
-          <div className="glass-card-glow max-w-md w-full p-8 rounded-3xl text-center flex flex-col items-center gap-6">
-            <div className="w-16 h-16 rounded-2xl bg-cyber-cyan/5 border border-cyber-cyan/20 flex items-center justify-center animate-pulse relative overflow-hidden">
-              <img src="/Logo Hd.webp" alt="Loading Logo" className="w-10 h-10 object-contain animate-pulse filter invert brightness-[2.5]" />
-              <div className="absolute inset-0 border border-cyber-cyan/30 rounded-2xl animate-ping opacity-25" style={{ animationDuration: '3s' }} />
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <h3 className="text-xl font-black text-white tracking-wide">
-                Initializing TechStack Matrix
-              </h3>
-              <p className="text-xs text-gray-400 font-mono">
-                Deconstructing System Layers...
-              </p>
-            </div>
-
-            <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
-              <div
-                className="h-full bg-gradient-to-r from-cyber-blue via-cyber-cyan to-cyber-purple transition-all duration-300 shadow-[0_0_10px_#06b6d4]"
-                style={{ width: `${loadProgress}%` }}
-              />
-            </div>
-
-            <span className="font-mono text-sm text-cyber-cyan font-bold">
-              {loadProgress}%
-            </span>
-          </div>
-        </div>
-      )}
-
       <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center">
         <div className="absolute inset-0 pointer-events-none opacity-[0.02]"
           style={{

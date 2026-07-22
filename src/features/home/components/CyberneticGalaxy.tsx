@@ -187,20 +187,14 @@ function TrackSVG({
   const feTrack = responsiveTracks.find(t => t.id === 'fe');
   const xStart = track.id === 'db' ? feTrack?.hexX ?? centerCoords.x : centerCoords.x;
   const yStart = track.id === 'db' ? feTrack?.hexY ?? centerCoords.y : centerCoords.y;
-
-  // Phase 2: Beams & Stations Slide out (0.25 to 0.60)
   const beamDash = useTransform(progress, [0.25, 0.55], [350, 0]);
   const beamOpacity = useTransform(progress, [0.25, 0.40], [0, 0.6]);
   const pulseOffset = useTransform(scrollYProgress, [0, 1], [0, -600]);
-
   const stationX = useTransform(progress, [0.28, 0.58], [xStart - track.stationX, 0]);
   const stationY = useTransform(progress, [0.28, 0.58], [yStart - track.stationY, 0]);
   const stationScale = useTransform(progress, [0.28, 0.52], [0, 1]);
   const stationOpacity = useTransform(progress, [0.28, 0.52], [0, 1]);
-
-  // Phase 3: Technology Branches extend (0.60 to 1.0)
   const branchDash = useTransform(progress, [0.60, 0.85], [150, 0]);
-
   const branchLineOpacity = isActive ? 0.8 : (isMobile ? 0.25 : 0.45);
   const branchDotOpacity = useTransform(progress, [0.70, 0.95], [0, isActive ? 1 : (isMobile ? 0.45 : 0.65)]);
 
@@ -435,8 +429,8 @@ function BranchLine({ branchProgress, cx, cy, bx, by, color }: BranchLineProps) 
       x1={cx} y1={cy} x2={lineX2} y2={lineY2}
       stroke={color}
       strokeWidth={1.2}
-      opacity={0.65}
-      strokeDasharray="4 3"
+      opacity={0.7}
+      strokeDasharray="3 3"
     />
   );
 }
@@ -454,20 +448,21 @@ interface BranchBubbleProps {
 function BranchBubble({ branchProgress, cx, cy, bx, by, color, name }: BranchBubbleProps) {
   const bubbleX = useTransform(branchProgress, [0, 1], [cx, bx]);
   const bubbleY = useTransform(branchProgress, [0, 1], [cy, by]);
-  const bubbleOpacity = useTransform(branchProgress, [0.2, 0.8], [0, 1]);
+  const bubbleOpacity = useTransform(branchProgress, [0.15, 0.75], [0, 1]);
 
   return (
     <motion.div
-      className="absolute font-mono text-[7.5px] font-black px-2 py-0.5 rounded border bg-[#03050d]/95 text-white whitespace-nowrap z-30 shadow-[0_4px_10px_rgba(0,0,0,0.5)] pointer-events-none"
+      className="absolute font-mono text-[7px] font-bold px-2 py-0.5 rounded-full border bg-[#030614]/95 text-gray-200 whitespace-nowrap z-30 shadow-lg pointer-events-none transform-gpu max-w-[100px] truncate"
       style={{
         borderColor: `${color}60`,
-        boxShadow: `0 0 8px ${color}20`,
+        boxShadow: `0 0 10px ${color}30`,
         left: bubbleX,
         top: bubbleY,
         translate: '-50% -50%',
         opacity: bubbleOpacity
       }}
     >
+      <span className="w-1.5 h-1.5 rounded-full inline-block mr-1 animate-pulse shrink-0" style={{ backgroundColor: color }} />
       {name}
     </motion.div>
   );
@@ -487,9 +482,10 @@ function TrackSlide({ progress, track, index }: TrackSlideProps) {
   const p2 = p0 + 0.12;
   const p3 = p0 + CARD_SPAN;
 
-  const y = useTransform(progress, [p0, p1, p2, p3], [240, 0, 0, -240]);
+  const y = useTransform(progress, [p0, p1, p2, p3], [220, 0, 0, -220]);
   const opacity = useTransform(progress, [p0, p1, p2, p3], [0, 1, 1, 0]);
   const scale = useTransform(progress, [p0, p1, p2, p3], [0.85, 1, 1, 0.85]);
+  const rotateX = useTransform(progress, [p0, p1, p2, p3], [12, 0, 0, -12]);
   const branchProgress = useTransform(progress, [p1, p2 - 0.02, p2, p3], [0, 1, 1, 1]);
 
   const detailsOpacity = useTransform(progress, [p0, p1, p1 + 0.04, p2, p3], [0, 0, 1, 1, 1]);
@@ -501,14 +497,14 @@ function TrackSlide({ progress, track, index }: TrackSlideProps) {
 
   return (
     <motion.div
-      className="absolute inset-0 w-full h-full pointer-events-none z-20 overflow-visible"
+      className="absolute inset-0 w-full h-full pointer-events-none z-20 overflow-visible transform-gpu"
       style={{ opacity, pointerEvents }}
     >
       <svg className="absolute inset-0 w-full h-full pointer-events-none z-10 overflow-visible">
         {track.branches.map((_, j) => {
           const isLeft = j % 2 === 0;
-          const bx = isLeft ? 10 : 330;
-          const by = 60 + (j / Math.max(track.branches.length - 1, 1)) * 300;
+          const bx = isLeft ? 38 : 302;
+          const by = 50 + (j / Math.max(track.branches.length - 1, 1)) * 320;
 
           return (
             <BranchLine
@@ -526,8 +522,8 @@ function TrackSlide({ progress, track, index }: TrackSlideProps) {
 
       {track.branches.map((b, j) => {
         const isLeft = j % 2 === 0;
-        const bx = isLeft ? 10 : 330;
-        const by = 60 + (j / Math.max(track.branches.length - 1, 1)) * 300;
+        const bx = isLeft ? 38 : 302;
+        const by = 50 + (j / Math.max(track.branches.length - 1, 1)) * 320;
 
         return (
           <BranchBubble
@@ -544,52 +540,64 @@ function TrackSlide({ progress, track, index }: TrackSlideProps) {
       })}
 
       <motion.div
-        className="absolute w-[228px] h-[340px] rounded-2xl border bg-[#060a17]/95 backdrop-blur-md p-3.5 shadow-[0_12px_40px_rgba(0,0,0,0.6)] flex flex-col justify-between overflow-hidden z-20 pointer-events-auto"
+        className="absolute w-[240px] h-[355px] rounded-3xl border bg-[#05091a]/95 backdrop-blur-xl p-4 shadow-[0_20px_50px_rgba(0,0,0,0.85)] flex flex-col justify-between overflow-hidden z-20 pointer-events-auto transform-gpu"
         style={{
-          borderColor: `${track.hexColor}35`,
-          boxShadow: `0 8px 32px rgba(0, 0, 0, 0.4), 0 0 20px ${track.hexColor}10`,
-          left: '56px',
-          top: '50px',
+          borderColor: `${track.hexColor}50`,
+          boxShadow: `0 16px 40px rgba(0, 0, 0, 0.7), 0 0 30px ${track.hexColor}20`,
+          left: '50px',
+          top: '42px',
           y,
           scale,
-          willChange: 'transform'
+          rotateX,
+          transformStyle: 'preserve-3d',
+          willChange: 'transform, opacity'
         }}
       >
-        <div className="flex flex-col gap-2.5 text-left font-sans h-full justify-start">
+        {/* Card Header Ambient Laser Line */}
+        <div
+          className="absolute top-0 left-0 right-0 h-[2px] pointer-events-none"
+          style={{ background: `linear-gradient(90deg, transparent 0%, ${track.hexColor} 50%, transparent 100%)` }}
+        />
 
-          <div className="flex items-center gap-2 shrink-0">
-            <div className="w-8 h-8 rounded-lg border flex items-center justify-center shrink-0"
+        <div className="flex flex-col gap-2.5 text-left font-sans h-full justify-start relative z-10">
+
+          <div className="flex items-center gap-2.5 shrink-0">
+            <div
+              className="w-9 h-9 rounded-xl border flex items-center justify-center shrink-0 shadow-md"
               style={{
-                borderColor: `${track.hexColor}40`,
-                background: `${track.hexColor}10`
-              }}>
-              {track.id === 'ai' && <Cpu className="w-4.5 h-4.5 text-pink-500" />}
-              {track.id === 'be' && <Network className="w-4.5 h-4.5 text-blue-500" />}
-              {track.id === 'fe' && <Zap className="w-4.5 h-4.5 text-cyan-400" />}
-              {track.id === 'ops' && <Shield className="w-4.5 h-4.5 text-purple-500" />}
-              {track.id === 'db' && <Terminal className="w-4.5 h-4.5 text-emerald-500" />}
+                borderColor: `${track.hexColor}50`,
+                background: `${track.hexColor}15`
+              }}
+            >
+              {track.id === 'ai' && <Cpu className="w-5 h-5 text-pink-400" />}
+              {track.id === 'be' && <Network className="w-5 h-5 text-blue-400" />}
+              {track.id === 'fe' && <Zap className="w-5 h-5 text-cyan-400" />}
+              {track.id === 'ops' && <Shield className="w-5 h-5 text-purple-400" />}
+              {track.id === 'db' && <Terminal className="w-5 h-5 text-emerald-400" />}
             </div>
             <div>
-              <span className="text-[7.5px] font-mono tracking-widest font-black px-1.5 py-0.5 rounded block w-fit"
-                style={{ color: track.hexColor, backgroundColor: `${track.hexColor}10` }}>
+              <span
+                className="text-[7.5px] font-mono tracking-widest font-black px-2 py-0.5 rounded-full block w-fit border"
+                style={{ color: track.hexColor, backgroundColor: `${track.hexColor}15`, borderColor: `${track.hexColor}30` }}
+              >
                 {track.capsuleName} PATHWAY
               </span>
-              <h4 className="text-[11px] font-black text-white leading-tight mt-0.5">{track.name}</h4>
+              <h4 className="text-xs font-black text-white leading-tight mt-0.5">{track.name}</h4>
             </div>
           </div>
 
-          <motion.div style={{ opacity: detailsOpacity }} className="flex flex-col gap-2.5 overflow-hidden">
-            <p className="text-[8.5px] text-gray-300 leading-relaxed mt-1">
+          <motion.div style={{ opacity: detailsOpacity }} className="flex flex-col gap-2 overflow-hidden">
+            <p className="text-[9px] text-gray-300 leading-relaxed font-sans mt-0.5">
               {track.description}
             </p>
 
-            <div className="mt-1">
-              <span className="text-[6.5px] uppercase font-mono text-gray-500 tracking-wider block mb-1 font-bold">
+            <div className="mt-0.5">
+              <span className="text-[7px] uppercase font-mono text-gray-400 tracking-wider block mb-1 font-bold">
                 ACADEMY SYLLABUS
               </span>
-              <div className="flex flex-col gap-1.5">
+              <div className="flex flex-col gap-1">
                 {track.syllabus.map((step, idx) => (
-                  <div key={idx} className="flex items-start gap-1 text-[8px] text-gray-200">
+                  <div key={idx} className="flex items-start gap-1.5 text-[8.5px] text-gray-200">
                     <ChevronRight className="w-3 h-3 shrink-0 mt-0.5" style={{ color: track.hexColor }} />
                     <span className="font-medium leading-relaxed font-sans">{step}</span>
                   </div>
@@ -601,12 +609,15 @@ function TrackSlide({ progress, track, index }: TrackSlideProps) {
 
         <motion.div
           style={{ opacity: detailsOpacity }}
-          className="pt-2 border-t border-white/5 flex flex-wrap gap-1.5 items-center shrink-0"
+          className="pt-2 border-t border-white/10 flex flex-wrap gap-1 items-center shrink-0 relative z-10"
         >
-          <span className="text-[6.5px] uppercase font-mono text-gray-500 tracking-wider mr-1 font-bold">CORE STACKS:</span>
+          <span className="text-[6.5px] uppercase font-mono text-gray-400 tracking-wider mr-1 font-bold">CORE STACKS:</span>
           {track.techs.map((tech) => (
-            <span key={tech.name} className="text-[7px] font-extrabold font-mono px-1.5 py-0.5 rounded border border-white/5 bg-white/[0.02] text-gray-300"
-              style={{ borderColor: `${track.hexColor}20` }}>
+            <span
+              key={tech.name}
+              className="text-[7px] font-extrabold font-mono px-1.5 py-0.5 rounded-md border text-gray-200"
+              style={{ borderColor: `${track.hexColor}30`, backgroundColor: `${track.hexColor}10` }}
+            >
               {tech.name}
             </span>
           ))}
@@ -621,15 +632,15 @@ function MobileExplodedMatrix({ scrollYProgress, tracks, activeTrack, setActiveT
   const progress = useTransform(scrollYProgress, [0.15, 0.88], [0, 1]);
 
   const smoothProgress = useSpring(progress, {
-    damping: 35,
-    stiffness: 90,
+    damping: 32,
+    stiffness: 95,
     restDelta: 0.0001
   });
 
   const mockupOpacity = useTransform(smoothProgress, [0.0, 0.08], [0, 1]);
-  const mockupScale = useTransform(smoothProgress, [0.0, 0.08], [0.85, 1]);
+  const mockupScale = useTransform(smoothProgress, [0.0, 0.08], [0.88, 1]);
 
-  const coreOpacity = useTransform(smoothProgress, [0.06, 0.12], [0, 0.75]);
+  const coreOpacity = useTransform(smoothProgress, [0.06, 0.12], [0, 0.85]);
   const coreScale = useTransform(smoothProgress, [0.06, 0.12], [0.5, 1]);
 
   const orderedTracks = useMemo(() => {
@@ -657,39 +668,77 @@ function MobileExplodedMatrix({ scrollYProgress, tracks, activeTrack, setActiveT
   }, [smoothProgress, tracks, activeTrack, setActiveTrack]);
 
   return (
-    <div className="w-[340px] flex flex-col gap-6 items-center select-none py-10 overflow-visible relative min-h-[480px]">
+    <div className="w-[340px] flex flex-col gap-5 items-center select-none py-6 overflow-visible relative min-h-[500px] transform-gpu">
 
+      {/* Mobile Track Navigator Header Pills */}
+      <div className="flex items-center gap-1.5 z-30 px-2 py-1 rounded-full bg-[#030614]/80 border border-white/10 backdrop-blur-md shadow-lg">
+        {orderedTracks.map((t) => {
+          const isActive = activeTrack?.id === t.id;
+          return (
+            <button
+              key={t.id}
+              onClick={() => setActiveTrack(t)}
+              className={`px-2.5 py-1 rounded-full text-[8.5px] font-mono font-bold tracking-wider transition-all flex items-center gap-1 cursor-pointer ${
+                isActive
+                  ? 'text-white border shadow-md scale-105'
+                  : 'text-gray-400 hover:text-gray-200 border border-transparent'
+              }`}
+              style={{
+                backgroundColor: isActive ? `${t.hexColor}25` : 'transparent',
+                borderColor: isActive ? `${t.hexColor}60` : 'transparent',
+                boxShadow: isActive ? `0 0 12px ${t.hexColor}30` : 'none'
+              }}
+            >
+              {isActive && <span className="w-1.5 h-1.5 rounded-full animate-ping" style={{ backgroundColor: t.hexColor }} />}
+              {t.codeName}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Cyberpunk 3D Holographic Deck Frame */}
       <motion.div
-        className="absolute w-[260px] h-[440px] rounded-[36px] bg-gradient-to-b from-[#070b19]/95 to-black border-2 border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.8),_inset_0_0_30px_rgba(255,255,255,0.05)] z-0 flex flex-col overflow-hidden"
+        className="absolute w-[268px] h-[450px] rounded-[36px] bg-gradient-to-b from-[#060a1a]/95 via-[#030614]/95 to-black border-2 border-cyan-500/30 shadow-[0_20px_60px_rgba(0,0,0,0.9),_inset_0_0_35px_rgba(6,182,212,0.1)] z-0 flex flex-col overflow-hidden transform-gpu"
         style={{
           opacity: mockupOpacity,
           scale: mockupScale,
-          top: 0
+          top: '55px'
         }}
       >
-        <div className="w-24 h-4 rounded-full bg-black mx-auto mt-2 border border-white/5 flex items-center justify-center shrink-0">
-          <div className="w-8 h-1 rounded-full bg-white/20" />
-        </div>
-        <div className="flex-1 w-full relative overflow-visible">
-          <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:100%_12px] opacity-20 pointer-events-none" />
+        {/* Dynamic Holographic Scanner Sweep */}
+        <div className="absolute inset-x-0 h-12 bg-gradient-to-b from-cyan-400/10 via-cyan-400/20 to-transparent pointer-events-none animate-[sweep_3.5s_ease-in-out_infinite]" />
 
+        {/* 4 HUD Corner Brackets */}
+        <div className="absolute top-3 left-3 w-3 h-3 border-t-2 border-l-2 border-cyan-400/60 pointer-events-none" />
+        <div className="absolute top-3 right-3 w-3 h-3 border-t-2 border-r-2 border-purple-500/60 pointer-events-none" />
+        <div className="absolute bottom-3 left-3 w-3 h-3 border-b-2 border-l-2 border-purple-500/60 pointer-events-none" />
+        <div className="absolute bottom-3 right-3 w-3 h-3 border-b-2 border-r-2 border-cyan-400/60 pointer-events-none" />
+
+        <div className="w-24 h-4 rounded-full bg-black mx-auto mt-2.5 border border-white/10 flex items-center justify-center shrink-0 z-10">
+          <div className="w-8 h-1 rounded-full bg-cyan-400/40" />
+        </div>
+
+        <div className="flex-1 w-full relative overflow-visible">
+          <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(6,182,212,0.04)_1px,transparent_1px)] bg-[size:100%_12px] opacity-30 pointer-events-none" />
+
+          {/* Central Rotating ARC Reactor Core Ring */}
           <motion.div
-            className="absolute inset-0 m-auto w-24 h-24 rounded-full flex items-center justify-center pointer-events-none"
+            className="absolute inset-0 m-auto w-28 h-28 rounded-full flex items-center justify-center pointer-events-none"
             style={{
               opacity: coreOpacity,
               scale: coreScale,
-              background: 'radial-gradient(circle, rgba(34,211,238,0.18) 0%, rgba(168,85,247,0.04) 50%, transparent 100%)'
+              background: 'radial-gradient(circle, rgba(6,182,212,0.22) 0%, rgba(168,85,247,0.06) 50%, transparent 100%)'
             }}
           >
-            <div className="w-14 h-14 rounded-full border border-dashed border-cyan-400/30 animate-spin" style={{ animationDuration: '6s' }}>
-              <div className="w-10 h-10 rounded-full border border-purple-500/25 animate-[spin_3s_linear_infinite_reverse] m-1.5" />
+            <div className="w-16 h-16 rounded-full border border-dashed border-cyan-400/40 animate-spin" style={{ animationDuration: '7s' }}>
+              <div className="w-11 h-11 rounded-full border border-purple-500/35 animate-[spin_3.5s_linear_infinite_reverse] m-2" />
             </div>
-            <div className="absolute w-3.5 h-3.5 rounded-full bg-white shadow-[0_0_12px_#06b6d4] animate-pulse" />
+            <div className="absolute w-3.5 h-3.5 rounded-full bg-white shadow-[0_0_15px_#06b6d4] animate-pulse" />
           </motion.div>
         </div>
       </motion.div>
 
-      <div className="relative w-full h-[440px] flex items-center justify-center overflow-visible" style={{ perspective: 1000 }}>
+      <div className="relative w-full h-[450px] flex items-center justify-center overflow-visible mt-2" style={{ perspective: 1000 }}>
         {orderedTracks.map((track, index) => (
           <TrackSlide
             key={track.id}
