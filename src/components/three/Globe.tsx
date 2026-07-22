@@ -44,7 +44,7 @@ export default function Globe() {
     groupRef.current.rotation.x += diffX * speed;
     groupRef.current.rotation.y += diffY * speed;
 
-    const time = state.clock.getElapsedTime();
+    const time = state.clock.elapsedTime || performance.now() * 0.001;
     if (globeRef.current) {
       globeRef.current.rotation.y = time * 0.05;
     }

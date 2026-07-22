@@ -47,7 +47,9 @@ export default function Home() {
         <EcosystemSection />
       </div>
 
-      <ProjectsSection />
+      <div className="relative z-30 bg-[#03050d]">
+        <ProjectsSection />
+      </div>
       <div className="h-px w-full bg-gradient-to-r from-transparent via-cyber-purple/10 to-transparent" />
 
       <div className="relative min-h-[400px]">

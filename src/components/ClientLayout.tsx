@@ -17,6 +17,14 @@ import LenisProvider from './LenisProvider';
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
+
+  const originalWarn = console.warn;
+  console.warn = function (...args: any[]) {
+    if (typeof args[0] === 'string' && args[0].includes('THREE.Clock')) {
+      return;
+    }
+    originalWarn.apply(console, args);
+  };
 }
 
 const ThreeCanvas = dynamic(() => import('./three/ThreeCanvas'), { ssr: false });

@@ -56,7 +56,7 @@ export default function TechSphere() {
   useFrame((state) => {
     if (!groupRef.current) return;
 
-    const time = state.clock.getElapsedTime();
+    const time = state.clock.elapsedTime || performance.now() * 0.001;
     groupRef.current.rotation.y = time * 0.12;
     groupRef.current.rotation.x = Math.sin(time * 0.05) * 0.1;
   });

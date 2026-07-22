@@ -34,7 +34,7 @@ export default function CloudNodes() {
   useFrame((state) => {
     if (!groupRef.current) return;
 
-    const time = state.clock.getElapsedTime();
+    const time = state.clock.elapsedTime || performance.now() * 0.001;
     groupRef.current.position.y = Math.sin(time * 0.5) * 0.15;
     groupRef.current.rotation.y = time * 0.05;
     groupRef.current.children.forEach((child, idx) => {

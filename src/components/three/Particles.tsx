@@ -23,8 +23,9 @@ export default function Particles() {
 
   useFrame((state) => {
     if (!pointsRef.current) return;
-    pointsRef.current.rotation.y = state.clock.getElapsedTime() * 0.015;
-    pointsRef.current.rotation.x = Math.sin(state.clock.getElapsedTime() * 0.01) * 0.05;
+    const time = state.clock.elapsedTime || performance.now() * 0.001;
+    pointsRef.current.rotation.y = time * 0.015;
+    pointsRef.current.rotation.x = Math.sin(time * 0.01) * 0.05;
 
     pointsRef.current.position.x += (state.pointer.x * 0.3 - pointsRef.current.position.x) * 0.02;
     pointsRef.current.position.y += (state.pointer.y * 0.3 - pointsRef.current.position.y) * 0.02;

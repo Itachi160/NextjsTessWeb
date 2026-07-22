@@ -112,7 +112,7 @@ export default function Contact() {
             <div className="flex flex-col gap-1">
               <span className="text-white font-extrabold text-sm">Tesseract Infosystems</span>
               <p className="text-gray-400 text-xs leading-relaxed">
-                Ozarde Estate, Tc College Road, Baramati Pune, 413102
+                Ozarde Estate, TC College Road, Baramati Pune, 413102
               </p>
             </div>
 

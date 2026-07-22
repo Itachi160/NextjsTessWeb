@@ -21,7 +21,10 @@ export default function EcosystemSection() {
   return (
     <div ref={containerRef} className="relative z-30 h-[180vh] lg:h-[220vh] w-full bg-[#03050d]">
 
-      <section className="sticky top-0 z-30 h-screen w-full flex flex-col justify-center overflow-hidden bg-[#03050d] pt-24 pb-8 px-4 sm:px-6 isolate">
+      <section
+        className="sticky top-0 z-30 h-screen w-full flex flex-col justify-center overflow-hidden bg-[#03050d] pt-24 pb-8 px-4 sm:px-6 isolate transform-gpu"
+        style={{ WebkitBackfaceVisibility: 'hidden', backfaceVisibility: 'hidden', transform: 'translateZ(0)' }}
+      >
 
         <div className="absolute top-1/2 left-1/4 w-[500px] h-[500px] rounded-full bg-cyber-cyan/5 blur-[150px] pointer-events-none -translate-y-1/2" />
         <div className="absolute bottom-0 right-0 w-[400px] h-[400px] rounded-full bg-cyber-purple/5 blur-[120px] pointer-events-none" />

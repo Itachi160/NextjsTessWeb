@@ -95,6 +95,8 @@ export default function ProjectsSection() {
 
       ctx?.revert();
 
+      const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+
       ctx = gsap.context(() => {
         gsap.to(track, {
           x: () => -getScrollDistance(),
@@ -102,7 +104,7 @@ export default function ProjectsSection() {
           scrollTrigger: {
             trigger: container,
             pin: true,
-            scrub: 0.8,
+            scrub: isMobile ? 0.3 : 0.8,
             start: 'top top',
             end: () => `+=${getScrollDistance()}`,
             invalidateOnRefresh: true,
@@ -163,8 +165,8 @@ export default function ProjectsSection() {
   return (
     <section
       ref={containerRef}
-      className="relative z-10 overflow-hidden"
-      style={{ background: '#03050d' }}
+      className="relative z-30 overflow-hidden isolate transform-gpu"
+      style={{ background: '#03050d', WebkitBackfaceVisibility: 'hidden', backfaceVisibility: 'hidden', transform: 'translateZ(0)' }}
     >
 
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyber-cyan/20 to-transparent" />
@@ -172,7 +174,8 @@ export default function ProjectsSection() {
       <div className="h-screen flex items-center w-full">
         <div
           ref={trackRef}
-          className="flex items-center gap-6 md:gap-8 px-6 md:pl-12 md:pr-24 overflow-visible w-max will-change-transform"
+          className="flex items-center gap-6 md:gap-8 px-6 md:pl-12 md:pr-24 overflow-visible w-max will-change-transform transform-gpu"
+          style={{ WebkitBackfaceVisibility: 'hidden', backfaceVisibility: 'hidden', transform: 'translateZ(0)' }}
         >
 
           <div className="w-[200px] sm:w-[240px] md:w-[440px] shrink-0 flex flex-col justify-center gap-3 sm:gap-4 md:gap-5 pr-2 md:pr-8">

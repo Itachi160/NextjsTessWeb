@@ -317,10 +317,9 @@ export default function Preloader() {
 
   useEffect(() => {
     const safetyTimer = setTimeout(() => {
-      console.warn('Preloader safety fallback triggered.');
       setPreloaderDone(true);
       setTimelineStage('boot');
-    }, 11000);
+    }, 7500);
 
     return () => clearTimeout(safetyTimer);
   }, [setPreloaderDone]);
@@ -416,7 +415,75 @@ export default function Preloader() {
               }}
               transition={{ duration: 0.9, ease: 'easeInOut' }}
             >
+              <defs>
+                <linearGradient id="neonGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#06b6d4" />
+                  <stop offset="35%" stopColor="#3b82f6" />
+                  <stop offset="70%" stopColor="#a855f7" />
+                  <stop offset="100%" stopColor="#ef2d56" />
+                </linearGradient>
 
+                <radialGradient id="coreHalo" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stopColor="rgba(6, 182, 212, 0.35)" />
+                  <stop offset="50%" stopColor="rgba(168, 85, 247, 0.15)" />
+                  <stop offset="100%" stopColor="rgba(3, 5, 13, 0)" />
+                </radialGradient>
+              </defs>
+
+              {/* Glowing Ambient Core Aura */}
+              <circle
+                cx={center}
+                cy={center}
+                r="115"
+                fill="url(#coreHalo)"
+                className="animate-pulse"
+              />
+
+              {/* Outer 36-Notch Sci-Fi ARC Reactor Compass Ring */}
+              <g className="opacity-40">
+                {Array.from({ length: 36 }).map((_, i) => {
+                  const angle = (i * 10 * Math.PI) / 180;
+                  const isMajor = i % 3 === 0;
+                  const r1 = 176;
+                  const r2 = isMajor ? 169 : 173;
+                  const x1 = center + r1 * Math.cos(angle);
+                  const y1 = center + r1 * Math.sin(angle);
+                  const x2 = center + r2 * Math.cos(angle);
+                  const y2 = center + r2 * Math.sin(angle);
+                  return (
+                    <line
+                      key={`tick-${i}`}
+                      x1={x1}
+                      y1={y1}
+                      x2={x2}
+                      y2={y2}
+                      stroke={isMajor ? '#06b6d4' : 'rgba(255,255,255,0.25)'}
+                      strokeWidth={isMajor ? 1.5 : 0.75}
+                    />
+                  );
+                })}
+              </g>
+
+              {/* Inner Node Orbit (12 Cardinal Dots) */}
+              <g className="opacity-30">
+                {Array.from({ length: 12 }).map((_, i) => {
+                  const angle = (i * 30 * Math.PI) / 180;
+                  const r = 112;
+                  const cx = center + r * Math.cos(angle);
+                  const cy = center + r * Math.sin(angle);
+                  return (
+                    <circle
+                      key={`node-${i}`}
+                      cx={cx}
+                      cy={cy}
+                      r={i % 3 === 0 ? 2 : 1.2}
+                      fill="#06b6d4"
+                    />
+                  );
+                })}
+              </g>
+
+              {/* Main Rainbow Energy Segments */}
               <g>
                 {Array.from({ length: 7 }).map((_, idx) => {
                   const rotAngle = idx * (360 / 7);
@@ -432,7 +499,7 @@ export default function Preloader() {
                       r={innerRadius}
                       fill="none"
                       stroke={PAT_COLORS[idx % PAT_COLORS.length]}
-                      strokeWidth="6.5"
+                      strokeWidth="7"
                       strokeDasharray={`${seg} ${gap}`}
                       strokeLinecap="round"
                       style={{
@@ -446,6 +513,7 @@ export default function Preloader() {
                 })}
               </g>
 
+              {/* Laser Spark Trail Points */}
               <g>
                 {Array.from({ length: 7 }).map((_, idx) => (
                   <circle
@@ -453,7 +521,7 @@ export default function Preloader() {
                     ref={(el) => { innerSparksRefs.current[idx] = el; }}
                     cx={center}
                     cy={center}
-                    r="3"
+                    r="4"
                     fill="#ffffff"
                     style={{
                       transformOrigin: `${center}px ${center}px`,
@@ -464,15 +532,17 @@ export default function Preloader() {
                 ))}
               </g>
 
+              {/* Outer Neon Gradient Ring */}
               <circle
                 ref={outerCircleRef}
                 cx={center}
                 cy={center}
                 r={outerRadius}
                 fill="none"
-                stroke="#ef2d56"
-                strokeWidth="2.5"
+                stroke="url(#neonGradient)"
+                strokeWidth="3"
                 strokeDasharray={`${2 * Math.PI * outerRadius}`}
+                strokeLinecap="round"
                 style={{
                   transformOrigin: `${center}px ${center}px`,
                   willChange: 'transform, stroke-dashoffset, opacity, filter',
@@ -480,16 +550,18 @@ export default function Preloader() {
                 }}
               />
 
+              {/* Outer Orbit Dotted Guideline */}
               <circle
                 cx={center}
                 cy={center}
                 r="174"
                 fill="none"
-                stroke="rgba(255, 255, 255, 0.05)"
+                stroke="rgba(6, 182, 212, 0.15)"
                 strokeWidth="1"
-                strokeDasharray="3 6"
+                strokeDasharray="4 8"
               />
 
+              {/* Dot Grid Layer */}
               <g ref={dotGridRef} style={{ opacity: 0, willChange: 'opacity' }}>
                 {dotGrid.map((dot, idx) => (
                   <circle
@@ -497,7 +569,7 @@ export default function Preloader() {
                     cx={dot.x}
                     cy={dot.y}
                     r="1.5"
-                    fill="rgba(255, 74, 90, 0.3)"
+                    fill="rgba(6, 182, 212, 0.4)"
                   />
                 ))}
               </g>

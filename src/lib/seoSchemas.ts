@@ -1,7 +1,3 @@
-/**
- * Schema.org JSON-LD Structured Data Builder for Tesseract InfoSystems
- * Fully compliant with Google Rich Results, E-E-A-T, and Search Central Guidelines.
- */
 
 const BASE_URL = 'https://tesseractinfosystems.com';
 
@@ -22,7 +18,7 @@ export function getOrganizationSchema() {
     foundingDate: '2021',
     address: {
       '@type': 'PostalAddress',
-      streetAddress: 'Ozarde Estate, Tc College Road',
+      streetAddress: 'Ozarde Estate, TC College Road',
       addressLocality: 'Baramati',
       addressRegion: 'Maharashtra',
       postalCode: '413102',
@@ -64,7 +60,7 @@ export function getLocalBusinessSchema() {
     priceRange: '₹5 Lakhs - ₹40+ Lakhs',
     address: {
       '@type': 'PostalAddress',
-      streetAddress: 'Ozarde Estate, Tc College Road',
+      streetAddress: 'Ozarde Estate, TC College Road',
       addressLocality: 'Baramati, Pune',
       addressRegion: 'Maharashtra',
       postalCode: '413102',

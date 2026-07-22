@@ -139,7 +139,7 @@ export default function ChatWidget() {
       scrollToBottom();
     } catch (err: any) {
       console.error('Streaming Chat error:', err);
-      const errMsg = err?.message || 'Failed to connect to Gemini AI service.';
+      const errMsg = err?.message || 'Failed to connect to Chat AI service.';
       setApiError(errMsg);
 
       setMessages((prev) =>
@@ -147,7 +147,7 @@ export default function ChatWidget() {
           m.id === botMsgId
             ? {
               ...m,
-              text: `⚠️ **Connection Error**\n\n${errMsg}`,
+              text: `**Connection Error**\n\n${errMsg}`,
               isError: true,
               isStreaming: false,
             }
@@ -381,7 +381,7 @@ export default function ChatWidget() {
                   type="text"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  placeholder="Ask Gemini about Tesseract..."
+                  placeholder="Ask A about Tesseract..."
                   disabled={isLoading}
                   className="flex-grow bg-white/[0.03] border border-white/10 focus:border-cyber-cyan/60 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-gray-500 outline-none transition-all font-mono"
                 />
