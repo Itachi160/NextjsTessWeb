@@ -62,7 +62,7 @@ export default function Preloader() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setTimelineStage('boot');
-    }, 1750);
+    }, 850);
     return () => clearTimeout(timer);
   }, []);
 
@@ -439,8 +439,8 @@ export default function Preloader() {
                 className="animate-pulse"
               />
 
-              {/* Outer 36-Notch Sci-Fi ARC Reactor Compass Ring */}
-              <g className="opacity-40">
+              {/* Outer 36-Notch Sci-Fi ARC Reactor Compass Ring (GPU Spin) */}
+              <g className="opacity-40 animate-[spin_40s_linear_infinite]" style={{ transformOrigin: `${center}px ${center}px` }}>
                 {Array.from({ length: 36 }).map((_, i) => {
                   const angle = (i * 10 * Math.PI) / 180;
                   const isMajor = i % 3 === 0;
@@ -464,8 +464,8 @@ export default function Preloader() {
                 })}
               </g>
 
-              {/* Inner Node Orbit (12 Cardinal Dots) */}
-              <g className="opacity-30">
+              {/* Inner Node Orbit (12 Cardinal Dots - Reverse GPU Spin) */}
+              <g className="opacity-30 animate-[spin_25s_linear_infinite_reverse]" style={{ transformOrigin: `${center}px ${center}px` }}>
                 {Array.from({ length: 12 }).map((_, i) => {
                   const angle = (i * 30 * Math.PI) / 180;
                   const r = 112;
@@ -476,8 +476,8 @@ export default function Preloader() {
                       key={`node-${i}`}
                       cx={cx}
                       cy={cy}
-                      r={i % 3 === 0 ? 2 : 1.2}
-                      fill="#06b6d4"
+                      r={i % 3 === 0 ? 2.5 : 1.2}
+                      fill={i % 3 === 0 ? '#06b6d4' : '#a855f7'}
                     />
                   );
                 })}

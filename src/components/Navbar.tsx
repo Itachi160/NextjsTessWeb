@@ -88,7 +88,7 @@ export default function Navbar() {
             />
           </div>
           <motion.span
-            className="font-sans text-xs md:text-sm font-black tracking-widest text-glow-cyan bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-cyber-cyan truncate max-w-[140px] xs:max-w-none block"
+            className="font-sans text-[11px] xs:text-xs md:text-sm font-black tracking-wider sm:tracking-widest text-glow-cyan bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-cyber-cyan whitespace-nowrap block"
             initial={{ x: -15, opacity: 0 }}
             animate={preloaderDone ? { x: 0, opacity: 1 } : { x: -15, opacity: 0 }}
             transition={{ duration: 0.6, delay: 0.4, ease: 'easeOut' }}
