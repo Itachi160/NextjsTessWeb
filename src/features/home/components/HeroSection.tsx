@@ -54,6 +54,16 @@ export default function HeroSection() {
       }
     };
 
+    const xSetters: ((val: number) => void)[] = [];
+    const ySetters: ((val: number) => void)[] = [];
+
+    floatingRefs.current.forEach((el, i) => {
+      if (el) {
+        xSetters[i] = gsap.quickTo(el, 'x', { duration: 1.2, ease: 'power2.out' });
+        ySetters[i] = gsap.quickTo(el, 'y', { duration: 1.2, ease: 'power2.out' });
+      }
+    });
+
     let rafScheduled = false;
 
     const updateParallax = () => {
@@ -61,13 +71,8 @@ export default function HeroSection() {
       floatingRefs.current.forEach((el, i) => {
         if (!el) return;
         const tech = HERO_TECHS[i];
-        gsap.to(el, {
-          x: mousePos.current.x * 30 * tech.depth,
-          y: mousePos.current.y * 30 * tech.depth,
-          duration: 1.2,
-          ease: 'power2.out',
-          overwrite: 'auto',
-        });
+        xSetters[i]?.(mousePos.current.x * 30 * tech.depth);
+        ySetters[i]?.(mousePos.current.y * 30 * tech.depth);
       });
     };
 

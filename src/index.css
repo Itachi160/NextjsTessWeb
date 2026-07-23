@@ -600,12 +600,12 @@ html.lenis, html.lenis body {
 }
 
 .trace-r2l {
-  animation: travelLeft 0.625s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  animation: travelLeft 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
   animation-delay: 0.25s;
 }
 
 .trace-l2r {
-  animation: travelRight 0.625s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  animation: travelRight 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
   animation-delay: 0.25s;
 }
 

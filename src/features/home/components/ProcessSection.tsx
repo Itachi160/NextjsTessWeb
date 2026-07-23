@@ -1,225 +1,124 @@
+'use client';
+
 import { useRef } from 'react';
-import { motion, useScroll, useTransform, MotionValue } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { Search, Compass, Layers, Palette, Terminal, ShieldAlert, Rocket, LifeBuoy } from 'lucide-react';
 import { useUIStore } from '../../../store/uiStore';
 import ScrollReveal from '../../../components/ScrollReveal';
 
 interface ProcessStep {
-  number: number;
+  number: string;
+  phase: string;
   title: string;
   icon: typeof Search;
   desc: string;
   color: string;
 }
 
-interface RoadmapStepProps {
-  step: ProcessStep;
-  idx: number;
-  scrollYProgress: MotionValue<number>;
-  setCursorType: (type: 'default' | 'hover' | 'magnetic' | 'view' | 'click') => void;
-}
-
-function RoadmapStep({ step, idx, scrollYProgress, setCursorType }: RoadmapStepProps) {
-  const startVal = idx === 0 ? 0 : (idx - 0.5) / 7;
-  const endVal = idx === 0 ? 0.02 : idx / 7;
-
-  const borderGlow = useTransform(
-    scrollYProgress,
-    [startVal, endVal],
-    ['rgba(255, 255, 255, 0.08)', 'rgba(6, 182, 212, 0.85)'],
-    { clamp: true }
-  );
-
-  const glowScale = useTransform(
-    scrollYProgress,
-    [startVal, endVal],
-    [0.96, 1.04],
-    { clamp: true }
-  );
-
-  const glowOpacity = useTransform(
-    scrollYProgress,
-    [startVal, endVal],
-    [0, 0.25],
-    { clamp: true }
-  );
-
-  const numColor = useTransform(
-    scrollYProgress,
-    [startVal, endVal],
-    ['rgba(6, 182, 212, 0.4)', 'rgba(6, 182, 212, 1)'],
-    { clamp: true }
-  );
-
-  const titleColor = useTransform(
-    scrollYProgress,
-    [startVal, endVal],
-    ['rgba(255, 255, 255, 0.45)', 'rgba(255, 255, 255, 1)'],
-    { clamp: true }
-  );
-
-  const shadowGlow = useTransform(
-    scrollYProgress,
-    [startVal, endVal],
-    ['0px 0px 0px rgba(6, 182, 212, 0)', '0px 0px 15px rgba(6, 182, 212, 0.4)'],
-    { clamp: true }
-  );
-
-  const numberOpacity = useTransform(scrollYProgress, [startVal, endVal], [1, 0], { clamp: true });
-  const iconOpacity = useTransform(scrollYProgress, [startVal, endVal], [0, 1], { clamp: true });
-  const iconScale = useTransform(scrollYProgress, [startVal, endVal], [0.6, 1.0], { clamp: true });
-
-  const Icon = step.icon;
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, x: 20 }}
-      whileInView={{ opacity: 1, x: 0 }}
-      viewport={{ once: true, margin: '-100px' }}
-      transition={{ duration: 0.5, delay: idx * 0.05 }}
-      className="flex gap-4 md:gap-8 relative items-start group"
-    >
-
-      <div className="relative shrink-0">
-
-        <motion.div
-          style={{
-            opacity: useTransform(scrollYProgress, [startVal, endVal], [0, 0.6]),
-            scale: useTransform(scrollYProgress, [startVal, endVal], [1, 1.35])
-          }}
-          className="absolute inset-0 border border-cyber-cyan/40 rounded-lg md:rounded-xl pointer-events-none"
-        />
-
-        <motion.div
-          style={{
-            borderColor: borderGlow,
-            boxShadow: shadowGlow,
-            scale: glowScale,
-          }}
-          className="w-10 h-10 md:w-12 md:h-12 rounded-lg md:rounded-xl glass-card flex items-center justify-center border transition-all duration-300 relative z-10 shrink-0 overflow-hidden"
-          onMouseEnter={() => setCursorType('hover')}
-          onMouseLeave={() => setCursorType('default')}
-        >
-
-          <motion.div
-            style={{ opacity: glowOpacity }}
-            className="absolute -inset-0.5 rounded-lg md:rounded-xl bg-gradient-to-br from-cyber-blue to-cyber-cyan pointer-events-none"
-          />
-
-          <motion.div
-            style={{ opacity: iconOpacity }}
-            className="absolute left-0 right-0 h-0.5 bg-cyber-cyan shadow-[0_0_8px_#06b6d4] z-20 pointer-events-none"
-            animate={{ top: ['10%', '90%', '10%'] }}
-            transition={{ repeat: Infinity, duration: 1.5, ease: 'easeInOut' }}
-          />
-
-          <motion.div
-            style={{ opacity: useTransform(scrollYProgress, [startVal, endVal], [0, 0.25]) }}
-            className="absolute inset-0 font-mono text-[5px] md:text-[6px] text-cyber-cyan/50 leading-none overflow-hidden select-none pointer-events-none p-0.5 flex flex-col justify-around items-center"
-          >
-            <div className="tracking-tighter">0101</div>
-            <div className="tracking-tighter">1010</div>
-          </motion.div>
-
-          <motion.div
-            style={{ opacity: iconOpacity }}
-            className="absolute inset-1 pointer-events-none"
-          >
-            <div className="absolute top-0 left-0 w-1.5 h-1.5 border-t border-l border-cyber-cyan" />
-            <div className="absolute top-0 right-0 w-1.5 h-1.5 border-t border-r border-cyber-cyan" />
-            <div className="absolute bottom-0 left-0 w-1.5 h-1.5 border-b border-l border-cyber-cyan" />
-            <div className="absolute bottom-0 right-0 w-1.5 h-1.5 border-b border-r border-cyber-cyan" />
-          </motion.div>
-
-          <motion.span
-            style={{ color: numColor, opacity: numberOpacity }}
-            className="text-xs md:text-base font-black font-mono transition-colors z-10"
-          >
-            {step.number}
-          </motion.span>
-
-          <motion.div
-            style={{ opacity: iconOpacity, scale: iconScale }}
-            className="absolute z-10 text-cyber-cyan flex items-center justify-center"
-          >
-            <Icon className="w-4 h-4 md:w-6 h-6 text-cyber-cyan filter drop-shadow-[0_0_5px_#06b6d4]" />
-          </motion.div>
-        </motion.div>
-      </div>
-
-      <div className="pt-1 md:pt-1.5">
-        <motion.h4
-          style={{ color: titleColor }}
-          className="text-sm md:text-base font-black transition-colors flex items-center gap-2"
-        >
-          <Icon className={`w-3.5 h-3.5 md:w-4 md:h-4 ${step.color}`} />
-          {step.title}
-        </motion.h4>
-        <p className="text-gray-400 text-[10px] md:text-sm mt-1 md:mt-2 leading-relaxed max-w-2xl font-sans">
-          {step.desc}
-        </p>
-      </div>
-    </motion.div>
-  );
-}
+const STEPS: ProcessStep[] = [
+  { number: '01', phase: 'Discovery & Audit', title: 'Legacy Audit & System Constraints', icon: Search, desc: 'We audit your existing legacy systems, document architectural bottlenecks, and define precise engineering scope and constraints.', color: '#06b6d4' },
+  { number: '02', phase: 'Strategic Planning', title: 'Roadmap & Milestone Architecture', icon: Compass, desc: 'Establishing technical milestones, resource allocation budgets, staging environments, and project delivery schedules.', color: '#3b82f6' },
+  { number: '03', phase: 'System Architecture', title: 'Topology & Database Design', icon: Layers, desc: 'Specifying cloud topologies, high-throughput database schemas, caching strategies, microservices, and load-balancer rules.', color: '#a855f7' },
+  { number: '04', phase: 'UI/UX Design', title: 'High-Fidelity Interface Engineering', icon: Palette, desc: 'Crafting premium user interfaces, responsive design systems, intuitive navigation flows, and interactive prototypes.', color: '#ec4899' },
+  { number: '05', phase: 'Core Development', title: 'Clean Full-Stack Implementation', icon: Terminal, desc: 'Writing clean, typed, modular code backed by automated unit testing suites, API gateways, and CI/CD pipelines.', color: '#6366f1' },
+  { number: '06', phase: 'QA & Hardening', title: 'Security & Stress Telemetry', icon: ShieldAlert, desc: 'Running penetration audits, load stress tests, automated vulnerability checks, and SOC 2/HIPAA compliance verifications.', color: '#10b981' },
+  { number: '07', phase: 'Cloud Deployment', title: 'Zero-Downtime Kubernetes Release', icon: Rocket, desc: 'Deploying containerized services onto AWS/Azure Kubernetes clusters under strict zero-downtime blue/green deployment strategies.', color: '#eab308' },
+  { number: '08', phase: 'Operations', title: '24/7 Monitoring & Maintenance', icon: LifeBuoy, desc: 'Continuous telemetry tracking (latencies, server loads, error logs) with automated alerts and 24/7 incident SLA response.', color: '#f97316' }
+];
 
 export default function ProcessSection() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
   const setCursorType = useUIStore((state) => state.setCursorType);
 
-  const steps: ProcessStep[] = [
-    { number: 1, title: 'Discovery & Audit', icon: Search, desc: 'We audit your legacy systems, document bottlenecks, and clarify engineering constraints.', color: 'text-blue-500' },
-    { number: 2, title: 'Strategic Planning', icon: Compass, desc: 'Defining technical milestones, budgeting, scheduling, and staging server environments.', color: 'text-cyan-500' },
-    { number: 3, title: 'Architecture Design', icon: Layers, desc: 'Specifying system topologies, database models, caching layers, and load-balancer settings.', color: 'text-purple-500' },
-    { number: 4, title: 'High-Fidelity UI/UX', icon: Palette, desc: 'Drafting high-end user interfaces, navigation maps, design systems, and responsive layouts.', color: 'text-pink-500' },
-    { number: 5, title: 'Core Development', icon: Terminal, desc: 'Writing clean, typed, modular code backed by automated testing suites and CI integrations.', color: 'text-indigo-500' },
-    { number: 6, title: 'Testing & Hardening', icon: ShieldAlert, desc: 'Running unit tests, penetration auditing, load stress tests, and usability quality checks.', color: 'text-emerald-500' },
-    { number: 7, title: 'Orchestrated Deployment', icon: Rocket, desc: 'Pushing containers to Kubernetes clusters or serverless nodes under zero-downtime rules.', color: 'text-yellow-500' },
-    { number: 8, title: 'Operations & support', icon: LifeBuoy, desc: 'Monitoring metrics (latencies, logs, CPU loads) and providing 24/7 incident responses.', color: 'text-orange-500' }
-  ];
-
-  const listRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: listRef,
-    offset: ['start center', 'end center']
+    offset: ['start 75%', 'end 80%']
   });
 
-  const height = useTransform(scrollYProgress, [0, 1], ['0%', '100%'], { clamp: true });
+  const beamHeight = useTransform(scrollYProgress, [0, 1], ['0%', '100%']);
 
   return (
-    <section ref={containerRef} id="process" className="relative py-24 px-6 max-w-4xl mx-auto">
+    <section ref={containerRef} id="process" className="relative py-24 md:py-32 px-4 sm:px-6 max-w-4xl mx-auto select-none isolate">
+      {/* Background Soft Glows */}
+      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full bg-cyber-cyan/[0.02] blur-[160px] pointer-events-none transform-gpu" />
 
-      <ScrollReveal direction="up" className="text-center mb-20">
-        <h2 className="text-xs uppercase font-mono tracking-widest text-cyber-cyan font-semibold mb-3">
-          Roadmap to Delivery
-        </h2>
-        <h3 className="text-3xl md:text-5xl font-black">
+      {/* Section Header */}
+      <ScrollReveal direction="up" className="text-center mb-16 md:mb-24">
+        <span className="text-[11px] font-mono font-bold uppercase tracking-widest text-cyber-cyan px-3 py-1 rounded-full bg-cyber-cyan/10 border border-cyber-cyan/20">
+          ROADMAP TO DELIVERY
+        </span>
+        <h2 className="text-3xl md:text-5xl font-black text-white mt-4 tracking-tight">
           Development Process
-        </h3>
+        </h2>
+        <p className="text-gray-400 text-sm md:text-base mt-3 max-w-xl mx-auto font-sans leading-relaxed">
+          A systematic 8-phase engineering methodology designed for predictable, enterprise-grade software execution.
+        </p>
       </ScrollReveal>
 
+      {/* Timeline List Container */}
       <div ref={listRef} className="relative">
-
-        <div className="absolute left-[18px] md:left-[22px] top-5 md:top-6 bottom-5 md:bottom-6 w-1 pointer-events-none">
-
-          <div className="absolute inset-0 bg-white/10 rounded-full" />
-
+        {/* Background Vertical Track */}
+        <div className="absolute left-[19px] md:left-[23px] top-4 bottom-4 w-[2px] bg-white/[0.08] pointer-events-none z-0">
+          {/* Active Glowing Laser Progress Line */}
           <motion.div
-            className="absolute top-0 left-0 right-0 bg-gradient-to-b from-cyber-cyan via-cyber-blue to-cyber-purple rounded-full shadow-[0_0_12px_#06b6d4]"
-            style={{ height, originY: 0 }}
+            className="w-full bg-gradient-to-b from-cyber-cyan via-cyber-blue to-cyber-purple shadow-[0_0_12px_#06b6d4]"
+            style={{ height: beamHeight, originY: 0 }}
           />
         </div>
 
-        <div className="flex flex-col gap-12">
-          {steps.map((step, idx) => (
-            <RoadmapStep
-              key={step.number}
-              step={step}
-              idx={idx}
-              scrollYProgress={scrollYProgress}
-              setCursorType={setCursorType}
-            />
-          ))}
+        <div className="flex flex-col gap-8 md:gap-10">
+          {STEPS.map((step, idx) => {
+            const Icon = step.icon;
+
+            return (
+              <motion.div
+                key={step.number}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-60px' }}
+                transition={{ duration: 0.45, ease: 'easeOut', delay: (idx % 2) * 0.05 }}
+                className="flex gap-4 md:gap-8 relative items-start group transform-gpu"
+              >
+                {/* Timeline Icon Node */}
+                <div className="relative shrink-0 mt-1 z-10">
+                  <div
+                    className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-white/10 bg-[#050816] flex items-center justify-center shadow-lg transition-all duration-300 group-hover:border-cyber-cyan group-hover:shadow-[0_0_20px_rgba(6,182,212,0.4)]"
+                    onMouseEnter={() => setCursorType('hover')}
+                    onMouseLeave={() => setCursorType('default')}
+                  >
+                    <Icon className="w-4 h-4 md:w-5 md:h-5 transition-transform duration-300 group-hover:scale-110" style={{ color: step.color }} />
+                  </div>
+                </div>
+
+                {/* Step Card */}
+                <div className="flex-1 glass-card p-5 md:p-7 rounded-2xl border border-white/[0.06] bg-white/[0.02] backdrop-blur-md relative overflow-hidden transition-all duration-300 hover:border-white/[0.15] hover:bg-white/[0.03] hover:shadow-[0_12px_40px_rgba(0,0,0,0.4)] group">
+                  {/* Left Accent Glow Bar */}
+                  <div
+                    className="absolute left-0 top-3 bottom-3 w-1 rounded-r-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+                    style={{ backgroundColor: step.color }}
+                  />
+
+                  <div className="flex items-center justify-between gap-4 mb-2">
+                    <span
+                      className="text-[10px] md:text-[11px] font-mono font-bold tracking-wider px-2.5 py-0.5 rounded-full border uppercase"
+                      style={{ color: step.color, backgroundColor: `${step.color}15`, borderColor: `${step.color}30` }}
+                    >
+                      Phase {step.number} — {step.phase}
+                    </span>
+                  </div>
+
+                  <h3 className="text-lg md:text-xl font-bold text-white group-hover:text-cyber-cyan transition-colors leading-tight">
+                    {step.title}
+                  </h3>
+
+                  <p className="text-gray-300 text-xs md:text-sm mt-2 leading-relaxed font-sans">
+                    {step.desc}
+                  </p>
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>

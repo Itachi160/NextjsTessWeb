@@ -207,11 +207,22 @@ export default function HeroVisual() {
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
 
-    const render = () => {
+    let lastFrameTime = 0;
+    const targetFps = typeof window !== 'undefined' && window.innerWidth < 768 ? 45 : 60;
+    const frameInterval = 1000 / targetFps;
+
+    const render = (now: number) => {
       if (document.hidden) {
         animId = requestAnimationFrame(render);
         return;
       }
+
+      if (now && now - lastFrameTime < frameInterval - 1) {
+        animId = requestAnimationFrame(render);
+        return;
+      }
+      lastFrameTime = now || performance.now();
+
       ctx.clearRect(0, 0, width, height);
 
       autoAngle.current.y += hoveredHubRef.current !== null ? 0.0005 : 0.0018;
@@ -570,7 +581,7 @@ export default function HeroVisual() {
       animId = requestAnimationFrame(render);
     };
 
-    render();
+    animId = requestAnimationFrame(render);
 
     return () => {
       cancelAnimationFrame(animId);

@@ -1030,24 +1030,20 @@ export default function CyberneticGalaxy() {
       <div className="sticky top-0 h-screen w-full overflow-hidden z-20">
 
         <div className="absolute inset-0 pointer-events-none z-0">
-          <div className="absolute top-[20%] left-[15%] w-[450px] h-[450px] rounded-full bg-cyber-cyan/[0.03] blur-[120px] animate-[pulse_6s_ease-in-out_infinite]" />
-          <div className="absolute bottom-[20%] right-[15%] w-[550px] h-[550px] rounded-full bg-cyber-purple/[0.03] blur-[150px] animate-[pulse_8s_ease-in-out_infinite]" />
+          <div className="absolute top-[20%] left-[15%] w-[450px] h-[450px] rounded-full bg-cyber-cyan/[0.03] blur-[120px] animate-[pulse_6s_ease-in-out_infinite] transform-gpu will-change-transform" />
+          <div className="absolute bottom-[20%] right-[15%] w-[550px] h-[550px] rounded-full bg-cyber-purple/[0.03] blur-[150px] animate-[pulse_8s_ease-in-out_infinite] transform-gpu will-change-transform" />
 
-          <AnimatePresence>
-            {activeTrack && (
-              <motion.div
-                key={activeTrack.id}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 0.18 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.5 }}
-                className="absolute inset-0 w-full h-full pointer-events-none will-change-[opacity]"
-                style={{
-                  background: `radial-gradient(circle at 60% 50%, rgba(${activeTrack.glowColor}, 0.35) 0%, rgba(${activeTrack.glowColor}, 0.1) 35%, transparent 70%)`
-                }}
-              />
-            )}
-          </AnimatePresence>
+          <motion.div
+            animate={{
+              opacity: activeTrack ? 0.18 : 0,
+              background: activeTrack
+                ? `radial-gradient(circle at 60% 50%, rgba(${activeTrack.glowColor}, 0.35) 0%, rgba(${activeTrack.glowColor}, 0.1) 35%, transparent 70%)`
+                : 'radial-gradient(circle at 60% 50%, transparent 0%, transparent 100%)'
+            }}
+            transition={{ duration: 0.4, ease: 'easeOut' }}
+            className="absolute inset-0 w-full h-full pointer-events-none transform-gpu"
+            style={{ WebkitBackfaceVisibility: 'hidden', backfaceVisibility: 'hidden' }}
+          />
         </div>
 
         {breakpoint !== 'desktop' ? (
