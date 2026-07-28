@@ -26,3 +26,14 @@ dist-ssr
 # Next.js build output
 .next/
 
+
+# OpenNext
+.open-next
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+
+.env*
+!.env.example
