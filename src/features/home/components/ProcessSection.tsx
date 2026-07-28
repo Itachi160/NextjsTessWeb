@@ -36,7 +36,7 @@ export default function ProcessSection() {
     offset: ['start 75%', 'end 80%']
   });
 
-  const beamHeight = useTransform(scrollYProgress, [0, 1], ['0%', '100%']);
+  const beamScaleY = useTransform(scrollYProgress, [0, 1], [0, 1]);
 
   return (
     <section ref={containerRef} id="process" className="relative py-24 md:py-32 px-4 sm:px-6 max-w-4xl mx-auto select-none isolate">
@@ -62,8 +62,8 @@ export default function ProcessSection() {
         <div className="absolute left-[19px] md:left-[23px] top-4 bottom-4 w-[2px] bg-white/[0.08] pointer-events-none z-0">
           {/* Active Glowing Laser Progress Line */}
           <motion.div
-            className="w-full bg-gradient-to-b from-cyber-cyan via-cyber-blue to-cyber-purple shadow-[0_0_12px_#06b6d4]"
-            style={{ height: beamHeight, originY: 0 }}
+            className="w-full h-full bg-gradient-to-b from-cyber-cyan via-cyber-blue to-cyber-purple shadow-[0_0_12px_#06b6d4] transform-gpu origin-top"
+            style={{ scaleY: beamScaleY }}
           />
         </div>
 

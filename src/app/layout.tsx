@@ -61,7 +61,7 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: '/',
+    canonical: './',
   },
   openGraph: {
     title: 'Tesseract Tech & Cloud Systems | Tesseract Infosystems',
@@ -113,8 +113,8 @@ export default function RootLayout({
   const localBizSchema = getLocalBusinessSchema();
 
   return (
-    <html lang="en" className={`${outfit.variable} ${inter.variable} ${firaCode.variable} scrollbar-none`}>
-      <body className="antialiased">
+    <html lang="en" className={`${outfit.variable} ${inter.variable} ${firaCode.variable} scrollbar-none`} suppressHydrationWarning>
+      <body className="antialiased" suppressHydrationWarning>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }}

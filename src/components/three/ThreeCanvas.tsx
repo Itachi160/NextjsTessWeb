@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
 import Particles from './Particles';
 import { isLowEndDevice } from '../../utils/performance';
@@ -13,7 +14,13 @@ if (typeof window !== 'undefined') {
 }
 
 export default function ThreeCanvas() {
-  const dpr = typeof window !== 'undefined' && isLowEndDevice() ? 1.0 : ([1, 1.5] as [number, number]);
+  const [dpr, setDpr] = useState<number | [number, number]>([1, 1.5]);
+
+  useEffect(() => {
+    if (isLowEndDevice()) {
+      setDpr(1.0);
+    }
+  }, []);
 
   return (
     <div className="fixed inset-0 w-full h-full pointer-events-none z-0">

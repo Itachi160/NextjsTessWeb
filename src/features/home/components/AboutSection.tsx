@@ -18,7 +18,7 @@ export default function AboutSection() {
     target: timelineRef,
     offset: ['start center', 'end center'],
   });
-  const lineHeight = useTransform(scrollYProgress, [0, 1], ['0%', '100%']);
+  const scaleY = useTransform(scrollYProgress, [0, 1], [0, 1]);
 
   const pillars = [
     { icon: Target, title: 'Our Mission', desc: 'To design and build high-performance, fault-tolerant cloud software solutions that drive growth for enterprise organizations.', border: 'border-cyber-blue/30', text: 'text-cyber-blue' },
@@ -85,8 +85,8 @@ export default function AboutSection() {
         <div ref={timelineRef} className="relative border-l border-white/10 max-w-3xl mx-auto pl-8 flex flex-col gap-12">
 
           <motion.div
-            className="absolute left-0 top-0 w-[1px] bg-gradient-to-b from-cyber-cyan via-cyber-blue to-cyber-purple shadow-[0_0_12px_#06b6d4]"
-            style={{ height: lineHeight, originY: 0 }}
+            className="absolute left-0 top-0 w-[1px] h-full bg-gradient-to-b from-cyber-cyan via-cyber-blue to-cyber-purple shadow-[0_0_12px_#06b6d4] transform-gpu origin-top"
+            style={{ scaleY }}
           />
 
           {timeline.map((item, idx) => (

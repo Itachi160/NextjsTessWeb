@@ -75,20 +75,20 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
         )}
 
         <div
-          className="fixed inset-0 pointer-events-none overflow-hidden z-0 global-starfield"
-          style={{ background: 'linear-gradient(180deg, #120303 0%, #080101 45%, #000000 100%)' }}
+          className="fixed inset-0 pointer-events-none overflow-hidden z-0 global-starfield transform-gpu"
+          style={{ background: 'linear-gradient(180deg, #120303 0%, #080101 45%, #000000 100%)', WebkitBackfaceVisibility: 'hidden', backfaceVisibility: 'hidden' }}
         >
           <div
-            className="absolute top-0 left-0 w-[1px] h-[1px] bg-transparent stars-layer-1"
-            style={{ animation: 'animStar 28s linear infinite' }}
+            className="absolute top-0 left-0 w-[1px] h-[1px] bg-transparent stars-layer-1 transform-gpu will-change-transform"
+            style={{ animation: 'animStar 28s linear infinite', WebkitBackfaceVisibility: 'hidden', backfaceVisibility: 'hidden' }}
           />
           <div
-            className="absolute top-0 left-0 w-[2px] h-[2px] bg-transparent stars-layer-2"
-            style={{ animation: 'animStar 45s linear infinite' }}
+            className="absolute top-0 left-0 w-[2px] h-[2px] bg-transparent stars-layer-2 transform-gpu will-change-transform"
+            style={{ animation: 'animStar 45s linear infinite', WebkitBackfaceVisibility: 'hidden', backfaceVisibility: 'hidden' }}
           />
           <div
-            className="absolute top-0 left-0 w-[2px] h-[2px] bg-transparent stars-layer-3"
-            style={{ animation: 'animStar 75s linear infinite' }}
+            className="absolute top-0 left-0 w-[2px] h-[2px] bg-transparent stars-layer-3 transform-gpu will-change-transform"
+            style={{ animation: 'animStar 75s linear infinite', WebkitBackfaceVisibility: 'hidden', backfaceVisibility: 'hidden' }}
           />
         </div>
 

@@ -21,11 +21,11 @@ export default function ScrollReveal({
   children,
   direction = 'up',
   delay = 0,
-  duration = 1.2,
-  distance = 40,
-  scrub = 1.5,
+  duration = 0.8,
+  distance = 35,
+  scrub = false,
   scale = true,
-  zDepth = 35,
+  zDepth = 25,
   className = '',
 }: ScrollRevealProps) {
   const ref = useRef<HTMLDivElement>(null);
@@ -61,18 +61,18 @@ export default function ScrollReveal({
     }
 
     if (scale) {
-      from.scale = 0.94;
+      from.scale = 0.96;
     }
 
-    const isScrubEnabled = scrub !== false;
-    const scrubValue = typeof scrub === 'number' ? scrub : (scrub ? 1.2 : false);
+    const isScrubEnabled = scrub !== false && scrub !== undefined;
+    const scrubValue = typeof scrub === 'number' ? scrub : (scrub ? 1.0 : false);
 
     to.scrollTrigger = {
       trigger: el,
-      start: 'top 92%',
+      start: 'top 88%',
       end: isScrubEnabled ? 'top 45%' : undefined,
       scrub: scrubValue,
-      toggleActions: isScrubEnabled ? undefined : 'play none none none',
+      toggleActions: isScrubEnabled ? undefined : 'play none none reverse',
     };
 
     const tween = gsap.fromTo(el, from, to);
@@ -91,4 +91,3 @@ export default function ScrollReveal({
     </div>
   );
 }
-

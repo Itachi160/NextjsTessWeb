@@ -1,4 +1,4 @@
-import { useRef, useMemo } from 'react';
+import { useRef, useMemo, useState, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { AdditiveBlending } from 'three';
 import type { Points } from 'three';
@@ -6,10 +6,13 @@ import { isLowEndDevice } from '../../utils/performance';
 
 export default function Particles() {
   const pointsRef = useRef<Points>(null);
+  const [count, setCount] = useState(400);
 
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
-  const isLowEnd = typeof window !== 'undefined' && isLowEndDevice();
-  const count = isLowEnd ? 80 : (isMobile ? 250 : 600);
+  useEffect(() => {
+    const isMobile = window.innerWidth < 768;
+    const isLowEnd = isLowEndDevice();
+    setCount(isLowEnd ? 80 : (isMobile ? 250 : 600));
+  }, []);
 
   const positions = useMemo(() => {
     const arr = new Float32Array(count * 3);
