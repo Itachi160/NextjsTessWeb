@@ -1,4 +1,5 @@
 import { MetadataRoute } from 'next';
+import { BLOG_POSTS } from '../lib/blogs';
 
 export const dynamic = 'force-static';
 
@@ -43,7 +44,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 0.9,
     },
+    {
+      url: `${baseUrl}/blog`,
+      lastModified: lastMod,
+      changeFrequency: 'daily',
+      priority: 0.9,
+    },
   ];
 
-  return staticRoutes;
+  const blogRoutes: MetadataRoute.Sitemap = BLOG_POSTS.map((post) => ({
+    url: `${baseUrl}/blog/${post.slug}`,
+    lastModified: lastMod,
+    changeFrequency: 'weekly',
+    priority: 0.85,
+  }));
+
+  return [...staticRoutes, ...blogRoutes];
 }

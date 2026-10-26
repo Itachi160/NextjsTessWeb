@@ -6,6 +6,7 @@ import { useUIStore } from '../store/uiStore';
 const links = {
   company: [
     { name: 'About Us', path: '/about' },
+    { name: 'Engineering Blog', path: '/blog' },
     { name: 'Careers', path: '/careers' },
     { name: 'Solutions', path: '/solutions' },
     { name: 'Contact', path: '/contact' },

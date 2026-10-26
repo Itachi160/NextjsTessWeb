@@ -12,6 +12,7 @@ const navItems = [
   { name: 'About', path: '/about', icon: Info },
   { name: 'Services', path: '/services', icon: Cpu },
   { name: 'Solutions', path: '/solutions', icon: Layers },
+  { name: 'Blog', path: '/blog', icon: BookOpen },
   { name: 'Careers', path: '/careers', icon: Briefcase },
   { name: 'Contact', path: '/contact', icon: Mail },
 ];

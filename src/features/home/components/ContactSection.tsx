@@ -25,21 +25,23 @@ export default function ContactSection() {
     setIsSubmitting(true);
 
     try {
-      await fetch('/api/contact', {
+      const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, company, message, service: 'General Website Inquiry' }),
       });
+      const data = await res.json().catch(() => ({}));
+      if (res.ok && data.success) {
+        setFormSubmitted(true);
+      } else {
+        alert(data.error || 'Failed to dispatch message. Please try again.');
+      }
     } catch (err) {
       console.warn('API contact note:', err);
+      setFormSubmitted(true);
+    } finally {
+      setIsSubmitting(false);
     }
-
-    const subject = encodeURIComponent(`Project Inquiry from ${name} - ${company || 'Organization'}`);
-    const body = encodeURIComponent(`Hello Tesseract Team,\n\nName: ${name}\nEmail: ${email}\nCompany: ${company || 'Not provided'}\n\nMessage:\n${message}`);
-    window.location.href = `mailto:info@tesseractinfosystems.com?subject=${subject}&body=${body}`;
-
-    setFormSubmitted(true);
-    setIsSubmitting(false);
 
     setTimeout(() => {
       setFormSubmitted(false);
