@@ -553,7 +553,6 @@ function TrackSlide({ progress, track, index }: TrackSlideProps) {
           willChange: 'transform, opacity'
         }}
       >
-        {/* Card Header Ambient Laser Line */}
         <div
           className="absolute top-0 left-0 right-0 h-[2px] pointer-events-none"
           style={{ background: `linear-gradient(90deg, transparent 0%, ${track.hexColor} 50%, transparent 100%)` }}

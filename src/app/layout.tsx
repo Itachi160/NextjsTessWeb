@@ -1,29 +1,7 @@
 import type { Metadata } from 'next';
-import { Outfit, Inter, Fira_Code } from 'next/font/google';
 import ClientLayout from '../components/ClientLayout';
 import { getOrganizationSchema, getWebSiteSchema, getLocalBusinessSchema } from '../lib/seoSchemas';
 import '../index.css';
-
-const outfit = Outfit({
-  subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700', '800', '900'],
-  variable: '--font-outfit',
-  display: 'swap',
-});
-
-const inter = Inter({
-  subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700', '800'],
-  variable: '--font-inter',
-  display: 'swap',
-});
-
-const firaCode = Fira_Code({
-  subsets: ['latin'],
-  weight: ['400', '500'],
-  variable: '--font-fira-code',
-  display: 'swap',
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://tesseractinfosystems.com'),
@@ -84,7 +62,6 @@ export const metadata: Metadata = {
     title: 'Tesseract Tech & Cloud Systems | Tesseract Infosystems',
     description: 'Tesseract Infosystems (Tesseract Tech) designs and deploys custom software platforms, cloud-native architectures, AI & automation solutions, and high-performance enterprise systems.',
     images: ['/Logo%20Hd.png'],
-    creator: '@tesseractsys',
   },
   icons: {
     icon: [
@@ -113,7 +90,15 @@ export default function RootLayout({
   const localBizSchema = getLocalBusinessSchema();
 
   return (
-    <html lang="en" className={`${outfit.variable} ${inter.variable} ${firaCode.variable} scrollbar-none`} suppressHydrationWarning>
+    <html lang="en" className="scrollbar-none" suppressHydrationWarning>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+        />
+      </head>
       <body className="antialiased" suppressHydrationWarning>
         <script
           type="application/ld+json"

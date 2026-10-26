@@ -80,6 +80,13 @@ function ScrollToTopOnRouteChange() {
 }
 
 export default function LenisProvider({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  const isBlog = pathname?.startsWith('/blog');
+
+  if (isBlog) {
+    return <>{children}</>;
+  }
+
   return (
     <ReactLenis root options={LENIS_OPTIONS}>
       <LenisScrollTriggerSync />

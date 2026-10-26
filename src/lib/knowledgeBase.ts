@@ -24,8 +24,8 @@ Specialization: High-concurrency custom software engineering, hyperscale cloud p
     title: 'Engineering Ethos, Security & Accreditations',
     keywords: ['ethos', 'security', 'compliance', 'soc2', 'hipaa', 'gdpr', 'aws', 'azure', 'partner', 'quality', 'testing', 'accreditations'],
     content: `Engineering Ethos: We write strictly typed, compiled systems. We reject code shortcuts, enforcing 90%+ unit test coverage and automated vulnerability pipelines before any merge occurs.
-Compliance & Security: Built for regulated industries (FinTech, Healthcare, Telecom). SOC 2 Type II audit tracking, strict adherence to GDPR and HIPAA privacy guidelines.
-Accreditations: AWS Select Partner, Azure Solutions Hub, SOC 2 Audited.`
+Security Standards: Built for modern enterprise demands. Zero-trust architectures, TLS 1.3 encryption, automated vulnerability testing, and strict data privacy practices.
+Core Competencies: Modern Cloud Native, Enterprise Security, High-Concurrency Systems, Strict Type Safety.`
   },
   {
     id: 'leadership',
@@ -113,7 +113,8 @@ Employee Perks & Benefits:
     title: 'Contact Information & Communication Channels',
     keywords: ['contact', 'email', 'phone', 'address', 'location', 'reach', 'support', 'inquiry', 'message', 'touch'],
     content: `Contact Tesseract InfoSystems:
-- Primary Email: info@tesseractinfosystems.com / contact@tesseractsys.com
+- Primary Email: info@tesseractinfosystems.com
+- Contact Phone: +91 9588666866
 - Main Offices: Baramati & Pune, Maharashtra, India.
 - Interactive Contact Page: /contact page features a project inquiry submission form and real-time telemetry logs.`
   }

@@ -5,22 +5,49 @@ import MagneticButton from '../../../components/MagneticButton';
 import ScrollReveal from '../../../components/ScrollReveal';
 
 const OFFICES = [
-  { name: 'New York', address: 'One World Trade Center, Suite 82', phone: '+1 (212) 555-0199', tz: 'EST' },
-  { name: 'London', address: 'The Shard, Level 24, London SE1', phone: '+44 20 7946 0192', tz: 'GMT' },
-  { name: 'Tokyo', address: 'Roppongi Hills, Level 38, Minato', phone: '+81 3 5555 0143', tz: 'JST' },
-  { name: 'Singapore', address: 'Marina Bay Financial Centre, Tower 3', phone: '+65 6555 0188', tz: 'SGT' },
-  { name: 'Sydney', address: 'International Towers, Barangaroo', phone: '+61 2 9555 0122', tz: 'AEST' },
+  { name: 'Headquarters (Baramati / Pune)', address: 'Ozarde Estate, TC College Road, Baramati, Pune 413102', phone: '+91 9588666866', tz: 'IST' },
+  { name: 'Pune Tech Corridor', address: 'Baner-Balewadi High St, Pune, Maharashtra 411045', phone: '+91 9588666866', tz: 'IST' },
+  { name: 'Enterprise Client Pod', address: 'Direct Global & Remote Delivery Pods', phone: '+91 9588666866', tz: 'IST / UTC' },
 ];
 
 export default function ContactSection() {
   const setCursorType = useUIStore((state) => state.setCursorType);
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [activeOffice, setActiveOffice] = useState(0);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [company, setCompany] = useState('');
+  const [message, setMessage] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, company, message, service: 'General Website Inquiry' }),
+      });
+    } catch (err) {
+      console.warn('API contact note:', err);
+    }
+
+    const subject = encodeURIComponent(`Project Inquiry from ${name} - ${company || 'Organization'}`);
+    const body = encodeURIComponent(`Hello Tesseract Team,\n\nName: ${name}\nEmail: ${email}\nCompany: ${company || 'Not provided'}\n\nMessage:\n${message}`);
+    window.location.href = `mailto:info@tesseractinfosystems.com?subject=${subject}&body=${body}`;
+
     setFormSubmitted(true);
-    setTimeout(() => setFormSubmitted(false), 5000);
+    setIsSubmitting(false);
+
+    setTimeout(() => {
+      setFormSubmitted(false);
+      setName('');
+      setEmail('');
+      setCompany('');
+      setMessage('');
+    }, 6000);
   };
 
   return (
@@ -32,13 +59,13 @@ export default function ContactSection() {
         <ScrollReveal direction="up" className="text-center mb-16">
           <h2 className="text-xs uppercase font-mono tracking-widest text-cyber-cyan font-semibold mb-3 flex items-center justify-center gap-1.5">
             <Globe className="w-4 h-4" />
-            Global Networks
+            Our Locations
           </h2>
           <h3 className="text-3xl md:text-5xl font-black">
             Get in <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyber-cyan to-cyber-purple">Touch</span>
           </h3>
           <p className="text-gray-400 text-sm mt-4 max-w-lg mx-auto">
-            Have a project or partnership in mind? Connect with our engineering directors at any of our global offices.
+            Have a project or partnership in mind? Connect with our engineering directors at our India headquarters.
           </p>
         </ScrollReveal>
 
@@ -52,8 +79,8 @@ export default function ContactSection() {
                   <div className="w-16 h-16 rounded-2xl bg-cyber-cyan/15 border border-cyber-cyan/30 flex items-center justify-center mx-auto mb-4">
                     <Send className="w-7 h-7 text-cyber-cyan" />
                   </div>
-                  <h4 className="text-cyber-cyan font-bold text-lg">Message Sent Successfully</h4>
-                  <p className="text-gray-400 text-xs mt-2">Our engineering team will respond within 24 hours.</p>
+                  <h4 className="text-cyber-cyan font-bold text-lg">Inquiry Sent to info@tesseractinfosystems.com</h4>
+                  <p className="text-gray-400 text-xs mt-2">Thank you! Our engineering team will review your message and reply within 24 hours.</p>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="flex flex-col gap-5 relative z-10">
@@ -62,34 +89,64 @@ export default function ContactSection() {
                   <div className="flex flex-col sm:flex-row gap-4">
                     <div className="flex flex-col gap-1.5 w-full">
                       <label htmlFor="contact-name" className="text-[10px] uppercase font-mono text-gray-500">Name</label>
-                      <input id="contact-name" required type="text" placeholder="Your name"
-                        className="bg-white/[0.03] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-cyber-cyan/50 focus:shadow-[0_0_12px_rgba(6,182,212,0.1)] transition-all" />
+                      <input
+                        id="contact-name"
+                        required
+                        type="text"
+                        placeholder="Your name"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        className="bg-white/[0.03] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-cyber-cyan/50 focus:shadow-[0_0_12px_rgba(6,182,212,0.1)] transition-all"
+                      />
                     </div>
                     <div className="flex flex-col gap-1.5 w-full">
                       <label htmlFor="contact-email" className="text-[10px] uppercase font-mono text-gray-500">Email</label>
-                      <input id="contact-email" required type="email" placeholder="you@company.com"
-                        className="bg-white/[0.03] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-cyber-cyan/50 focus:shadow-[0_0_12px_rgba(6,182,212,0.1)] transition-all" />
+                      <input
+                        id="contact-email"
+                        required
+                        type="email"
+                        placeholder="you@company.com"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="bg-white/[0.03] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-cyber-cyan/50 focus:shadow-[0_0_12px_rgba(6,182,212,0.1)] transition-all"
+                      />
                     </div>
                   </div>
 
                   <div className="flex flex-col gap-1.5">
                     <label htmlFor="contact-company" className="text-[10px] uppercase font-mono text-gray-500">Company</label>
-                    <input id="contact-company" type="text" placeholder="Organization name"
-                      className="bg-white/[0.03] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-cyber-cyan/50 focus:shadow-[0_0_12px_rgba(6,182,212,0.1)] transition-all" />
+                    <input
+                      id="contact-company"
+                      type="text"
+                      placeholder="Organization name"
+                      value={company}
+                      onChange={(e) => setCompany(e.target.value)}
+                      className="bg-white/[0.03] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-cyber-cyan/50 focus:shadow-[0_0_12px_rgba(6,182,212,0.1)] transition-all"
+                    />
                   </div>
 
                   <div className="flex flex-col gap-1.5">
                     <label htmlFor="contact-message" className="text-[10px] uppercase font-mono text-gray-500">Message</label>
-                    <textarea id="contact-message" required rows={4} placeholder="Describe your project goals..."
-                      className="bg-white/[0.03] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-cyber-cyan/50 focus:shadow-[0_0_12px_rgba(6,182,212,0.1)] transition-all resize-none" />
+                    <textarea
+                      id="contact-message"
+                      required
+                      rows={4}
+                      placeholder="Describe your project goals..."
+                      value={message}
+                      onChange={(e) => setMessage(e.target.value)}
+                      className="bg-white/[0.03] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-cyber-cyan/50 focus:shadow-[0_0_12px_rgba(6,182,212,0.1)] transition-all resize-none"
+                    />
                   </div>
 
                   <MagneticButton strength={0.15} className="self-start mt-2">
-                    <button type="submit"
-                      className="btn-cyber-primary px-8 py-4 rounded-full text-xs font-bold uppercase tracking-wider text-white flex items-center gap-2"
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="btn-cyber-primary px-8 py-4 rounded-full text-xs font-bold uppercase tracking-wider text-white flex items-center gap-2 cursor-pointer disabled:opacity-50"
                       onMouseEnter={() => setCursorType('magnetic')}
-                      onMouseLeave={() => setCursorType('default')}>
-                      Send Message <Send className="w-3.5 h-3.5" />
+                      onMouseLeave={() => setCursorType('default')}
+                    >
+                      {isSubmitting ? 'Sending...' : 'Send Message'} <Send className="w-3.5 h-3.5" />
                     </button>
                   </MagneticButton>
                 </form>
@@ -98,7 +155,7 @@ export default function ContactSection() {
           </ScrollReveal>
 
           <ScrollReveal direction="right" delay={0.2} className="w-full lg:w-1/2 flex flex-col gap-6">
-            <h4 className="text-sm font-bold text-gray-300 uppercase tracking-wider">Our Global Offices</h4>
+            <h4 className="text-sm font-bold text-gray-300 uppercase tracking-wider">Our Offices & Locations</h4>
 
             <div className="flex flex-col gap-3">
               {OFFICES.map((office, idx) => (
@@ -132,7 +189,7 @@ export default function ContactSection() {
                   {activeOffice === idx && (
                     <div className="flex gap-6 mt-3 pt-3 border-t border-white/5 text-xs text-gray-400">
                       <span className="flex items-center gap-1.5"><Phone className="w-3 h-3 text-cyber-purple" />{office.phone}</span>
-                      <span className="flex items-center gap-1.5"><Mail className="w-3 h-3 text-cyber-cyan" />contact@tesseractsys.com</span>
+                      <span className="flex items-center gap-1.5"><Mail className="w-3 h-3 text-cyber-cyan" />info@tesseractinfosystems.com</span>
                     </div>
                   )}
                 </button>

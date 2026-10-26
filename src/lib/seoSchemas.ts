@@ -13,8 +13,8 @@ export function getOrganizationSchema() {
     image: `${BASE_URL}/Logo%20Hd.png`,
     description:
       'Tesseract InfoSystems designs and deploys custom enterprise software platforms, hyperscale cloud-native architectures, AI & automation solutions, and zero-trust security infrastructure.',
-    email: 'contact@tesseractinfosystems.com',
-    telephone: '+91 20 5555 0199',
+    email: 'info@tesseractinfosystems.com',
+    telephone: '+91 9588666866',
     foundingDate: '2021',
     address: {
       '@type': 'PostalAddress',
@@ -25,23 +25,23 @@ export function getOrganizationSchema() {
       addressCountry: 'IN',
     },
     sameAs: [
-      'https://www.linkedin.com/company/tesseractsys',
-      'https://github.com/tesseractsys',
-      'https://twitter.com/tesseractsys',
+      'https://www.linkedin.com/company/tesseract-infosystems',
+      'https://www.instagram.com/tesseractinfosystems',
     ],
     contactPoint: [
       {
         '@type': 'ContactPoint',
-        telephone: '+91 20 5555 0199',
+        telephone: '+91 9588666866',
         contactType: 'customer support',
         email: 'info@tesseractinfosystems.com',
         availableLanguage: ['English', 'Hindi', 'Marathi'],
       },
       {
         '@type': 'ContactPoint',
-        email: 'contact@tesseractsys.com',
+        telephone: '+91 9588666866',
+        email: 'info@tesseractinfosystems.com',
         contactType: 'sales',
-        availableLanguage: ['English'],
+        availableLanguage: ['English', 'Hindi'],
       },
     ],
   };
@@ -55,8 +55,8 @@ export function getLocalBusinessSchema() {
     name: 'Tesseract InfoSystems',
     image: `${BASE_URL}/Logo%20Hd.png`,
     url: BASE_URL,
-    telephone: '+91 20 5555 0199',
-    email: 'contact@tesseractinfosystems.com',
+    telephone: '+91 9588666866',
+    email: 'info@tesseractinfosystems.com',
     priceRange: '₹5 Lakhs - ₹40+ Lakhs',
     address: {
       '@type': 'PostalAddress',
@@ -173,7 +173,7 @@ export function getServicesListSchema() {
     {
       name: 'Cybersecurity & Zero Trust Architecture',
       description:
-        'Deploying multi-layered network security, automated vulnerability auditing, eBPF telemetry, and SOC 2/HIPAA compliance.',
+        'Deploying multi-layered network security, automated vulnerability auditing, zero-trust topologies, and enterprise encryption standards.',
       url: `${BASE_URL}/services#security`,
     },
     {
@@ -433,7 +433,7 @@ export function getFAQSchema() {
         name: 'How much does custom software or cloud architecture development cost?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Architecture project estimates range from ₹5 Lakhs to ₹40+ Lakhs (INR) depending on project scope (Custom Software, Cloud-Native, AI Integration), corporate scale (SME, Enterprise, Hyperscale), and compliance requirements (SOC 2, HIPAA).',
+          text: 'Architecture project estimates range from ₹5 Lakhs to ₹40+ Lakhs (INR) depending on project scope (Custom Software, Cloud-Native, AI Integration), corporate scale (SME, Enterprise, Hyperscale), and security requirements.',
         },
       },
       {
@@ -441,9 +441,46 @@ export function getFAQSchema() {
         name: 'How can clients request a project quotation?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Clients can request a custom project quote through the interactive estimator on the /services page or by emailing info@tesseractinfosystems.com or contact@tesseractsys.com.',
+          text: 'Clients can request a custom project quote through the interactive estimator on the /services page or by emailing info@tesseractinfosystems.com or contact@tesseractinfosystems.com.',
         },
       },
     ],
+  };
+}
+
+export function getBlogPostSchema(post: {
+  title: string;
+  excerpt: string;
+  slug: string;
+  publishedAt: string;
+  coverImage: string;
+  author: { name: string; role: string };
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.title,
+    description: post.excerpt,
+    url: `${BASE_URL}/blog/${post.slug}`,
+    datePublished: post.publishedAt,
+    dateModified: post.publishedAt,
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `${BASE_URL}/blog/${post.slug}`,
+    },
+    image: post.coverImage.startsWith('http') ? post.coverImage : `${BASE_URL}${post.coverImage}`,
+    author: {
+      '@type': 'Person',
+      name: post.author.name,
+      jobTitle: post.author.role,
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Tesseract InfoSystems',
+      logo: {
+        '@type': 'ImageObject',
+        url: `${BASE_URL}/android-chrome-512x512.png`,
+      },
+    },
   };
 }

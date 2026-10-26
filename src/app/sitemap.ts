@@ -4,9 +4,9 @@ export const dynamic = 'force-static';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://tesseractinfosystems.com';
-  const lastMod = new Date('2026-07-21').toISOString();
+  const lastMod = new Date().toISOString();
 
-  return [
+  const staticRoutes: MetadataRoute.Sitemap = [
     {
       url: `${baseUrl}/`,
       lastModified: lastMod,
@@ -44,4 +44,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
   ];
+
+  return staticRoutes;
 }

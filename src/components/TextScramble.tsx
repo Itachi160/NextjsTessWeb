@@ -78,5 +78,10 @@ export default function TextScramble({
     return () => clearTimeout(scrambleTimer);
   }, [text, delay, duration, trigger]);
 
-  return <span className={className}>{displayText}</span>;
+  return (
+    <span className={className}>
+      <span className="sr-only">{text}</span>
+      <span aria-hidden="true">{displayText}</span>
+    </span>
+  );
 }

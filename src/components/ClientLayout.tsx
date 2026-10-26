@@ -61,7 +61,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
     }, 900);
   };
 
-  const showThreeCanvas = pathname !== '/login';
+  const showThreeCanvas = pathname !== '/login' && !pathname.startsWith('/blog');
 
   return (
     <LenisProvider>

@@ -6,7 +6,7 @@ import { useUIStore } from '../store/uiStore';
 import MagneticButton from '../components/MagneticButton';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const CONTACT_EMAIL = atob('Y29udGFjdEB0ZXNzZXJhY3RzeXMuY29t');
+const CONTACT_EMAIL = 'info@tesseractinfosystems.com';
 
 export default function Contact() {
   const setCursorType = useUIStore((state) => state.setCursorType);
@@ -38,10 +38,26 @@ export default function Contact() {
     return () => clearInterval(intervalId);
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormSubmitted(true);
     setLogs((prev) => [...prev, `SYSTEM: Preparing email transmission for ${selectedStack.toUpperCase()}...`]);
+
+    try {
+      await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name,
+          email,
+          service: selectedStack.toUpperCase(),
+          message,
+        }),
+      });
+      setLogs((prev) => [...prev, 'SYSTEM: Inquiry payload registered with Tesseract server node.']);
+    } catch (err) {
+      console.warn('API submission error:', err);
+    }
 
     const subject = encodeURIComponent(`Project Inquiry (${selectedStack.toUpperCase()}) - ${name}`);
     const body = encodeURIComponent(`Hello Tesseract Team,\n\nI would like to initiate a request for:\nService: ${selectedStack.toUpperCase()}\nName: ${name}\nEmail: ${email}\n\nMessage:\n${message}`);
@@ -117,9 +133,9 @@ export default function Contact() {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-4 border-t border-white/5 text-xs text-gray-400">
-              <a href="tel:+912055550199" className="flex items-center gap-2 hover:text-cyber-cyan transition-colors">
+              <a href="tel:+919588666866" className="flex items-center gap-2 hover:text-cyber-cyan transition-colors">
                 <Phone className="w-3.5 h-3.5 text-cyber-purple" />
-                +91 20 5555 0199
+                +91 9588666866
               </a>
               <a href={`mailto:${CONTACT_EMAIL}`} className="flex items-center gap-2 hover:text-cyber-cyan transition-colors">
                 <Mail className="w-3.5 h-3.5 text-cyber-cyan" />
@@ -155,10 +171,10 @@ export default function Contact() {
                     </div>
                     <h4 className="text-white font-black text-xl tracking-tight">Transmission Complete</h4>
                     <p className="text-gray-300 text-xs max-w-sm mt-1 leading-relaxed">
-                      Your project inquiry has been prepared for transmission. Please check your default email client to confirm sending. Our team will contact you at `{email}` shortly.
+                      Your inquiry has been registered and dispatched to <span className="text-cyber-cyan font-mono">info@tesseractinfosystems.com</span>. Please verify in your email client to complete sending. Our team will contact you at `{email}` shortly.
                     </p>
                     <div className="font-mono text-[9px] text-cyber-cyan bg-cyber-cyan/10 border border-cyber-cyan/20 px-3 py-1 rounded-md mt-4 animate-pulse">
-                      MAILTO_LAUNCHED // TARGET_PREPARED
+                      TARGET: info@tesseractinfosystems.com // DISPATCHED
                     </div>
                   </motion.div>
                 ) : (

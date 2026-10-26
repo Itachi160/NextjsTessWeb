@@ -55,9 +55,9 @@ export default function About() {
             <Shield className="w-6 h-6" />
           </div>
           <div>
-            <h3 className="text-lg font-bold text-white mb-2">Compliance & Security</h3>
+            <h3 className="text-lg font-bold text-white mb-2">Security & Quality Engineering</h3>
             <p className="text-gray-400 text-xs md:text-sm leading-relaxed">
-              Serving highly regulated markets like FinTech, healthcare, and telecommunications requires SOC 2 Type II audit tracking and strict adherence to GDPR / HIPAA privacy guidelines.
+              We engineer zero-trust architectures, TLS 1.3 encrypted payloads, automated vulnerability testing, and secure data handling standards across all enterprise deployments.
             </p>
           </div>
         </div>
@@ -88,16 +88,16 @@ export default function About() {
         <div>
           <h4 className="text-white font-extrabold text-base flex items-center gap-2">
             <Award className="w-5 h-5 text-cyber-cyan" />
-            Accredited Cloud Architects
+            Enterprise Technology Standards
           </h4>
           <p className="text-gray-400 text-xs mt-1">
-            Our company is globally verified across AWS Partner networks, Azure Solutions hubs, and ISO credentials.
+            Production-grade systems built using modern cloud infrastructure, strict type systems, and scalable microservices.
           </p>
         </div>
-        <div className="flex flex-wrap gap-4 text-[10px] font-mono font-bold text-gray-500">
-          <span className="border border-white/10 px-3 py-1 rounded bg-white/5">AWS SELECT PARTNER</span>
-          <span className="border border-white/10 px-3 py-1 rounded bg-white/5">AZURE SOLUTIONS HUB</span>
-          <span className="border border-white/10 px-3 py-1 rounded bg-white/5">SOC 2 AUDITED</span>
+        <div className="flex flex-wrap gap-3 text-[10px] font-mono font-bold">
+          <span className="border border-cyan-500/30 px-3.5 py-1.5 rounded-lg bg-cyber-cyan/10 text-cyber-cyan">MODERN CLOUD ARCHITECTURE</span>
+          <span className="border border-purple-500/30 px-3.5 py-1.5 rounded-lg bg-cyber-purple/10 text-cyber-purple">ENTERPRISE SECURITY</span>
+          <span className="border border-white/10 px-3.5 py-1.5 rounded-lg bg-white/5 text-gray-300">HIGH-CONCURRENCY SYSTEMS</span>
         </div>
       </div>
     </div>

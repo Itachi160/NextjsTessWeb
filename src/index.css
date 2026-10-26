@@ -3,6 +3,12 @@
 
 @import "tailwindcss";
 
+:root {
+  --font-outfit: 'Outfit', sans-serif;
+  --font-inter: 'Inter', sans-serif;
+  --font-fira-code: 'Fira Code', monospace;
+}
+
 @theme {
   --color-space-darkest: #03050d;
   --color-space-darker: #070b19;

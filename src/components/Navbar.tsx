@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-import { Menu, X, ChevronRight, Home, Info, Cpu, Layers, Briefcase, Mail } from 'lucide-react';
+import { Menu, X, ChevronRight, Home, Info, Cpu, Layers, Briefcase, Mail, BookOpen } from 'lucide-react';
 import { useUIStore } from '../store/uiStore';
 import MagneticButton from './MagneticButton';
 import { motion, AnimatePresence } from 'framer-motion';
