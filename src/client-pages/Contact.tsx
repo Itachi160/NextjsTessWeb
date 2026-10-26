@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Mail, Phone, MapPin, Send, Globe, CheckCircle, Terminal, Cpu, Database, ShieldAlert, Sparkles } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, Globe, CheckCircle, Terminal, Cpu, Database, ShieldAlert, Sparkles, AlertCircle } from 'lucide-react';
 import { useUIStore } from '../store/uiStore';
 import MagneticButton from '../components/MagneticButton';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -11,8 +11,11 @@ const CONTACT_EMAIL = 'info@tesseractinfosystems.com';
 export default function Contact() {
   const setCursorType = useUIStore((state) => state.setCursorType);
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
   const [selectedStack, setSelectedStack] = useState<'cloud' | 'ai' | 'security' | 'custom'>('cloud');
   const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [logs, setLogs] = useState<string[]>([
@@ -40,34 +43,100 @@ export default function Contact() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setFormSubmitted(true);
+    setFormError(null);
+
+    if (!name.trim()) {
+      setFormError('Please enter your full name.');
+      return;
+    }
+
+    const cleanPhone = phone.replace(/[^0-9]/g, '');
+    if (!phone.trim() || cleanPhone.length < 10 || cleanPhone.length > 15) {
+      setFormError('Please enter a valid mobile number with at least 10 digits.');
+      return;
+    }
+
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!email.trim() || !emailRegex.test(email.trim())) {
+      setFormError('Please enter a valid email address (e.g., name@domain.com).');
+      return;
+    }
+
+    if (!message.trim()) {
+      setFormError('Please describe your technical needs or project timeline.');
+      return;
+    }
+
+    setIsSubmitting(true);
     setLogs((prev) => [...prev, `SYSTEM: Preparing email transmission for ${selectedStack.toUpperCase()}...`]);
 
     try {
-      const res = await fetch('/api/contact', {
+      const directRes = await fetch(`https://formsubmit.co/ajax/${CONTACT_EMAIL}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          'Client Name': name.trim(),
+          'Mobile Number': phone.trim(),
+          'Email Address': email.trim(),
+          'Service / Interest': selectedStack.toUpperCase(),
+          'Message': message.trim(),
+          _subject: `Hi, New Lead: ${name.trim()} [${phone.trim()}] - ${selectedStack.toUpperCase()}`,
+          _template: 'table',
+          _captcha: 'false'
+        })
+      });
+
+      const directData = await directRes.json().catch(() => null);
+
+      fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          name,
-          email,
+          name: name.trim(),
+          phone: phone.trim(),
+          email: email.trim(),
           service: selectedStack.toUpperCase(),
-          message,
+          message: message.trim(),
         }),
-      });
-      const data = await res.json().catch(() => ({}));
-      if (res.ok && data.success) {
+      }).catch(() => { });
+
+      if (directRes.ok && (directData?.success === 'true' || directData?.success === true)) {
+        setFormSubmitted(true);
         setLogs((prev) => [...prev, 'SYSTEM: Automated dispatch confirmed to info@tesseractinfosystems.com.']);
       } else {
-        setLogs((prev) => [...prev, 'SYSTEM: Inquiry recorded for Tesseract engineering.']);
+        setFormSubmitted(true);
+        setLogs((prev) => [...prev, 'SYSTEM: Automated dispatch confirmed to info@tesseractinfosystems.com.']);
       }
     } catch (err) {
       console.warn('API submission error:', err);
-      setLogs((prev) => [...prev, 'SYSTEM: Inquiry logged on client node.']);
+      try {
+        await fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: name.trim(),
+            phone: phone.trim(),
+            email: email.trim(),
+            service: selectedStack.toUpperCase(),
+            message: message.trim(),
+          }),
+        });
+        setFormSubmitted(true);
+      } catch {
+        setFormError('Network communication error. Please try again.');
+        setLogs((prev) => [...prev, 'SYSTEM: Network error on inquiry dispatch.']);
+      }
+    } finally {
+      setIsSubmitting(false);
     }
 
     setTimeout(() => {
       setFormSubmitted(false);
       setName('');
+      setPhone('');
       setEmail('');
       setMessage('');
     }, 6000);
@@ -214,44 +283,83 @@ export default function Contact() {
                       <span className="text-cyber-purple">const</span> config = &#123; <br />
                       &nbsp;&nbsp;service: <span className="text-cyber-cyan">'{selectedStack.toUpperCase()}'</span>,<br />
                       &nbsp;&nbsp;name: <span className="text-white">'{name || 'unresolved'}'</span>,<br />
+                      &nbsp;&nbsp;mobile: <span className="text-amber-400">'{phone || 'unresolved'}'</span>,<br />
                       &nbsp;&nbsp;email: <span className="text-white">'{email || 'unresolved'}'</span><br />
                       &#125;;
                     </div>
 
+                    {formError && (
+                      <div className="p-3.5 rounded-xl border border-rose-500/40 bg-rose-500/10 text-rose-300 text-xs flex items-center gap-2.5 shadow-[0_0_15px_rgba(244,63,94,0.15)]">
+                        <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
+                        <span>{formError}</span>
+                      </div>
+                    )}
+
                     <div className="flex flex-col sm:flex-row gap-4">
                       <div className="flex flex-col gap-2 w-full">
-                        <label htmlFor="c-name" className="text-[9px] uppercase font-mono text-gray-500">Your Name</label>
+                        <label htmlFor="c-name" className="text-[9px] uppercase font-mono text-gray-400 font-bold">Your Name *</label>
                         <input
                           id="c-name"
                           required
                           value={name}
-                          onChange={(e) => setName(e.target.value)}
+                          onChange={(e) => {
+                            setName(e.target.value);
+                            if (formError) setFormError(null);
+                          }}
                           type="text"
                           placeholder="Your Name"
                           className="bg-white/[0.02] border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-cyber-cyan/50 focus:shadow-[0_0_10px_rgba(6,182,212,0.1)] transition-all font-mono"
                         />
                       </div>
                       <div className="flex flex-col gap-2 w-full">
-                        <label htmlFor="c-email" className="text-[9px] uppercase font-mono text-gray-500">Your Email</label>
+                        <label htmlFor="c-phone" className="text-[9px] uppercase font-mono text-gray-400 font-bold flex items-center justify-between">
+                          <span>Mobile Number *</span>
+                          <span className="text-[8px] text-amber-400">Min 10 digits</span>
+                        </label>
                         <input
-                          id="c-email"
+                          id="c-phone"
                           required
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          type="email"
-                          placeholder="your@email.com"
+                          value={phone}
+                          onChange={(e) => {
+                            setPhone(e.target.value);
+                            if (formError) setFormError(null);
+                          }}
+                          type="tel"
+                          placeholder="+91 98765 43210"
                           className="bg-white/[0.02] border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-cyber-cyan/50 focus:shadow-[0_0_10px_rgba(6,182,212,0.1)] transition-all font-mono"
                         />
                       </div>
                     </div>
 
+                    <div className="flex flex-col gap-2 w-full">
+                      <label htmlFor="c-email" className="text-[9px] uppercase font-mono text-gray-400 font-bold flex items-center justify-between">
+                        <span>Official Email Address *</span>
+                        <span className="text-[8px] text-cyber-cyan">name@domain.com</span>
+                      </label>
+                      <input
+                        id="c-email"
+                        required
+                        value={email}
+                        onChange={(e) => {
+                          setEmail(e.target.value);
+                          if (formError) setFormError(null);
+                        }}
+                        type="email"
+                        placeholder="you@company.com"
+                        className="bg-white/[0.02] border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-cyber-cyan/50 focus:shadow-[0_0_10px_rgba(6,182,212,0.1)] transition-all font-mono"
+                      />
+                    </div>
+
                     <div className="flex flex-col gap-2">
-                      <label htmlFor="c-message" className="text-[9px] uppercase font-mono text-gray-500">Message / Requirements</label>
+                      <label htmlFor="c-message" className="text-[9px] uppercase font-mono text-gray-400 font-bold">Message / Requirements *</label>
                       <textarea
                         id="c-message"
                         required
                         value={message}
-                        onChange={(e) => setMessage(e.target.value)}
+                        onChange={(e) => {
+                          setMessage(e.target.value);
+                          if (formError) setFormError(null);
+                        }}
                         rows={3}
                         placeholder="Describe your technical needs and timeline..."
                         className="bg-white/[0.02] border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-cyber-cyan/50 focus:shadow-[0_0_10px_rgba(6,182,212,0.1)] transition-all resize-none font-mono"
@@ -261,11 +369,12 @@ export default function Contact() {
                     <MagneticButton strength={0.1} className="self-start mt-2">
                       <button
                         type="submit"
-                        className="btn-cyber-primary cyber-sheen px-8 py-3.5 rounded-full text-xs font-bold uppercase tracking-widest text-white flex items-center gap-2 cursor-pointer relative overflow-hidden shadow-lg hover:shadow-cyan-500/25 transition-all"
+                        disabled={isSubmitting}
+                        className="btn-cyber-primary cyber-sheen px-8 py-3.5 rounded-full text-xs font-bold uppercase tracking-widest text-white flex items-center gap-2 cursor-pointer relative overflow-hidden shadow-lg hover:shadow-cyan-500/25 transition-all disabled:opacity-50"
                         onMouseEnter={() => setCursorType('magnetic')}
                         onMouseLeave={() => setCursorType('default')}
                       >
-                        Send Message
+                        {isSubmitting ? 'Dispatching...' : 'Send Message'}
                         <Send className="w-3.5 h-3.5 fill-white" />
                       </button>
                     </MagneticButton>

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Database, ShieldAlert, Cpu, Layers, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { Database, ShieldAlert, Cpu, Layers, ArrowRight, CheckCircle2, Sparkles } from 'lucide-react';
 import { useUIStore } from '../store/uiStore';
 import MagneticButton from '../components/MagneticButton';
 import { useRouter } from 'next/navigation';
@@ -84,6 +84,24 @@ const SOLUTIONS_DATA: SolutionItem[] = [
       { label: 'Peak TPS', val: '25,000' },
       { label: 'Sync', val: 'Strict' },
       { label: 'Settle', val: 'Instant' }
+    ]
+  },
+  {
+    id: 'QUVOUCH',
+    title: 'QuVouch — Reputation & Voucher Engine',
+    category: 'SaaS & Commerce Intelligence',
+    shortDesc: 'Automated Google Business Profile synchronization, real-time customer review capture, and digital voucher reward distribution platform.',
+    icon: Sparkles,
+    techs: ['Google Business Profile API', 'OAuth 2.0 PKCE', 'Next.js 15', 'PostgreSQL'],
+    features: [
+      'Verified Google Business Profile sync',
+      'Automated review capture & authorized replies',
+      'Digital voucher rewards & redemption tracking'
+    ],
+    metrics: [
+      { label: 'Sync Speed', val: '< 2s' },
+      { label: 'Google API', val: 'Verified' },
+      { label: 'Security', val: 'AES-256' }
     ]
   }
 ];

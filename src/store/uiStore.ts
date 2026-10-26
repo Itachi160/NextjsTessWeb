@@ -9,8 +9,10 @@ interface UIState {
   setCursorType: (type: CursorType) => void;
   preloaderDone: boolean;
   setPreloaderDone: (done: boolean) => void;
-  isTransitioning: boolean;
-  setIsTransitioning: (val: boolean) => void;
+  legalModalOpen: boolean;
+  legalModalTab: 'privacy' | 'terms' | 'cookies' | 'security';
+  openLegalModal: (tab?: 'privacy' | 'terms' | 'cookies' | 'security') => void;
+  closeLegalModal: () => void;
 }
 
 export const useUIStore = create<UIState>((set) => ({
@@ -22,4 +24,8 @@ export const useUIStore = create<UIState>((set) => ({
   setPreloaderDone: (done) => set({ preloaderDone: done }),
   isTransitioning: false,
   setIsTransitioning: (val) => set({ isTransitioning: val }),
+  legalModalOpen: false,
+  legalModalTab: 'privacy',
+  openLegalModal: (tab = 'privacy') => set({ legalModalOpen: true, legalModalTab: tab }),
+  closeLegalModal: () => set({ legalModalOpen: false }),
 }));

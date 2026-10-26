@@ -6,9 +6,10 @@ import { useUIStore } from '../store/uiStore';
 const links = {
   company: [
     { name: 'About Us', path: '/about' },
+    { name: 'Our Products', path: '/products' },
+    { name: 'Solutions Blueprint', path: '/solutions' },
     { name: 'Engineering Blog', path: '/blog' },
     { name: 'Careers', path: '/careers' },
-    { name: 'Solutions', path: '/solutions' },
     { name: 'Contact', path: '/contact' },
   ],
   services: [
@@ -21,6 +22,7 @@ const links = {
 
 export default function Footer() {
   const setCursorType = useUIStore((state) => state.setCursorType);
+  const openLegalModal = useUIStore((state) => state.openLegalModal);
   const handleMouseEnter = () => setCursorType('hover');
   const handleMouseLeave = () => setCursorType('default');
 
@@ -126,10 +128,58 @@ export default function Footer() {
 
       <div className="max-w-7xl mx-auto border-t border-white/5 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-500">
         <p>© {new Date().getFullYear()} Tesseract Infosystems. All rights reserved.</p>
-        <div className="flex gap-6">
-          <a href="#" className="hover:text-white">Privacy Policy</a>
-          <a href="#" className="hover:text-white">Terms of Service</a>
-          <a href="#" className="hover:text-white">Security Architecture</a>
+        <div className="flex flex-wrap items-center gap-3 md:gap-5 text-gray-400">
+          <Link
+            href="/privacy"
+            onClick={(e) => {
+              if (!e.metaKey && !e.ctrlKey) {
+                e.preventDefault();
+                openLegalModal('privacy');
+              }
+            }}
+            className="hover:text-cyber-cyan transition-colors"
+          >
+            Privacy Policy
+          </Link>
+          <span className="text-white/10 hidden sm:inline">•</span>
+          <Link
+            href="/terms"
+            onClick={(e) => {
+              if (!e.metaKey && !e.ctrlKey) {
+                e.preventDefault();
+                openLegalModal('terms');
+              }
+            }}
+            className="hover:text-cyber-purple transition-colors"
+          >
+            Terms &amp; Conditions
+          </Link>
+          <span className="text-white/10 hidden sm:inline">•</span>
+          <Link
+            href="/cookie-policy"
+            onClick={(e) => {
+              if (!e.metaKey && !e.ctrlKey) {
+                e.preventDefault();
+                openLegalModal('cookies');
+              }
+            }}
+            className="hover:text-amber-400 transition-colors"
+          >
+            Cookie Policy
+          </Link>
+          <span className="text-white/10 hidden sm:inline">•</span>
+          <Link
+            href="/security"
+            onClick={(e) => {
+              if (!e.metaKey && !e.ctrlKey) {
+                e.preventDefault();
+                openLegalModal('security');
+              }
+            }}
+            className="hover:text-emerald-400 transition-colors"
+          >
+            Security &amp; Safety
+          </Link>
         </div>
       </div>
     </footer>

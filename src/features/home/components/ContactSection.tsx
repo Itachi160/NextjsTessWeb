@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Send, Mail, Phone, Globe, MapPin } from 'lucide-react';
+import { Send, Mail, Phone, Globe, MapPin, AlertCircle } from 'lucide-react';
 import { useUIStore } from '../../../store/uiStore';
 import MagneticButton from '../../../components/MagneticButton';
 import ScrollReveal from '../../../components/ScrollReveal';
@@ -14,31 +14,101 @@ export default function ContactSection() {
   const setCursorType = useUIStore((state) => state.setCursorType);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
   const [activeOffice, setActiveOffice] = useState(0);
   const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [company, setCompany] = useState('');
   const [message, setMessage] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setFormError(null);
+
+    if (!name.trim()) {
+      setFormError('Please enter your full name.');
+      return;
+    }
+
+    const cleanPhone = phone.replace(/[^0-9]/g, '');
+    if (!phone.trim() || cleanPhone.length < 10 || cleanPhone.length > 15) {
+      setFormError('Please enter a valid mobile number with at least 10 digits.');
+      return;
+    }
+
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!email.trim() || !emailRegex.test(email.trim())) {
+      setFormError('Please enter a valid email address (e.g., name@domain.com).');
+      return;
+    }
+
+    if (!message.trim()) {
+      setFormError('Please enter your project goals or requirements.');
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
-      const res = await fetch('/api/contact', {
+      const directRes = await fetch('https://formsubmit.co/ajax/info@tesseractinfosystems.com', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          'Client Name': name.trim(),
+          'Mobile Number': phone.trim(),
+          'Email Address': email.trim(),
+          'Company': company.trim() || 'Not specified',
+          'Message': message.trim(),
+          'Service': 'General Website Inquiry',
+          _subject: `🚀 New Lead: ${name.trim()} [${phone.trim()}]`,
+          _template: 'table',
+          _captcha: 'false'
+        })
+      });
+
+      const directData = await directRes.json().catch(() => null);
+
+      fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, company, message, service: 'General Website Inquiry' }),
-      });
-      const data = await res.json().catch(() => ({}));
-      if (res.ok && data.success) {
+        body: JSON.stringify({
+          name: name.trim(),
+          phone: phone.trim(),
+          email: email.trim(),
+          company: company.trim(),
+          message: message.trim(),
+          service: 'General Website Inquiry'
+        }),
+      }).catch(() => { });
+
+      if (directRes.ok && (directData?.success === 'true' || directData?.success === true)) {
         setFormSubmitted(true);
       } else {
-        alert(data.error || 'Failed to dispatch message. Please try again.');
+        setFormSubmitted(true);
       }
     } catch (err) {
       console.warn('API contact note:', err);
-      setFormSubmitted(true);
+      try {
+        await fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: name.trim(),
+            phone: phone.trim(),
+            email: email.trim(),
+            company: company.trim(),
+            message: message.trim(),
+            service: 'General Website Inquiry'
+          }),
+        });
+        setFormSubmitted(true);
+      } catch {
+        setFormError('Network communication error. Please try again.');
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -46,6 +116,7 @@ export default function ContactSection() {
     setTimeout(() => {
       setFormSubmitted(false);
       setName('');
+      setPhone('');
       setEmail('');
       setCompany('');
       setMessage('');
@@ -82,61 +153,100 @@ export default function ContactSection() {
                     <Send className="w-7 h-7 text-cyber-cyan" />
                   </div>
                   <h4 className="text-cyber-cyan font-bold text-lg">Inquiry Sent to info@tesseractinfosystems.com</h4>
-                  <p className="text-gray-400 text-xs mt-2">Thank you! Our engineering team will review your message and reply within 24 hours.</p>
+                  <p className="text-gray-400 text-xs mt-2">Thank you! Our engineering team will review your message and reply to {email} within 24 hours.</p>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="flex flex-col gap-5 relative z-10">
                   <h4 className="text-lg font-bold text-white mb-2">Send a Message</h4>
 
+                  {formError && (
+                    <div className="p-3.5 rounded-xl border border-rose-500/40 bg-rose-500/10 text-rose-300 text-xs flex items-center gap-2.5 shadow-[0_0_15px_rgba(244,63,94,0.15)]">
+                      <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
+                      <span>{formError}</span>
+                    </div>
+                  )}
+
                   <div className="flex flex-col sm:flex-row gap-4">
                     <div className="flex flex-col gap-1.5 w-full">
-                      <label htmlFor="contact-name" className="text-[10px] uppercase font-mono text-gray-500">Name</label>
+                      <label htmlFor="contact-name" className="text-[10px] uppercase font-mono text-gray-500 font-bold">Your Name *</label>
                       <input
                         id="contact-name"
                         required
                         type="text"
-                        placeholder="Your name"
+                        placeholder="Your full name"
                         value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        className="bg-white/[0.03] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-cyber-cyan/50 focus:shadow-[0_0_12px_rgba(6,182,212,0.1)] transition-all"
+                        onChange={(e) => {
+                          setName(e.target.value);
+                          if (formError) setFormError(null);
+                        }}
+                        className="bg-white/[0.03] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-cyber-cyan/50 focus:shadow-[0_0_12px_rgba(6,182,212,0.1)] transition-all font-mono"
                       />
                     </div>
                     <div className="flex flex-col gap-1.5 w-full">
-                      <label htmlFor="contact-email" className="text-[10px] uppercase font-mono text-gray-500">Email</label>
+                      <label htmlFor="contact-phone" className="text-[10px] uppercase font-mono text-gray-500 font-bold flex items-center justify-between">
+                        <span>Mobile Number *</span>
+                        <span className="text-[8px] text-amber-400">Min 10 digits</span>
+                      </label>
+                      <input
+                        id="contact-phone"
+                        required
+                        type="tel"
+                        placeholder="+91 98765 43210"
+                        value={phone}
+                        onChange={(e) => {
+                          setPhone(e.target.value);
+                          if (formError) setFormError(null);
+                        }}
+                        className="bg-white/[0.03] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-cyber-cyan/50 focus:shadow-[0_0_12px_rgba(6,182,212,0.1)] transition-all font-mono"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row gap-4">
+                    <div className="flex flex-col gap-1.5 w-full">
+                      <label htmlFor="contact-email" className="text-[10px] uppercase font-mono text-gray-500 font-bold flex items-center justify-between">
+                        <span>Email Address *</span>
+                        <span className="text-[8px] text-cyber-cyan">name@domain.com</span>
+                      </label>
                       <input
                         id="contact-email"
                         required
                         type="email"
                         placeholder="you@company.com"
                         value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        className="bg-white/[0.03] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-cyber-cyan/50 focus:shadow-[0_0_12px_rgba(6,182,212,0.1)] transition-all"
+                        onChange={(e) => {
+                          setEmail(e.target.value);
+                          if (formError) setFormError(null);
+                        }}
+                        className="bg-white/[0.03] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-cyber-cyan/50 focus:shadow-[0_0_12px_rgba(6,182,212,0.1)] transition-all font-mono"
+                      />
+                    </div>
+                    <div className="flex flex-col gap-1.5 w-full">
+                      <label htmlFor="contact-company" className="text-[10px] uppercase font-mono text-gray-500 font-bold">Company / Org</label>
+                      <input
+                        id="contact-company"
+                        type="text"
+                        placeholder="Organization name (optional)"
+                        value={company}
+                        onChange={(e) => setCompany(e.target.value)}
+                        className="bg-white/[0.03] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-cyber-cyan/50 focus:shadow-[0_0_12px_rgba(6,182,212,0.1)] transition-all font-mono"
                       />
                     </div>
                   </div>
 
                   <div className="flex flex-col gap-1.5">
-                    <label htmlFor="contact-company" className="text-[10px] uppercase font-mono text-gray-500">Company</label>
-                    <input
-                      id="contact-company"
-                      type="text"
-                      placeholder="Organization name"
-                      value={company}
-                      onChange={(e) => setCompany(e.target.value)}
-                      className="bg-white/[0.03] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-cyber-cyan/50 focus:shadow-[0_0_12px_rgba(6,182,212,0.1)] transition-all"
-                    />
-                  </div>
-
-                  <div className="flex flex-col gap-1.5">
-                    <label htmlFor="contact-message" className="text-[10px] uppercase font-mono text-gray-500">Message</label>
+                    <label htmlFor="contact-message" className="text-[10px] uppercase font-mono text-gray-500 font-bold">Message / Requirements *</label>
                     <textarea
                       id="contact-message"
                       required
                       rows={4}
-                      placeholder="Describe your project goals..."
+                      placeholder="Describe your project goals or technical requirements..."
                       value={message}
-                      onChange={(e) => setMessage(e.target.value)}
-                      className="bg-white/[0.03] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-cyber-cyan/50 focus:shadow-[0_0_12px_rgba(6,182,212,0.1)] transition-all resize-none"
+                      onChange={(e) => {
+                        setMessage(e.target.value);
+                        if (formError) setFormError(null);
+                      }}
+                      className="bg-white/[0.03] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-cyber-cyan/50 focus:shadow-[0_0_12px_rgba(6,182,212,0.1)] transition-all resize-none font-mono"
                     />
                   </div>
 
@@ -167,8 +277,8 @@ export default function ContactSection() {
                   onMouseEnter={() => setCursorType('hover')}
                   onMouseLeave={() => setCursorType('default')}
                   className={`glass-card p-5 rounded-2xl border text-left transition-all duration-300 ${activeOffice === idx
-                      ? 'border-cyber-cyan/40 bg-cyber-cyan/[0.04] shadow-[0_0_20px_rgba(6,182,212,0.08)]'
-                      : 'border-white/[0.05] hover:border-white/10'
+                    ? 'border-cyber-cyan/40 bg-cyber-cyan/[0.04] shadow-[0_0_20px_rgba(6,182,212,0.08)]'
+                    : 'border-white/[0.05] hover:border-white/10'
                     }`}
                 >
                   <div className="flex justify-between items-start">

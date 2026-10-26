@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-import { Menu, X, ChevronRight, Home, Info, Cpu, Layers, Briefcase, Mail, BookOpen } from 'lucide-react';
+import { Menu, X, ChevronRight, Home, Info, Cpu, Layers, Briefcase, Mail, BookOpen, Boxes } from 'lucide-react';
 import { useUIStore } from '../store/uiStore';
 import MagneticButton from './MagneticButton';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -10,6 +10,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 const navItems = [
   { name: 'Home', path: '/', icon: Home },
   { name: 'About', path: '/about', icon: Info },
+  { name: 'Products', path: '/products', icon: Boxes },
   { name: 'Services', path: '/services', icon: Cpu },
   { name: 'Solutions', path: '/solutions', icon: Layers },
   { name: 'Blog', path: '/blog', icon: BookOpen },
@@ -98,8 +99,8 @@ export default function Navbar() {
           </motion.span>
         </button>
 
-        <nav className="hidden md:flex items-center gap-6">
-          <div className="flex items-center gap-3">
+        <nav className="hidden lg:flex items-center gap-2 xl:gap-5">
+          <div className="flex items-center gap-1 xl:gap-2">
             {navItems.map((item, idx) => {
               const isActive = pathname === item.path;
               return (
@@ -120,7 +121,7 @@ export default function Navbar() {
                 >
                   <button
                     onClick={() => handleNav(item.path)}
-                    className={`relative px-4 py-2 text-xs font-bold tracking-wider uppercase cursor-pointer transition-colors duration-300 z-10 block ${isActive ? 'text-white text-glow-cyan' : 'text-gray-400 hover:text-white'
+                    className={`relative px-2.5 xl:px-3.5 py-1.5 text-[11px] xl:text-xs font-bold tracking-wider uppercase cursor-pointer transition-colors duration-300 z-10 block ${isActive ? 'text-white text-glow-cyan' : 'text-gray-400 hover:text-white'
                       }`}
                   >
                     {item.name}
@@ -182,7 +183,7 @@ export default function Navbar() {
         </nav>
 
         <button
-          className="md:hidden text-white hover:text-cyber-cyan transition-colors pointer-events-auto"
+          className="lg:hidden text-white hover:text-cyber-cyan transition-colors pointer-events-auto"
           onClick={() => setIsOpen(!isOpen)}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
@@ -198,7 +199,7 @@ export default function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3, ease: 'easeOut' }}
-            className="md:hidden absolute top-20 left-4 right-4 bg-[#03050d]/95 backdrop-blur-2xl border border-white/10 rounded-2xl py-8 px-6 flex flex-col gap-5 shadow-2xl z-50 pointer-events-auto"
+            className="lg:hidden absolute top-20 left-4 right-4 bg-[#03050d]/95 backdrop-blur-2xl border border-white/10 rounded-2xl py-8 px-6 flex flex-col gap-5 shadow-2xl z-50 pointer-events-auto"
           >
             <div className="absolute top-0 right-0 w-3 h-3 border-t border-r border-cyber-cyan/30" />
             <div className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-cyber-cyan/30" />

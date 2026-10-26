@@ -29,6 +29,7 @@ if (typeof window !== 'undefined') {
 
 const ThreeCanvas = dynamic(() => import('./three/ThreeCanvas'), { ssr: false });
 const ChatWidget = dynamic(() => import('./ChatWidget'), { ssr: false });
+const LegalTrustModal = dynamic(() => import('./LegalTrustModal'), { ssr: false });
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -121,6 +122,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
           </div>
         )}
 
+        <LegalTrustModal />
         <ChatWidget />
 
         <CustomCursor />
