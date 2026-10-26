@@ -17,7 +17,6 @@ export async function POST(req: Request) {
       );
     }
 
-    // Basic email format validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       return NextResponse.json(
@@ -38,7 +37,6 @@ export async function POST(req: Request) {
     console.log(`Message: ${message}`);
     console.log('=============================================');
 
-    // Check if SMTP environment variables are configured
     const smtpHost = process.env.SMTP_HOST;
     const smtpPort = process.env.SMTP_PORT ? parseInt(process.env.SMTP_PORT, 10) : 465;
     const smtpUser = process.env.SMTP_USER;
@@ -108,7 +106,6 @@ export async function POST(req: Request) {
       });
     }
 
-    // If SMTP is not yet configured, return success with instructions and log it
     return NextResponse.json({
       success: true,
       delivered: false,
