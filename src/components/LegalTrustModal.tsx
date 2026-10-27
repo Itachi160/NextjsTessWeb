@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import { useLenis } from 'lenis/react';
+import { useRouter } from 'next/navigation';
 
 interface LegalModalProps {
   initialTab?: 'privacy' | 'terms' | 'cookies' | 'security';
@@ -28,6 +29,7 @@ interface LegalModalProps {
 }
 
 export default function LegalTrustModal({ initialTab, isEmbedded = false }: LegalModalProps) {
+  const router = useRouter();
   const legalModalOpen = useUIStore((state) => state.legalModalOpen);
   const legalModalTab = useUIStore((state) => state.legalModalTab);
   const closeLegalModal = useUIStore((state) => state.closeLegalModal);
@@ -37,6 +39,32 @@ export default function LegalTrustModal({ initialTab, isEmbedded = false }: Lega
   const [activeTab, setActiveTab] = useState<'privacy' | 'terms' | 'cookies' | 'security'>(
     initialTab || legalModalTab || 'privacy'
   );
+
+  const handleClose = () => {
+    if (!isEmbedded) {
+      closeLegalModal();
+    } else {
+      if (typeof window !== 'undefined' && window.history.length > 1) {
+        router.back();
+      } else {
+        router.push('/');
+      }
+    }
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        if (!isEmbedded && legalModalOpen) {
+          closeLegalModal();
+        } else if (isEmbedded) {
+          handleClose();
+        }
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isEmbedded, legalModalOpen]);
 
   useEffect(() => {
     if (legalModalTab) {
@@ -74,7 +102,7 @@ export default function LegalTrustModal({ initialTab, isEmbedded = false }: Lega
       className={`w-full max-w-4xl mx-auto rounded-2xl overflow-hidden border border-cyber-cyan/30 shadow-[0_0_50px_rgba(0,240,255,0.15)] bg-[#070b14]/95 backdrop-blur-2xl text-gray-200 flex flex-col ${isEmbedded ? 'my-8' : 'max-h-[90vh]'}`}
     >
 
-      {/* Header */}
+      { }
       <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-gradient-to-r from-cyber-cyan/10 via-cyber-purple/10 to-transparent">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-lg p-1.5 bg-black/60 border border-cyber-cyan/30 flex items-center justify-center shadow-[0_0_15px_rgba(0,240,255,0.2)]">
@@ -96,18 +124,29 @@ export default function LegalTrustModal({ initialTab, isEmbedded = false }: Lega
           </div>
         </div>
 
-        {!isEmbedded && (
+        <div className="flex items-center gap-2">
+          {isEmbedded && (
+            <button
+              type="button"
+              onClick={handleClose}
+              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-mono text-gray-300 hover:text-white transition-all cursor-pointer"
+            >
+              <span>← Back</span>
+            </button>
+          )}
           <button
-            onClick={closeLegalModal}
-            className="w-9 h-9 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center text-gray-400 hover:text-white transition-all cursor-pointer"
-            aria-label="Close modal"
+            type="button"
+            onClick={handleClose}
+            className="w-9 h-9 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center text-gray-400 hover:text-white transition-all cursor-pointer group"
+            aria-label="Close"
+            title="Close"
           >
-            <X className="w-4 h-4" />
+            <X className="w-4 h-4 transition-transform group-hover:rotate-90 text-gray-300 group-hover:text-white" />
           </button>
-        )}
+        </div>
       </div>
 
-      {/* Navigation Tabs */}
+      { }
       <div className="grid grid-cols-2 md:grid-cols-4 border-b border-white/10 bg-black/40 text-xs font-semibold">
         <button
           onClick={() => handleTabChange('privacy')}
@@ -305,7 +344,7 @@ export default function LegalTrustModal({ initialTab, isEmbedded = false }: Lega
           </div>
         )}
 
-        {/* ==================== TAB 2: TERMS & CONDITIONS ==================== */}
+        { }
         {activeTab === 'terms' && (
           <div className="space-y-6">
             <div className="p-4 rounded-xl border border-cyber-purple/20 bg-cyber-purple/5">
@@ -480,10 +519,12 @@ export default function LegalTrustModal({ initialTab, isEmbedded = false }: Lega
         </div>
 
         <button
-          onClick={!isEmbedded ? closeLegalModal : undefined}
-          className="w-full sm:w-auto px-6 py-2 rounded-lg bg-gradient-to-r from-cyber-cyan to-cyber-purple text-black font-extrabold text-xs tracking-wider uppercase hover:opacity-90 transition-opacity cursor-pointer shadow-[0_0_20px_rgba(0,240,255,0.3)]"
+          type="button"
+          onClick={handleClose}
+          className="w-full sm:w-auto px-6 py-2.5 rounded-lg bg-gradient-to-r from-cyber-cyan to-cyber-purple text-black font-extrabold text-xs tracking-wider uppercase hover:opacity-90 active:scale-95 transition-all cursor-pointer shadow-[0_0_20px_rgba(0,240,255,0.3)] flex items-center justify-center gap-2"
         >
-          I Understand &amp; Agree
+          <span>I Understand &amp; Agree</span>
+          <CheckCircle2 className="w-4 h-4 text-black" />
         </button>
       </div>
 
@@ -498,7 +539,7 @@ export default function LegalTrustModal({ initialTab, isEmbedded = false }: Lega
     <AnimatePresence>
       {legalModalOpen && (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
-          {/* Backdrop */}
+          { }
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

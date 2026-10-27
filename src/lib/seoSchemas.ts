@@ -417,7 +417,7 @@ export function getFAQSchema() {
         name: 'How much does custom software or cloud architecture development cost?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Architecture project estimates range from ₹5 Lakhs to ₹40+ Lakhs (INR) depending on project scope (Custom Software, Cloud-Native, AI Integration), corporate scale (SME, Enterprise, Hyperscale), and security requirements.',
+          text: 'Architecture project estimates range from ₹1 Lakhs to ₹40+ Lakhs (INR) depending on project scope (Custom Software, Cloud-Native, AI Integration), corporate scale (SME, Enterprise, Hyperscale), and security requirements.',
         },
       },
       {
@@ -454,8 +454,9 @@ export function getBlogPostSchema(post: {
     },
     image: post.coverImage.startsWith('http') ? post.coverImage : `${BASE_URL}${post.coverImage}`,
     author: {
-      '@type': 'Organization',
+      '@type': 'Person',
       name: post.author.name,
+      jobTitle: post.author.role,
     },
     publisher: {
       '@type': 'Organization',

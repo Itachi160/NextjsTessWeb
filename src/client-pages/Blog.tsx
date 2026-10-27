@@ -68,10 +68,10 @@ export default function BlogClient() {
 
   return (
     <div className="pt-28 pb-24 px-4 sm:px-6 max-w-7xl mx-auto select-none min-h-screen">
-      {/* Background Ambient Glows */}
+      { }
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full bg-cyber-cyan/[0.03] blur-[160px] pointer-events-none transform-gpu" />
 
-      {/* Header Section */}
+      { }
       <ScrollReveal direction="up" className="text-center mb-12">
         <span className="text-[11px] font-mono font-bold uppercase tracking-widest text-cyber-cyan px-3.5 py-1 rounded-full bg-cyber-cyan/10 border border-cyber-cyan/25 inline-flex items-center gap-1.5 shadow-[0_0_15px_rgba(6,182,212,0.15)]">
           <BookOpen className="w-3.5 h-3.5" />
@@ -88,7 +88,7 @@ export default function BlogClient() {
         </p>
       </ScrollReveal>
 
-      {/* Featured Articles Carousel Hero Slider */}
+      { }
       {activeFeatured && (
         <ScrollReveal direction="up" className="mb-16">
           <div
@@ -108,7 +108,7 @@ export default function BlogClient() {
                   </span>
                 </div>
 
-                {/* Carousel Controls */}
+                { }
                 {featuredPosts.length > 1 && (
                   <div className="flex items-center gap-1.5" onClick={(e) => e.stopPropagation()}>
                     <button
@@ -170,7 +170,7 @@ export default function BlogClient() {
         </ScrollReveal>
       )}
 
-      {/* Filter Tabs & Search Bar */}
+      { }
       <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-10 pb-6 border-b border-white/10">
         <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
           {categories.map((cat) => (
@@ -179,18 +179,17 @@ export default function BlogClient() {
               onClick={() => setSelectedCategory(cat)}
               onMouseEnter={() => setCursorType('hover')}
               onMouseLeave={() => setCursorType('default')}
-              className={`px-3.5 py-1.5 rounded-full text-xs font-mono font-bold transition-all duration-300 ${
-                selectedCategory === cat
+              className={`px-3.5 py-1.5 rounded-full text-xs font-mono font-bold transition-all duration-300 ${selectedCategory === cat
                   ? 'bg-cyber-cyan text-space-darkest shadow-[0_0_15px_rgba(6,182,212,0.4)]'
                   : 'bg-white/[0.03] text-gray-400 hover:text-white hover:bg-white/[0.08] border border-white/5'
-              }`}
+                }`}
             >
               {cat}
             </button>
           ))}
         </div>
 
-        {/* Search Input */}
+        { }
         <div className="relative w-full md:w-72">
           <Search className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
           <input
@@ -203,7 +202,7 @@ export default function BlogClient() {
         </div>
       </div>
 
-      {/* Articles Grid */}
+      { }
       {filteredPosts.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           {filteredPosts.map((post, idx) => (

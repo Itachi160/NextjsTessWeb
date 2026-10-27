@@ -64,7 +64,7 @@ export default function ContactSection() {
           'Company': company.trim() || 'Not specified',
           'Message': message.trim(),
           'Service': 'General Website Inquiry',
-          _subject: `🚀 New Lead: ${name.trim()} [${phone.trim()}]`,
+          _subject: `New Lead: ${name.trim()} [${phone.trim()}]`,
           _template: 'table',
           _captcha: 'false'
         })
