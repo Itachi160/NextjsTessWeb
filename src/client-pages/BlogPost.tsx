@@ -21,11 +21,9 @@ import ScrollReveal from '../components/ScrollReveal';
 import MagneticButton from '../components/MagneticButton';
 import { BlogPost } from '../lib/blogs';
 
-// FAANG-Grade Professional Markdown to HTML Engine
 function renderMarkdownContent(content: string): string {
   let html = content.trim();
 
-  // 1. Process Code / Spec / Architecture Diagram Blocks
   html = html.replace(/```(\w+)?\n([\s\S]*?)```/g, (_, lang, code) => {
     const cleanCode = code.trim().replace(/</g, '&lt;').replace(/>/g, '&gt;');
     return `<div class="my-8 rounded-2xl border border-cyber-cyan/20 bg-[#030614] overflow-hidden shadow-2xl transform-gpu">
@@ -40,7 +38,6 @@ function renderMarkdownContent(content: string): string {
     </div>`;
   });
 
-  // 2. Process Markdown Tables
   const tableRegex = /\|(.+)\|\n\|[-:\s|]+\|\n((?:\|.+\|\n?)+)/g;
   html = html.replace(tableRegex, (match, headerRow, bodyRows) => {
     const headers = headerRow.split('|').filter((cell: string) => cell.trim().length > 0).map((c: string) => c.trim());
@@ -69,11 +66,9 @@ function renderMarkdownContent(content: string): string {
     return tableHtml;
   });
 
-  // 3. Process Custom Headings with Anchors
   html = html.replace(/<h2 id="([^"]+)">([^<]+)<\/h2>/g, '<h2 id="$1" class="text-xl sm:text-2xl md:text-3xl font-black text-white mt-14 mb-5 border-b border-white/10 pb-3 leading-snug flex items-center gap-2 font-sans tracking-tight">$2</h2>');
   html = html.replace(/^### (.*$)/gim, '<h3 class="text-base sm:text-lg font-bold text-cyber-cyan mt-8 mb-3 font-sans leading-snug">$1</h3>');
 
-  // 4. Process Grouped Numbered Lists (Fixes CSS counter bug cleanly by wrapping in <ol>)
   html = html.replace(/(?:(?:^[0-9]+\. .*\n?)+)/gm, (match) => {
     const items = match.trim().split('\n').map(line => {
       const content = line.replace(/^[0-9]+\. /, '');
@@ -82,7 +77,6 @@ function renderMarkdownContent(content: string): string {
     return `<ol class="my-6 pl-6 list-decimal space-y-2 text-gray-300 font-sans">${items}</ol>`;
   });
 
-  // 5. Process Grouped Bullet Lists (Wraps in <ul>)
   html = html.replace(/(?:(?:^\* .*\n?)+)/gm, (match) => {
     const items = match.trim().split('\n').map(line => {
       const content = line.replace(/^\* /, '');
@@ -91,12 +85,10 @@ function renderMarkdownContent(content: string): string {
     return `<ul class="my-6 pl-6 list-disc space-y-2 text-gray-300 font-sans">${items}</ul>`;
   });
 
-  // 6. Process Inline Formatting Tags
   html = html.replace(/\*\*(.*?)\*\*/g, '<strong class="text-white font-bold">$1</strong>');
   html = html.replace(/`([^`]+)`/g, '<code class="text-cyber-cyan bg-white/5 border border-white/10 px-2 py-0.5 rounded font-mono text-xs">$1</code>');
   html = html.replace(/^---$/gim, '<hr class="my-10 border-white/10" />');
 
-  // 7. Wrap Paragraphs
   const blocks = html.split(/\n\n+/);
   html = blocks.map(b => {
     const trimmed = b.trim();
@@ -128,7 +120,6 @@ export default function BlogPostClient({ post }: { post: BlogPost }) {
 
   const formattedContent = useMemo(() => renderMarkdownContent(post.content), [post.content]);
 
-  // Zero-Re-Render Scroll Progress & rAF Throttled Active Heading Tracker
   useEffect(() => {
     let ticking = false;
 
@@ -194,7 +185,7 @@ export default function BlogPostClient({ post }: { post: BlogPost }) {
 
   return (
     <div className="pt-24 pb-28 px-4 sm:px-6 max-w-7xl mx-auto select-none min-h-screen relative">
-      {/* Scroll Reading Progress Bar (Direct DOM GPU Scale Transform) */}
+      { }
       <div className="fixed top-0 left-0 right-0 h-1 bg-white/10 z-[110] pointer-events-none transform-gpu">
         <div
           ref={progressBarFillRef}
@@ -203,7 +194,7 @@ export default function BlogPostClient({ post }: { post: BlogPost }) {
         />
       </div>
 
-      {/* Back Button Navigation */}
+      { }
       <div className="mb-8">
         <a
           href="/blog"
@@ -216,7 +207,7 @@ export default function BlogPostClient({ post }: { post: BlogPost }) {
         </a>
       </div>
 
-      {/* Article Header */}
+      { }
       <ScrollReveal direction="up" scrub={false} className="max-w-4xl mx-auto text-center mb-12">
         <div className="flex items-center justify-center gap-3 text-xs font-mono mb-4 flex-wrap">
           <span className="px-3.5 py-1 rounded-full bg-cyber-cyan/15 border border-cyber-cyan/30 text-cyber-cyan font-bold uppercase tracking-widest text-[10px] shadow-[0_0_12px_rgba(6,182,212,0.2)]">
@@ -240,7 +231,7 @@ export default function BlogPostClient({ post }: { post: BlogPost }) {
           {post.excerpt}
         </p>
 
-        {/* Author Details Bar */}
+        { }
         <div className="flex items-center justify-between gap-4 mt-8 pt-6 border-t border-white/10 max-w-2xl mx-auto text-left">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-cyber-cyan/20 border border-cyber-cyan/40 flex items-center justify-center overflow-hidden shrink-0">
@@ -264,7 +255,7 @@ export default function BlogPostClient({ post }: { post: BlogPost }) {
         </div>
       </ScrollReveal>
 
-      {/* Main Hero Cover Image */}
+      { }
       <div className="max-w-5xl mx-auto rounded-3xl overflow-hidden border border-white/10 shadow-[0_15px_50px_rgba(0,0,0,0.6)] mb-16 h-72 sm:h-96 md:h-[420px] relative transform-gpu">
         <img
           src={post.coverImage}
@@ -274,9 +265,9 @@ export default function BlogPostClient({ post }: { post: BlogPost }) {
         <div className="absolute inset-0 bg-gradient-to-t from-[#03050d] via-transparent to-transparent opacity-60" />
       </div>
 
-      {/* Main Content Layout */}
+      { }
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 max-w-6xl mx-auto items-start">
-        {/* Sticky Table of Contents Sidebar */}
+        { }
         <aside className="lg:col-span-4 sticky top-28 hidden lg:block transform-gpu">
           <div className="p-6 rounded-2xl border border-white/10 bg-[#040817]/95 shadow-xl">
             <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-cyber-cyan mb-4 flex items-center gap-2">
@@ -287,11 +278,10 @@ export default function BlogPostClient({ post }: { post: BlogPost }) {
                 <a
                   key={item.id}
                   href={`#${item.id}`}
-                  className={`text-xs font-sans transition-colors leading-relaxed block py-1 border-l-2 pl-3 ${
-                    activeHeading === item.id
+                  className={`text-xs font-sans transition-colors leading-relaxed block py-1 border-l-2 pl-3 ${activeHeading === item.id
                       ? 'border-cyber-cyan text-cyber-cyan font-bold'
                       : 'border-white/10 text-gray-400 hover:text-white hover:border-white/40'
-                  }`}
+                    }`}
                 >
                   {item.title}
                 </a>
@@ -314,9 +304,9 @@ export default function BlogPostClient({ post }: { post: BlogPost }) {
           </div>
         </aside>
 
-        {/* Formatted Article Body */}
+        { }
         <article className="lg:col-span-8 font-sans">
-          {/* Key Takeaways Card */}
+          { }
           {post.keyTakeaways && post.keyTakeaways.length > 0 && (
             <div className="mb-10 p-6 sm:p-7 rounded-2xl border border-cyber-cyan/30 bg-[#061224]/80 backdrop-blur-md shadow-[0_0_25px_rgba(6,182,212,0.12)]">
               <h3 className="text-xs font-mono font-bold uppercase tracking-widest text-cyber-cyan flex items-center gap-2 mb-4">
@@ -333,13 +323,13 @@ export default function BlogPostClient({ post }: { post: BlogPost }) {
             </div>
           )}
 
-          {/* HTML Rendered Content */}
+          { }
           <div
             className="prose prose-invert max-w-none text-gray-200"
             dangerouslySetInnerHTML={{ __html: formattedContent }}
           />
 
-          {/* Technical References & Citations */}
+          { }
           {post.references && post.references.length > 0 && (
             <div className="mt-14 pt-8 border-t border-white/10">
               <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-white mb-4 flex items-center gap-2">
@@ -367,7 +357,7 @@ export default function BlogPostClient({ post }: { post: BlogPost }) {
             </div>
           )}
 
-          {/* Frequently Asked Questions (FAQs) */}
+          { }
           {post.faqs && post.faqs.length > 0 && (
             <div className="mt-12 pt-8 border-t border-white/10">
               <h3 className="text-base sm:text-lg font-black text-white mb-6 flex items-center gap-2">
@@ -389,7 +379,7 @@ export default function BlogPostClient({ post }: { post: BlogPost }) {
             </div>
           )}
 
-          {/* Tags */}
+          { }
           <div className="pt-8 border-t border-white/10 flex flex-wrap items-center gap-2 mt-12">
             <span className="text-xs font-mono text-gray-500 font-bold">TAGS:</span>
             {post.tags.map((tag) => (
@@ -402,7 +392,7 @@ export default function BlogPostClient({ post }: { post: BlogPost }) {
             ))}
           </div>
 
-          {/* Tailored Article Footer Consultation Banner */}
+          { }
           <div className="mt-12 p-6 sm:p-8 rounded-3xl border border-cyber-cyan/30 bg-[#040817]/95 relative overflow-hidden flex flex-col sm:flex-row items-center justify-between gap-6 shadow-[0_0_30px_rgba(6,182,212,0.1)] transform-gpu">
             <div>
               <span className="text-[10px] font-mono font-bold text-cyber-cyan uppercase tracking-wider">

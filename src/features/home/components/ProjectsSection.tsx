@@ -112,7 +112,6 @@ export default function ProjectsSection() {
 
     setupScroll();
 
-    // Debounce ResizeObserver to prevent synchronous reflow spikes when pin-spacer wraps container
     let resizeTimeout: NodeJS.Timeout;
     const ro = new ResizeObserver(() => {
       clearTimeout(resizeTimeout);

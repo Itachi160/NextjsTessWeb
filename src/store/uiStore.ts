@@ -9,6 +9,8 @@ interface UIState {
   setCursorType: (type: CursorType) => void;
   preloaderDone: boolean;
   setPreloaderDone: (done: boolean) => void;
+  isTransitioning: boolean;
+  setIsTransitioning: (val: boolean) => void;
   legalModalOpen: boolean;
   legalModalTab: 'privacy' | 'terms' | 'cookies' | 'security';
   openLegalModal: (tab?: 'privacy' | 'terms' | 'cookies' | 'security') => void;

@@ -79,7 +79,6 @@ export default function LegalTrustModal({ initialTab, isEmbedded = false }: Lega
   const modalContent = (
     <div
       data-lenis-prevent="true"
-      data-lenis-prevent
       className={`w-full max-w-4xl mx-auto rounded-2xl overflow-hidden border border-cyber-cyan/30 shadow-[0_0_50px_rgba(0,240,255,0.15)] bg-[#070b14]/95 backdrop-blur-2xl text-gray-200 flex flex-col ${isEmbedded ? 'my-8' : 'max-h-[90vh]'}`}
     >
 
@@ -166,7 +165,6 @@ export default function LegalTrustModal({ initialTab, isEmbedded = false }: Lega
       {/* Modal Scrollable Body */}
       <div
         data-lenis-prevent="true"
-        data-lenis-prevent
         onWheel={(e) => {
           e.stopPropagation();
         }}

@@ -4,7 +4,7 @@ import LegalTrustModal from '../../components/LegalTrustModal';
 export const metadata: Metadata = {
   title: 'Privacy Policy & QuVouch Compliance | Tesseract InfoSystems',
   description:
-    'Read the official Privacy Policy for Tesseract InfoSystems and our QuVouch application. Verified compliance with Google API Services User Data Policy and Limited Use requirements.',
+    'Read the official Privacy Policy for Tesseract InfoSystems and our QuVouch application. Strict adherence to Google API Services User Data Policy and Limited Use requirements.',
   alternates: {
     canonical: 'https://tesseractinfosystems.com/privacy',
   },

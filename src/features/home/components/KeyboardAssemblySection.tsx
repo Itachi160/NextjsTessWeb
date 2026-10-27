@@ -53,7 +53,6 @@ export default function KeyboardAssemblySection() {
   const [imagesArray, setImagesArray] = useState<HTMLImageElement[]>([]);
   const [shouldPreload] = useState(true);
 
-  // Eager preloading cache restore
   useEffect(() => {
     if (cachedImagesLoaded && cachedFrameCount === totalFrames) {
       setImagesLoaded(true);
@@ -80,7 +79,6 @@ export default function KeyboardAssemblySection() {
     };
   }, []);
 
-  // Preloading image sequence
   useEffect(() => {
     if (cachedImagesLoaded && cachedFrameCount === totalFrames) {
       setImagesLoaded(true);
@@ -173,7 +171,6 @@ export default function KeyboardAssemblySection() {
     restDelta: 0.0001
   });
 
-  // Schedule a single rAF draw tick to prevent scroll event flooding
   const scheduleRender = () => {
     if (rafIdRef.current !== null) return;
     rafIdRef.current = requestAnimationFrame(() => {

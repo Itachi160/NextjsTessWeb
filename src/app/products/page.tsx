@@ -4,7 +4,7 @@ import ProductsClient from '../../client-pages/Products';
 export const metadata: Metadata = {
   title: 'Proprietary Software Products & SaaS Platforms',
   description:
-    'Explore proprietary software products by Tesseract InfoSystems: Garage 360 (Automotive OS), ERP Core, QuVouch (Google Profile & Review Automation), Rent-It (Brokerage & Tenant App), Atithi (Hotel Management), and Gurukul-LMS.',
+    'Explore proprietary software products by Tesseract InfoSystems: Garage 360 (Automotive OS), ERP Core, QuVouch (Customer Relationship & Merchant SaaS), Rent-It (Brokerage & Tenant App), Atithi (Hotel Management), and Gurukul-LMS.',
   alternates: {
     canonical: 'https://tesseractinfosystems.com/products',
   },
@@ -53,8 +53,8 @@ export default function ProductsPage() {
         position: 3,
         name: 'QuVouch',
         applicationCategory: 'MarketingApplication',
-        operatingSystem: 'Web, Google Cloud Connected',
-        description: 'Reputation engine, Google Business Profile API sync, and digital voucher rewards platform.',
+        operatingSystem: 'Web, Cloud-Native',
+        description: 'Customer loyalty management, multi-location merchant presence, and digital relationship platform (In Active Development).',
       },
       {
         '@type': 'SoftwareApplication',

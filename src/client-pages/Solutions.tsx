@@ -90,17 +90,17 @@ const SOLUTIONS_DATA: SolutionItem[] = [
     id: 'QUVOUCH',
     title: 'QuVouch — Reputation & Voucher Engine',
     category: 'SaaS & Commerce Intelligence',
-    shortDesc: 'Automated Google Business Profile synchronization, real-time customer review capture, and digital voucher reward distribution platform.',
+    shortDesc: 'Merchant relationship management, multi-location presence synchronization, and secure digital voucher redemption architecture.',
     icon: Sparkles,
-    techs: ['Google Business Profile API', 'OAuth 2.0 PKCE', 'Next.js 15', 'PostgreSQL'],
+    techs: ['OAuth 2.0 PKCE', 'Cloud Microservices', 'Next.js 15', 'PostgreSQL'],
     features: [
-      'Verified Google Business Profile sync',
-      'Automated review capture & authorized replies',
-      'Digital voucher rewards & redemption tracking'
+      'Multi-location merchant presence sync',
+      'Unified customer inquiry & interaction console',
+      'Digital voucher rewards & tamper-proof redemption'
     ],
     metrics: [
       { label: 'Sync Speed', val: '< 2s' },
-      { label: 'Google API', val: 'Verified' },
+      { label: 'Platform Mode', val: 'Private Beta' },
       { label: 'Security', val: 'AES-256' }
     ]
   }

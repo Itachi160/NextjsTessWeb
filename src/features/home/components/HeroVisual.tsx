@@ -295,7 +295,7 @@ export default function HeroVisual() {
         const theta = (i * Math.PI * 2) / 60;
         const rx = Math.cos(theta) * t1Radius;
         const rz = Math.sin(theta) * t1Radius;
-        const ry = rx * 0.35; // tilt
+        const ry = rx * 0.35;
 
         const p = getRotated(rx, ry, rz);
         const scale = fov / (fov + p.z);
