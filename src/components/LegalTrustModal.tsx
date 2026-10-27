@@ -79,7 +79,7 @@ export default function LegalTrustModal({ initialTab, isEmbedded = false }: Lega
   }, [initialTab]);
 
   useEffect(() => {
-    if (!isEmbedded && legalModalOpen) {
+    if ((!isEmbedded && legalModalOpen) || isEmbedded) {
       document.body.style.overflow = 'hidden';
       lenis?.stop();
       return () => {
@@ -99,11 +99,13 @@ export default function LegalTrustModal({ initialTab, isEmbedded = false }: Lega
   const modalContent = (
     <div
       data-lenis-prevent="true"
-      className={`w-full max-w-4xl mx-auto rounded-2xl overflow-hidden border border-cyber-cyan/30 shadow-[0_0_50px_rgba(0,240,255,0.15)] bg-[#070b14]/95 backdrop-blur-2xl text-gray-200 flex flex-col ${isEmbedded ? 'my-8' : 'max-h-[90vh]'}`}
+      className={`w-full max-w-4xl mx-auto rounded-2xl overflow-hidden border border-cyber-cyan/30 shadow-[0_0_50px_rgba(0,240,255,0.15)] bg-[#070b14]/95 backdrop-blur-2xl text-gray-200 flex flex-col ${
+        isEmbedded ? 'flex-1 min-h-0 h-full' : 'h-[88vh] sm:h-[85vh] max-h-[820px]'
+      }`}
     >
 
       { }
-      <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-gradient-to-r from-cyber-cyan/10 via-cyber-purple/10 to-transparent">
+      <div className="shrink-0 flex items-center justify-between px-4 sm:px-6 py-3.5 border-b border-white/10 bg-gradient-to-r from-cyber-cyan/10 via-cyber-purple/10 to-transparent">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-lg p-1.5 bg-black/60 border border-cyber-cyan/30 flex items-center justify-center shadow-[0_0_15px_rgba(0,240,255,0.2)]">
             <Image
@@ -147,7 +149,7 @@ export default function LegalTrustModal({ initialTab, isEmbedded = false }: Lega
       </div>
 
       { }
-      <div className="grid grid-cols-2 md:grid-cols-4 border-b border-white/10 bg-black/40 text-xs font-semibold">
+      <div className="shrink-0 grid grid-cols-2 md:grid-cols-4 border-b border-white/10 bg-black/40 text-xs font-semibold">
         <button
           onClick={() => handleTabChange('privacy')}
           className={`flex items-center justify-center gap-2 py-3 px-4 transition-all border-b-2 cursor-pointer ${activeTab === 'privacy'
@@ -196,16 +198,13 @@ export default function LegalTrustModal({ initialTab, isEmbedded = false }: Lega
       { }
       <div
         data-lenis-prevent="true"
-        onWheel={(e) => {
-          e.stopPropagation();
-        }}
         style={{
           scrollbarWidth: 'thin',
           scrollbarColor: '#00f0ff #050a14',
+          WebkitOverflowScrolling: 'touch',
           overscrollBehavior: 'contain',
         }}
-        className={`p-6 md:p-8 space-y-6 text-xs md:text-sm leading-relaxed overflow-y-auto ${isEmbedded ? '' : 'max-h-[62vh]'
-          } font-sans overscroll-contain touch-auto`}
+        className="flex-1 min-h-0 overflow-y-auto p-4 sm:p-6 md:p-8 space-y-6 text-xs md:text-sm leading-relaxed font-sans overscroll-contain touch-pan-y"
       >
 
         { }
@@ -512,7 +511,7 @@ export default function LegalTrustModal({ initialTab, isEmbedded = false }: Lega
       </div>
 
       { }
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-6 py-4 border-t border-white/10 bg-black/60">
+      <div className="shrink-0 flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 px-4 sm:px-6 py-3 border-t border-white/10 bg-black/60">
         <div className="flex items-center gap-2 text-xs font-mono text-gray-400">
           <CheckCircle2 className="w-4 h-4 text-cyber-cyan" />
           <span>Status: <strong className="text-cyber-cyan">✓ Verified &amp; Compliant 2026</strong></span>
