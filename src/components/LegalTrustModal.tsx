@@ -50,7 +50,6 @@ export default function LegalTrustModal({ initialTab, isEmbedded = false }: Lega
     }
   }, [initialTab]);
 
-  // Lock body scroll and pause Lenis smooth-scroll when open as modal
   useEffect(() => {
     if (!isEmbedded) {
       if (legalModalOpen) {
@@ -120,8 +119,8 @@ export default function LegalTrustModal({ initialTab, isEmbedded = false }: Lega
         <button
           onClick={() => handleTabChange('privacy')}
           className={`flex items-center justify-center gap-2 py-3 px-4 transition-all border-b-2 cursor-pointer ${activeTab === 'privacy'
-              ? 'border-cyber-cyan text-cyber-cyan bg-cyber-cyan/10 shadow-[inset_0_-2px_10px_rgba(0,240,255,0.2)]'
-              : 'border-transparent text-gray-400 hover:text-white hover:bg-white/5'
+            ? 'border-cyber-cyan text-cyber-cyan bg-cyber-cyan/10 shadow-[inset_0_-2px_10px_rgba(0,240,255,0.2)]'
+            : 'border-transparent text-gray-400 hover:text-white hover:bg-white/5'
             }`}
         >
           <ShieldCheck className="w-3.5 h-3.5" />
@@ -131,8 +130,8 @@ export default function LegalTrustModal({ initialTab, isEmbedded = false }: Lega
         <button
           onClick={() => handleTabChange('terms')}
           className={`flex items-center justify-center gap-2 py-3 px-4 transition-all border-b-2 cursor-pointer ${activeTab === 'terms'
-              ? 'border-cyber-purple text-cyber-purple bg-cyber-purple/10 shadow-[inset_0_-2px_10px_rgba(168,85,247,0.2)]'
-              : 'border-transparent text-gray-400 hover:text-white hover:bg-white/5'
+            ? 'border-cyber-purple text-cyber-purple bg-cyber-purple/10 shadow-[inset_0_-2px_10px_rgba(168,85,247,0.2)]'
+            : 'border-transparent text-gray-400 hover:text-white hover:bg-white/5'
             }`}
         >
           <FileText className="w-3.5 h-3.5" />
@@ -142,8 +141,8 @@ export default function LegalTrustModal({ initialTab, isEmbedded = false }: Lega
         <button
           onClick={() => handleTabChange('cookies')}
           className={`flex items-center justify-center gap-2 py-3 px-4 transition-all border-b-2 cursor-pointer ${activeTab === 'cookies'
-              ? 'border-amber-400 text-amber-400 bg-amber-400/10 shadow-[inset_0_-2px_10px_rgba(251,191,36,0.2)]'
-              : 'border-transparent text-gray-400 hover:text-white hover:bg-white/5'
+            ? 'border-amber-400 text-amber-400 bg-amber-400/10 shadow-[inset_0_-2px_10px_rgba(251,191,36,0.2)]'
+            : 'border-transparent text-gray-400 hover:text-white hover:bg-white/5'
             }`}
         >
           <Cookie className="w-3.5 h-3.5" />
@@ -153,8 +152,8 @@ export default function LegalTrustModal({ initialTab, isEmbedded = false }: Lega
         <button
           onClick={() => handleTabChange('security')}
           className={`flex items-center justify-center gap-2 py-3 px-4 transition-all border-b-2 cursor-pointer ${activeTab === 'security'
-              ? 'border-emerald-400 text-emerald-400 bg-emerald-400/10 shadow-[inset_0_-2px_10px_rgba(52,211,153,0.2)]'
-              : 'border-transparent text-gray-400 hover:text-white hover:bg-white/5'
+            ? 'border-emerald-400 text-emerald-400 bg-emerald-400/10 shadow-[inset_0_-2px_10px_rgba(52,211,153,0.2)]'
+            : 'border-transparent text-gray-400 hover:text-white hover:bg-white/5'
             }`}
         >
           <Lock className="w-3.5 h-3.5" />
@@ -162,7 +161,7 @@ export default function LegalTrustModal({ initialTab, isEmbedded = false }: Lega
         </button>
       </div>
 
-      {/* Modal Scrollable Body */}
+      { }
       <div
         data-lenis-prevent="true"
         onWheel={(e) => {
@@ -173,12 +172,11 @@ export default function LegalTrustModal({ initialTab, isEmbedded = false }: Lega
           scrollbarColor: '#00f0ff #050a14',
           overscrollBehavior: 'contain',
         }}
-        className={`p-6 md:p-8 space-y-6 text-xs md:text-sm leading-relaxed overflow-y-auto ${
-          isEmbedded ? '' : 'max-h-[62vh]'
-        } font-sans overscroll-contain touch-auto`}
+        className={`p-6 md:p-8 space-y-6 text-xs md:text-sm leading-relaxed overflow-y-auto ${isEmbedded ? '' : 'max-h-[62vh]'
+          } font-sans overscroll-contain touch-auto`}
       >
 
-        {/* ==================== TAB 1: PRIVACY POLICY ==================== */}
+        { }
         {activeTab === 'privacy' && (
           <div className="space-y-6">
             <div className="p-4 rounded-xl border border-cyber-cyan/20 bg-cyber-cyan/5">
@@ -188,7 +186,7 @@ export default function LegalTrustModal({ initialTab, isEmbedded = false }: Lega
               </p>
             </div>
 
-            {/* Section 1 */}
+            { }
             <div className="space-y-2">
               <h4 className="text-sm font-bold text-cyber-cyan flex items-center gap-2">
                 <Shield className="w-4 h-4" /> 1. Information Collection &amp; Scope
@@ -203,7 +201,7 @@ export default function LegalTrustModal({ initialTab, isEmbedded = false }: Lega
               </ul>
             </div>
 
-            {/* Section 2 */}
+            { }
             <div className="space-y-2">
               <h4 className="text-sm font-bold text-cyber-cyan flex items-center gap-2">
                 <Lock className="w-4 h-4" /> 2. How We Use Your Data
@@ -219,7 +217,7 @@ export default function LegalTrustModal({ initialTab, isEmbedded = false }: Lega
               </div>
             </div>
 
-            {/* Section 3 */}
+            { }
             <div className="space-y-2">
               <h4 className="text-sm font-bold text-cyber-cyan flex items-center gap-2">
                 <Key className="w-4 h-4" /> 3. Data Confidentiality &amp; Access
@@ -229,7 +227,7 @@ export default function LegalTrustModal({ initialTab, isEmbedded = false }: Lega
               </p>
             </div>
 
-            {/* Section 4: QuVouch APPLICATION PRIVACY (GOOGLE BUSINESS PROFILE COMPLIANCE) */}
+            { }
             <div className="p-5 rounded-xl border-2 border-cyber-cyan/40 bg-gradient-to-br from-black/80 via-cyber-cyan/5 to-black/80 shadow-[0_0_25px_rgba(0,240,255,0.1)] space-y-4">
               <div className="flex items-center gap-3 pb-3 border-b border-white/10">
                 <div className="w-16 h-16 rounded-2xl overflow-hidden bg-black/90 border border-cyber-cyan/50 flex items-center justify-center shadow-[0_0_25px_rgba(0,240,255,0.35)] shrink-0">
@@ -353,7 +351,7 @@ export default function LegalTrustModal({ initialTab, isEmbedded = false }: Lega
               </ul>
             </div>
 
-            {/* Google Business Profile Third Party Disclosure */}
+            { }
             <div className="p-4 rounded-xl border border-cyber-purple/30 bg-cyber-purple/10 space-y-2">
               <h4 className="text-sm font-bold text-white flex items-center gap-2">
                 <Sparkles className="w-4 h-4 text-cyber-purple" /> 4. Google Business Profile &amp; Third-Party Transparency
@@ -379,7 +377,7 @@ export default function LegalTrustModal({ initialTab, isEmbedded = false }: Lega
           </div>
         )}
 
-        {/* ==================== TAB 3: COOKIE POLICY ==================== */}
+        { }
         {activeTab === 'cookies' && (
           <div className="space-y-6">
             <div className="p-4 rounded-xl border border-amber-400/20 bg-amber-400/5">
@@ -435,7 +433,7 @@ export default function LegalTrustModal({ initialTab, isEmbedded = false }: Lega
           </div>
         )}
 
-        {/* ==================== TAB 4: SECURITY & SAFETY ==================== */}
+        { }
         {activeTab === 'security' && (
           <div className="space-y-6">
             <div className="p-4 rounded-xl border border-emerald-400/20 bg-emerald-400/5">
@@ -481,7 +479,7 @@ export default function LegalTrustModal({ initialTab, isEmbedded = false }: Lega
 
       </div>
 
-      {/* Footer */}
+      { }
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-6 py-4 border-t border-white/10 bg-black/60">
         <div className="flex items-center gap-2 text-xs font-mono text-gray-400">
           <CheckCircle2 className="w-4 h-4 text-cyber-cyan" />
@@ -516,7 +514,7 @@ export default function LegalTrustModal({ initialTab, isEmbedded = false }: Lega
             className="fixed inset-0 bg-black/80 backdrop-blur-md"
           />
 
-          {/* Modal Container */}
+          { }
           <motion.div
             initial={{ scale: 0.95, opacity: 0, y: 20 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}

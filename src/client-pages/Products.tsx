@@ -275,7 +275,7 @@ export default function ProductsClient() {
                 <div className="absolute top-0 right-0 w-8 h-8 border-t border-r border-white/10 group-hover:border-cyber-cyan/50 transition-colors pointer-events-none" />
                 <div className="absolute bottom-0 left-0 w-8 h-8 border-b border-l border-white/10 group-hover:border-cyber-cyan/50 transition-colors pointer-events-none" />
 
-                {/* Coming Soon Corner Ribbon */}
+                { }
                 {product.isComingSoon && (
                   <div className="absolute top-7 -right-12 rotate-45 bg-gradient-to-r from-amber-500 via-rose-500 to-purple-600 text-white font-mono text-[9px] font-black tracking-widest py-1 px-14 shadow-[0_0_25px_rgba(244,63,94,0.5)] z-20 uppercase text-center border-y border-white/20 select-none">
                     Coming Soon
@@ -321,7 +321,7 @@ export default function ProductsClient() {
                     {product.tagline}
                   </p>
 
-                  {/* Prominent Coming Soon Banner for QuVouch */}
+                  { }
                   {product.isComingSoon && (
                     <div className="mb-4 py-2 px-3.5 rounded-xl bg-gradient-to-r from-amber-500/15 via-rose-500/15 to-cyber-cyan/15 border border-amber-500/40 flex items-center justify-between shadow-[0_0_20px_rgba(245,158,11,0.15)]">
                       <div className="flex items-center gap-2">
@@ -390,11 +390,10 @@ export default function ProductsClient() {
 
                   <button
                     onClick={() => handleContactNav(product.isComingSoon ? `${product.name} (Early Access Waitlist)` : product.name)}
-                    className={`w-full py-3 px-4 rounded-xl border text-white text-xs font-mono font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer group/btn ${
-                      product.isComingSoon
+                    className={`w-full py-3 px-4 rounded-xl border text-white text-xs font-mono font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer group/btn ${product.isComingSoon
                         ? 'bg-gradient-to-r from-amber-500/20 via-rose-500/20 to-cyber-purple/20 hover:from-amber-500/30 hover:to-rose-500/30 border-amber-500/40 hover:border-amber-400 text-amber-200 shadow-[0_0_20px_rgba(245,158,11,0.2)]'
                         : 'bg-white/5 hover:bg-cyber-cyan/20 border-white/10 hover:border-cyber-cyan'
-                    }`}
+                      }`}
                   >
                     <span>{product.isComingSoon ? 'Join Early Access Waitlist' : 'Request Demo & Quote'}</span>
                     <ArrowRight className="w-3.5 h-3.5 text-cyber-cyan group-hover/btn:translate-x-1 transition-transform" />
