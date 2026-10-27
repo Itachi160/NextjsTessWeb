@@ -5,7 +5,7 @@ import MagneticButton from '../../../components/MagneticButton';
 import ScrollReveal from '../../../components/ScrollReveal';
 
 const OFFICES = [
-  { name: 'Headquarters (Baramati / Pune)', address: 'Ozarde Estate, TC College Road, Baramati, Pune 413102', phone: '+91 9588666866', tz: 'IST' },
+  { name: 'Headquarters (Baramati / Pune)', address: '1st Floor, Omkar Commercial Building, TC College Rd, above Durga Cafe, Avdhut Nagar, Baramati, Pune, Maharashtra 413102', phone: '+91 9588666866', tz: 'IST' },
   { name: 'Pune Tech Corridor', address: 'Baner-Balewadi High St, Pune, Maharashtra 411045', phone: '+91 9588666866', tz: 'IST' },
   { name: 'Enterprise Client Pod', address: 'Direct Global & Remote Delivery Pods', phone: '+91 9588666866', tz: 'IST / UTC' },
 ];
@@ -138,7 +138,7 @@ export default function ContactSection() {
             Get in <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyber-cyan to-cyber-purple">Touch</span>
           </h3>
           <p className="text-gray-400 text-sm mt-4 max-w-lg mx-auto">
-            Have a project or partnership in mind? Connect with our engineering directors at our India headquarters.
+            Have a project or partnership in mind? Connect with our engineering team at our India headquarters.
           </p>
         </ScrollReveal>
 

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MapPin, Clock, Briefcase, GraduationCap, ArrowUpRight } from 'lucide-react';
 import { useUIStore } from '../../../store/uiStore';
@@ -23,37 +24,37 @@ export default function CareersSection() {
       id: 1,
       title: 'Senior Software Engineer (Java / AWS)',
       type: 'Engineering',
-      location: 'New York (Hybrid)',
+      location: 'Pune (Hybrid)',
       schedule: 'Full-time',
       skills: ['Java', 'Spring Boot', 'AWS', 'Kubernetes'],
       desc: 'Build transaction processing systems and multi-threaded JVM microservices handling millions of users.'
     },
     {
       id: 2,
-      title: 'Cloud Infrastructure Architect',
-      type: 'Engineering',
-      location: 'Singapore (On-site)',
-      schedule: 'Full-time',
-      skills: ['Kubernetes', 'Docker', 'Terraform', 'Azure'],
-      desc: 'Design fault-tolerant container orchestration patterns, load balancers, and multi-tenant clusters.'
+      title: 'AI ML Intern',
+      type: 'Internship',
+      location: 'Baramati (On-site)',
+      schedule: '6 Months',
+      skills: ['Python', 'PyTorch', 'TensorFlow', 'Scikit-Learn'],
+      desc: 'Build and train neural networks, evaluate machine learning models, and integrate intelligent automation pipelines.'
     },
     {
       id: 3,
       title: 'Deep Learning Intern (NLP)',
       type: 'Internship',
-      location: 'London (Remote)',
+      location: 'Pune (Remote)',
       schedule: '6 Months (Paid)',
       skills: ['Python', 'PyTorch', 'Hugging Face', 'Docker'],
       desc: 'Work directly inside our ML lab training model graphs and deploying transformer pipelines into apps.'
     },
     {
       id: 4,
-      title: 'Graduate Cloud Developer Training',
+      title: 'Full Stack Developer Training',
       type: 'Internship',
-      location: 'Tokyo (Hybrid)',
-      schedule: '1 Year Program',
-      skills: ['React', 'Node.js', 'PostgreSQL', 'Redis'],
-      desc: 'Fast-track graduate mentorship covering database configurations, UI systems, and CI deployment paths.'
+      location: 'Baramati (Hybrid)',
+      schedule: '1 Year',
+      skills: ['React', 'Next.js', 'Node.js', 'PostgreSQL'],
+      desc: 'Fast-track graduate mentorship covering modern full stack architectures, reactive UI systems, and backend APIs.'
     }
   ];
 
@@ -138,10 +139,13 @@ export default function CareersSection() {
                     </span>
                   ))}
                 </div>
-                <div className="flex items-center gap-1 text-xs font-bold text-cyber-cyan opacity-80 group-hover:opacity-100 transition-opacity">
+                <Link
+                  href="/careers"
+                  className="flex items-center gap-1 text-xs font-bold text-cyber-cyan opacity-80 group-hover:opacity-100 transition-opacity hover:underline"
+                >
                   Apply Now
                   <ArrowUpRight className="w-4 h-4" />
-                </div>
+                </Link>
               </div>
             </motion.div>
           ))}

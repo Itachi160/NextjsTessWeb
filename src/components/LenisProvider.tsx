@@ -6,13 +6,14 @@ import { ReactLenis, useLenis } from 'lenis/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 const LENIS_OPTIONS = {
-  duration: 1.2,
+  duration: 1.0,
   easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
   orientation: 'vertical' as const,
   gestureOrientation: 'vertical' as const,
   smoothWheel: true,
   syncTouch: false,
-  touchMultiplier: 1.5,
+  touchMultiplier: 1.2,
+  wheelMultiplier: 0.9,
 };
 
 function LenisScrollTriggerSync() {

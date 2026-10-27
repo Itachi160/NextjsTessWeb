@@ -6,10 +6,19 @@ import { useUIStore } from '../store/uiStore';
 export default function About() {
   const setCursorType = useUIStore((state) => state.setCursorType);
 
-  const board = [
-    { name: 'Dr. Alistair Vance', role: 'Chief Executive Officer', bio: 'Former Principal Architect at AWS and Distributed Systems researcher.' },
-    { name: 'Marcus Sterling', role: 'Head of Software Systems', bio: 'Vetted database systems lead with 15+ years managing scale infrastructure.' },
-    { name: 'Dr. Julia Feng', role: 'Director of AI Systems', bio: 'PhD in Machine Learning and neural graph optimizer designer.' }
+  const capabilities = [
+    {
+      title: 'Cloud Infrastructure & DevOps',
+      desc: 'Automated Kubernetes clusters, zero-downtime rolling updates, and resilient multi-region infrastructure as code.'
+    },
+    {
+      title: 'High-Concurrency Backends',
+      desc: 'Clean architecture microservices, event-driven streaming with Kafka & Redis, and high-throughput transactional databases.'
+    },
+    {
+      title: 'AI & Intelligent Systems',
+      desc: 'End-to-end automated pipelines, neural classification models, and private retrieval-augmented generation architectures.'
+    }
   ];
 
   return (
@@ -64,21 +73,20 @@ export default function About() {
       </div>
 
       <div>
-        <h2 className="text-2xl font-black mb-8 text-glow-cyan text-cyber-cyan">Engineering Leadership</h2>
+        <h2 className="text-2xl font-black mb-8 text-glow-cyan text-cyber-cyan">Core Engineering Pillars</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {board.map((member) => (
+          {capabilities.map((cap) => (
             <div
-              key={member.name}
+              key={cap.title}
               onMouseEnter={() => setCursorType('hover')}
               onMouseLeave={() => setCursorType('default')}
               className="glass-card p-6 rounded-2xl border border-white/5"
             >
               <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-cyber-cyan mb-4">
-                <Users className="w-5 h-5" />
+                <Code2 className="w-5 h-5" />
               </div>
-              <h4 className="text-white font-extrabold text-base">{member.name}</h4>
-              <span className="text-cyber-purple text-[10px] font-mono uppercase font-bold block mt-1">{member.role}</span>
-              <p className="text-gray-400 text-xs mt-3 leading-relaxed">{member.bio}</p>
+              <h4 className="text-white font-extrabold text-base">{cap.title}</h4>
+              <p className="text-gray-400 text-xs mt-3 leading-relaxed">{cap.desc}</p>
             </div>
           ))}
         </div>

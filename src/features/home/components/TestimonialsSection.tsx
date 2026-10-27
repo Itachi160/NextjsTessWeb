@@ -7,7 +7,6 @@ import ScrollReveal from '../../../components/ScrollReveal';
 interface Testimonial {
   id: number;
   name: string;
-  role: string;
   company: string;
   quote: string;
   border: string;
@@ -21,28 +20,25 @@ export default function TestimonialsSection() {
   const testimonials: Testimonial[] = [
     {
       id: 1,
-      name: 'Jioji Green India pvt ltd',
-      role: 'Director',
-      company: 'Fintech Global LLC',
-      quote: 'Tesseract Infosystems re-engineered our core payment systems from a legacy server base to a distributed Kubernetes stack. Their DevOps audit saved us 35% in active cloud hosting costs while improving system latencies under load.',
+      name: 'Mr. Shaha',
+      company: 'Jioji Green India Pvt Ltd',
+      quote: 'Tesseract Infosystems re-engineered our operational platforms and backend architectures. Their automated deployment pipelines reduced latency and saved us significant cloud hosting overhead while keeping our systems resilient under high load.',
       border: 'border-cyber-blue/30',
       shadow: 'shadow-blue-500/10',
     },
     {
       id: 2,
-      name: 'Anuarc Sales & Services',
-      role: 'Director',
-      company: 'LogiSmart Automations',
-      quote: 'The AI computer vision systems delivered by their deep tech team enabled our warehouse robots to coordinate packing speeds automatically. A flawless integration that showcased exceptional engineering capability.',
+      name: 'Aniruddha',
+      company: 'Anuarc Sales & Services',
+      quote: 'The automation and inventory systems delivered by their engineering team streamlined our daily operations and customer fulfillment workflows. A smooth rollout that demonstrated exceptional technical competence.',
       border: 'border-cyber-cyan/30',
       shadow: 'shadow-cyan-500/10',
     },
     {
       id: 3,
-      name: 'Auto Car Care',
-      role: 'CEO',
-      company: 'MedCore Health Platforms',
-      quote: 'Their security design is state-of-the-art. They designed our HIPAA-compliant database matrices and microservice channels, allowing safe patient state records access across 12 countries with zero leaks.',
+      name: 'Arjun',
+      company: 'Auto Car Care',
+      quote: 'The workshop management and digital job-card systems developed by Tesseract transformed our garage workflow. Tracking parts, mechanic productivity, and customer invoicing is now completely seamless.',
       border: 'border-cyber-purple/30',
       shadow: 'shadow-purple-500/10',
     },
@@ -98,7 +94,7 @@ export default function TestimonialsSection() {
                   <div className="flex justify-between items-center mt-4 pt-6 border-t border-white/5 relative z-10">
                     <div>
                       <h4 className="text-white font-extrabold text-sm md:text-base">{item.name}</h4>
-                      <p className="text-gray-500 text-xs mt-0.5">{item.role} — <span className="text-cyber-cyan">{item.company}</span></p>
+                      <p className="text-cyber-cyan text-xs mt-0.5 font-bold font-mono">{item.company}</p>
                     </div>
                   </div>
                 </motion.div>

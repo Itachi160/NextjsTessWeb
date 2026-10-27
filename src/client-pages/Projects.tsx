@@ -33,7 +33,7 @@ export default function Projects() {
       id: 1,
       title: 'Hyperscale Cloud Platform',
       category: 'Cloud',
-      desc: 'Orchestrating multi-region hybrid Kubernetes clusters on AWS and Azure, processing 150M+ requests per day with 99.999% uptime.',
+      desc: 'Orchestrating multi-region hybrid Kubernetes clusters on AWS and Azure with automated failover and 99.9% uptime architecture.',
       icon: Globe,
       tech: ['AWS', 'Kubernetes', 'Docker', 'Terraform'],
       gradient: 'from-blue-600/35 via-cyan-500/10 to-transparent',
@@ -66,9 +66,9 @@ export default function Projects() {
       tech: ['Java', 'Spring Boot', 'PostgreSQL', 'Docker'],
       gradient: 'from-green-600/35 via-emerald-500/10 to-transparent',
       caseStudy: {
-        problem: 'A FinTech corporation required SOC 2 Type II validation and robust database isolation models to secure transaction data against unauthorized access.',
+        problem: 'A FinTech corporation required zero-trust security standards and robust database isolation models to secure transaction data against unauthorized access.',
         solution: 'We engineered a hardware key (FIDO2) identity access gateway, coupled with cell-level database encryption and isolated microservices.',
-        metrics: ['100% compliance with SOC 2 policies', 'Zero breach records in stress audits', 'Authorized access log syncing under 1s'],
+        metrics: ['100% compliance with zero-trust policies', 'Zero breach records in stress audits', 'Authorized access log syncing under 1s'],
       }
     },
     {

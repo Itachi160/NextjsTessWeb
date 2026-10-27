@@ -553,6 +553,7 @@ function TrackSlide({ progress, track, index }: TrackSlideProps) {
           willChange: 'transform, opacity'
         }}
       >
+        {/* Card Header Ambient Laser Line */}
         <div
           className="absolute top-0 left-0 right-0 h-[2px] pointer-events-none"
           style={{ background: `linear-gradient(90deg, transparent 0%, ${track.hexColor} 50%, transparent 100%)` }}
@@ -997,10 +998,10 @@ export default function CyberneticGalaxy() {
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start end", "end end"]
+    offset: ["start start", "end end"]
   });
 
-  const progress = useTransform(scrollYProgress, [0.10, 0.90], [0, 1]);
+  const progress = useTransform(scrollYProgress, [0.03, 0.92], [0, 1]);
 
   const coreScale = useTransform(progress, [0.0, 0.25], [0, 1]);
   const coreOpacity = useTransform(progress, [0.0, 0.25], [0, 1]);
@@ -1023,7 +1024,7 @@ export default function CyberneticGalaxy() {
     <section
       ref={containerRef}
       id="career-pathway"
-      className="relative h-[800vh] md:h-[600vh] lg:h-[550vh] w-full bg-transparent text-white"
+      className="relative h-[950vh] md:h-[900vh] lg:h-[850vh] w-full bg-transparent text-white"
     >
 
       <div className="sticky top-0 h-screen w-full overflow-hidden z-20">

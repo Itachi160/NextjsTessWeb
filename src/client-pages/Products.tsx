@@ -90,7 +90,7 @@ const PRODUCTS: ProductItem[] = [
     ],
     specs: [
       { label: 'Architecture', value: 'Multi-Tenant' },
-      { label: 'Audit Compliance', value: 'SOC 2 Type II' },
+      { label: 'Access Control', value: 'Granular RBAC' },
       { label: 'Latency', value: '< 3ms Shards' },
     ],
   },
@@ -117,7 +117,7 @@ const PRODUCTS: ProductItem[] = [
     specs: [
       { label: 'Platform Mode', value: 'Private Beta' },
       { label: 'Architecture', value: 'Cloud-Native' },
-      { label: 'Security', value: 'SOC 2 & OAuth' },
+      { label: 'Security', value: 'OAuth 2.0 & TLS 1.3' },
     ],
   },
   {
@@ -236,7 +236,7 @@ export default function ProductsClient() {
             Engineered <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyber-cyan via-white to-cyber-purple">Products</span>
           </h1>
           <p className="text-gray-400 text-sm md:text-base mt-4 leading-relaxed">
-            Scalable, battle-tested software suites built by Tesseract InfoSystems. From workshop automation and enterprise ERPs to Google-verified review engines and hospitality cores.
+            Scalable, battle-tested software suites built by Tesseract InfoSystems. From workshop automation and enterprise ERPs to reputation SaaS platforms and hospitality cores.
           </p>
         </ScrollReveal>
 

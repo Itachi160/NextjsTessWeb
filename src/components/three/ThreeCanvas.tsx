@@ -26,7 +26,7 @@ export default function ThreeCanvas() {
     <div className="fixed inset-0 w-full h-full pointer-events-none z-0">
       <Canvas
         camera={{ position: [0, 0, 5], fov: 60 }}
-        gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
+        gl={{ antialias: false, alpha: true, powerPreference: 'high-performance', depth: false, stencil: false }}
         dpr={dpr}
         style={{ background: 'transparent' }}
       >

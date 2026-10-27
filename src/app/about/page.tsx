@@ -1,15 +1,15 @@
 import type { Metadata } from 'next';
 import AboutClient from '../../client-pages/About';
-import { getBreadcrumbSchema, getLeadershipSchema } from '../../lib/seoSchemas';
+import { getBreadcrumbSchema } from '../../lib/seoSchemas';
 
 export const metadata: Metadata = {
-  title: 'Engineering Ethos & Executive Leadership',
+  title: 'About Us & Core Engineering Ethos',
   description: 'Learn about Tesseract Infosystems, our core engineering philosophy, custom software platforms, cloud-native architectures, and robust enterprise engineering standards.',
   alternates: {
     canonical: 'https://tesseractinfosystems.com/about',
   },
   openGraph: {
-    title: 'Engineering Ethos & Executive Leadership | Tesseract Infosystems',
+    title: 'About Us & Core Engineering Ethos | Tesseract Infosystems',
     description: 'Learn about Tesseract Infosystems, our core engineering philosophy, custom software platforms, cloud-native architectures, and robust enterprise engineering standards.',
     url: 'https://tesseractinfosystems.com/about',
     siteName: 'Tesseract Infosystems',
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Engineering Ethos & Executive Leadership | Tesseract Infosystems',
+    title: 'About Us & Core Engineering Ethos | Tesseract Infosystems',
     description: 'Learn about Tesseract Infosystems, our core engineering philosophy, custom software platforms, cloud-native architectures, and robust enterprise engineering standards.',
     images: ['/Logo%20Hd.png'],
   },
@@ -29,17 +29,12 @@ export default function Page() {
     { name: 'Home', item: '/' },
     { name: 'About', item: '/about' },
   ]);
-  const leadership = getLeadershipSchema();
 
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(leadership) }}
       />
       <AboutClient />
     </>

@@ -22,9 +22,10 @@ export default function Careers() {
   ];
 
   const jobs = [
-    { id: 'JVM-SE', title: 'Senior Software Engineer (Java / AWS)', loc: 'Baramati (Hybrid)', sal: '₹12L - ₹18L P.A.' },
-    { id: 'CLD-ARCH', title: 'Cloud Infrastructure Architect', loc: 'Pune (On-site)', sal: '₹15L - ₹24L P.A.' },
-    { id: 'AI-INT', title: 'Deep Learning Intern (AI Models)', loc: 'Baramati (Remote)', sal: 'Paid Internship' }
+    { id: 'JVM-SE', title: 'Senior Software Engineer (Java / AWS)', loc: 'Pune (Hybrid)', sal: '₹12L - ₹18L P.A.' },
+    { id: 'AIML-INT', title: 'AI ML Intern', loc: 'Baramati (On-site)', sal: '6 Months (Paid)' },
+    { id: 'DL-INT', title: 'Deep Learning Intern (NLP)', loc: 'Pune (Remote)', sal: '6 Months (Paid)' },
+    { id: 'FS-TRN', title: 'Full Stack Developer Training', loc: 'Baramati (Hybrid)', sal: '1 Year Program' }
   ];
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -74,7 +75,7 @@ export default function Careers() {
 
         <div className="lg:col-span-5 flex flex-col gap-4">
           <div className="flex items-center justify-between border-b border-white/5 pb-2">
-            <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest">// ACTIVE_CORES</h2>
+            <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest"></h2>
             <span className="text-[10px] text-cyber-cyan">SELECT CORE</span>
           </div>
 
@@ -88,8 +89,8 @@ export default function Careers() {
                   onMouseEnter={() => setCursorType('hover')}
                   onMouseLeave={() => setCursorType('default')}
                   className={`relative p-4 rounded-xl border transition-all duration-300 cursor-pointer ${isSelected
-                      ? 'border-cyber-cyan bg-cyber-cyan/[0.02] shadow-[0_0_15px_rgba(6,182,212,0.1)]'
-                      : 'border-white/5 bg-white/[0.01] hover:border-white/10 hover:bg-white/[0.02]'
+                    ? 'border-cyber-cyan bg-cyber-cyan/[0.02] shadow-[0_0_15px_rgba(6,182,212,0.1)]'
+                    : 'border-white/5 bg-white/[0.01] hover:border-white/10 hover:bg-white/[0.02]'
                     }`}
                 >
                   <div className="flex justify-between items-start gap-4">
@@ -163,7 +164,7 @@ export default function Careers() {
                             type="text"
                             value={candName}
                             onChange={(e) => setCandName(e.target.value)}
-                            placeholder="John Doe"
+                            placeholder="Aarav Shah"
                             className="bg-white/[0.02] border border-white/10 rounded-lg px-3 py-2 text-xs text-white placeholder-gray-700 focus:outline-none focus:border-cyber-cyan/50 focus:shadow-[0_0_8px_rgba(6,182,212,0.1)] transition-all"
                           />
                         </div>
@@ -174,7 +175,7 @@ export default function Careers() {
                             type="email"
                             value={candEmail}
                             onChange={(e) => setCandEmail(e.target.value)}
-                            placeholder="john@email.com"
+                            placeholder="[EMAIL_ADDRESS]"
                             className="bg-white/[0.02] border border-white/10 rounded-lg px-3 py-2 text-xs text-white placeholder-gray-700 focus:outline-none focus:border-cyber-cyan/50 focus:shadow-[0_0_8px_rgba(6,182,212,0.1)] transition-all"
                           />
                         </div>

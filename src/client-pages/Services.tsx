@@ -9,7 +9,6 @@ import { useRouter } from 'next/navigation';
 interface ServiceItem {
   id: 'software' | 'cloud' | 'ai' | 'automation' | 'marketing' | 'staffing';
   title: string;
-  layer: string;
   icon: any;
   techs: string[];
   details: string;
@@ -20,7 +19,6 @@ const SERVICES_DATA: ServiceItem[] = [
   {
     id: 'software',
     title: 'Custom Software Systems',
-    layer: 'LAYER_01 // SOFTWARE CORE',
     icon: Code2,
     techs: ['Java', 'Spring Boot', 'Node.js', 'Go'],
     details: 'Creating modular service interfaces, high-concurrency backends, and custom integrations configured under strict SOLID rules.',
@@ -33,7 +31,6 @@ const SERVICES_DATA: ServiceItem[] = [
   {
     id: 'cloud',
     title: 'Hyperscale Cloud Deployments',
-    layer: 'LAYER_02 // CLOUD FABRIC',
     icon: Cloud,
     techs: ['AWS', 'Kubernetes', 'Terraform', 'Istio'],
     details: 'Designing failover cluster topologies, hybrid networks, IAM authorization parameters, and automatic telemetry dashboards.',
@@ -46,7 +43,6 @@ const SERVICES_DATA: ServiceItem[] = [
   {
     id: 'ai',
     title: 'AI & Data Orchestrations',
-    layer: 'LAYER_03 // NEURAL INTELLIGENCE',
     icon: Cpu,
     techs: ['Python', 'PyTorch', 'Kafka', 'PostgreSQL'],
     details: 'Compiling real-time data buffers, deploying LLMs inside application flows, training analysis charts, and structuring ETL queues.',
@@ -59,7 +55,6 @@ const SERVICES_DATA: ServiceItem[] = [
   {
     id: 'automation',
     title: 'AI & Automation Solutions',
-    layer: 'LAYER_04 // INTELLIGENT AUTOMATION',
     icon: Bot,
     techs: ['Python', 'LangChain', 'OpenAI', 'RPA'],
     details: 'Automating end-to-end business workflows, building autonomous AI agents, and eliminating repetitive operational tasks.',
@@ -72,7 +67,6 @@ const SERVICES_DATA: ServiceItem[] = [
   {
     id: 'marketing',
     title: 'Digital Marketing',
-    layer: 'LAYER_05 // GROWTH & ANALYTICS',
     icon: TrendingUp,
     techs: ['SEO', 'PPC', 'Google Ads', 'Analytics'],
     details: 'Executing data-driven SEO, high-ROI PPC campaigns, social media growth, and content strategies that scale user acquisition.',
@@ -85,7 +79,6 @@ const SERVICES_DATA: ServiceItem[] = [
   {
     id: 'staffing',
     title: 'IT Staffing Solutions',
-    layer: 'LAYER_06 // HUMAN CAPITAL',
     icon: Users,
     techs: ['Staff Augmentation', 'Dedicated Pods', 'Direct Hire'],
     details: 'Connecting your company with top-tier software engineers, cloud architects, and dedicated tech teams on-demand.',
@@ -198,8 +191,7 @@ export default function Services() {
                     <NodeIcon className="w-4 h-4" />
                   </div>
                   <div>
-                    <span className="text-[8px] text-gray-500 uppercase font-mono block">{s.layer}</span>
-                    <span className="text-xs md:text-sm font-bold text-white block mt-0.5">{s.title}</span>
+                    <h3 className="text-sm md:text-base font-bold text-white block">{s.title}</h3>
                   </div>
                 </div>
                 <p className="text-gray-300 text-xs leading-relaxed font-sans font-normal">
@@ -307,7 +299,7 @@ export default function Services() {
                     : 'bg-white/5 border-white/5 text-gray-400'
                     }`}
                 >
-                  SOC 2 / HIPAA Core
+                  Enterprise Zero-Trust
                 </button>
               </div>
             </div>

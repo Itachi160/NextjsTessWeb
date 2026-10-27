@@ -18,8 +18,8 @@ export function getOrganizationSchema() {
     foundingDate: '2021',
     address: {
       '@type': 'PostalAddress',
-      streetAddress: 'Ozarde Estate, TC College Road',
-      addressLocality: 'Baramati',
+      streetAddress: '1st Floor, Omkar Commercial Building, TC College Rd, above Durga Cafe, Avdhut Nagar',
+      addressLocality: 'Baramati, Pune',
       addressRegion: 'Maharashtra',
       postalCode: '413102',
       addressCountry: 'IN',
@@ -60,7 +60,7 @@ export function getLocalBusinessSchema() {
     priceRange: '₹5 Lakhs - ₹40+ Lakhs',
     address: {
       '@type': 'PostalAddress',
-      streetAddress: 'Ozarde Estate, TC College Road',
+      streetAddress: '1st Floor, Omkar Commercial Building, TC College Rd, above Durga Cafe, Avdhut Nagar',
       addressLocality: 'Baramati, Pune',
       addressRegion: 'Maharashtra',
       postalCode: '413102',
@@ -289,7 +289,7 @@ export function getJobPostingsSchema() {
         '@type': 'Place',
         address: {
           '@type': 'PostalAddress',
-          addressLocality: 'Baramati',
+          addressLocality: 'Pune',
           addressRegion: 'Maharashtra',
           addressCountry: 'IN',
         },
@@ -308,17 +308,44 @@ export function getJobPostingsSchema() {
     {
       '@context': 'https://schema.org',
       '@type': 'JobPosting',
-      title: 'Cloud Infrastructure Architect',
+      title: 'AI ML Intern',
       description:
-        'Architect multi-region Kubernetes clusters, Terraform Infrastructure as Code, and Istio service mesh networks at Tesseract InfoSystems.',
+        'Build neural network graphs, train machine learning models, and implement intelligent automation pipelines under senior AI researchers.',
       identifier: {
         '@type': 'PropertyValue',
         name: 'Tesseract InfoSystems',
-        value: 'CLD-ARCH',
+        value: 'AIML-INT',
       },
       datePosted: '2026-07-01',
       validThrough: '2026-12-31',
-      employmentType: 'FULL_TIME',
+      employmentType: 'INTERN',
+      hiringOrganization: {
+        '@id': `${BASE_URL}/#organization`,
+      },
+      jobLocation: {
+        '@type': 'Place',
+        address: {
+          '@type': 'PostalAddress',
+          addressLocality: 'Baramati',
+          addressRegion: 'Maharashtra',
+          addressCountry: 'IN',
+        },
+      },
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'JobPosting',
+      title: 'Deep Learning Intern (NLP)',
+      description:
+        'Train transformer model graphs, fine-tune LLMs, and structure vector stores alongside senior AI researchers.',
+      identifier: {
+        '@type': 'PropertyValue',
+        name: 'Tesseract InfoSystems',
+        value: 'DL-INT',
+      },
+      datePosted: '2026-07-01',
+      validThrough: '2026-12-31',
+      employmentType: 'INTERN',
       hiringOrganization: {
         '@id': `${BASE_URL}/#organization`,
       },
@@ -331,27 +358,17 @@ export function getJobPostingsSchema() {
           addressCountry: 'IN',
         },
       },
-      baseSalary: {
-        '@type': 'MonetaryAmount',
-        currency: 'INR',
-        value: {
-          '@type': 'QuantitativeValue',
-          minValue: 1500000,
-          maxValue: 2400000,
-          unitText: 'YEAR',
-        },
-      },
     },
     {
       '@context': 'https://schema.org',
       '@type': 'JobPosting',
-      title: 'Deep Learning Intern (AI Models)',
+      title: 'Full Stack Developer Training',
       description:
-        'Train neural network graphs, fine-tune LLMs, and structure vector stores alongside senior AI researchers.',
+        'Fast-track 1-year mentorship covering modern full stack architectures, reactive UI systems, and backend API engineering.',
       identifier: {
         '@type': 'PropertyValue',
         name: 'Tesseract InfoSystems',
-        value: 'AI-INT',
+        value: 'FS-TRN',
       },
       datePosted: '2026-07-01',
       validThrough: '2026-12-31',
@@ -372,40 +389,7 @@ export function getJobPostingsSchema() {
   ];
 }
 
-export function getLeadershipSchema() {
-  return [
-    {
-      '@context': 'https://schema.org',
-      '@type': 'Person',
-      name: 'Dr. Alistair Vance',
-      jobTitle: 'Chief Executive Officer (CEO)',
-      worksFor: {
-        '@id': `${BASE_URL}/#organization`,
-      },
-      description: 'Former Principal Architect at AWS and Distributed Systems researcher.',
-    },
-    {
-      '@context': 'https://schema.org',
-      '@type': 'Person',
-      name: 'Marcus Sterling',
-      jobTitle: 'Head of Software Systems',
-      worksFor: {
-        '@id': `${BASE_URL}/#organization`,
-      },
-      description: 'Database systems lead with 15+ years managing scale infrastructure.',
-    },
-    {
-      '@context': 'https://schema.org',
-      '@type': 'Person',
-      name: 'Dr. Julia Feng',
-      jobTitle: 'Director of AI Systems',
-      worksFor: {
-        '@id': `${BASE_URL}/#organization`,
-      },
-      description: 'PhD in Machine Learning and neural graph optimizer designer.',
-    },
-  ];
-}
+
 
 export function getFAQSchema() {
   return {
@@ -470,9 +454,8 @@ export function getBlogPostSchema(post: {
     },
     image: post.coverImage.startsWith('http') ? post.coverImage : `${BASE_URL}${post.coverImage}`,
     author: {
-      '@type': 'Person',
+      '@type': 'Organization',
       name: post.author.name,
-      jobTitle: post.author.role,
     },
     publisher: {
       '@type': 'Organization',

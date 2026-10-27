@@ -19,7 +19,7 @@ export default function EcosystemSection() {
   });
 
   return (
-    <div ref={containerRef} className="relative z-30 h-[180vh] lg:h-[220vh] w-full bg-[#03050d]">
+    <div ref={containerRef} className="relative z-30 h-[300vh] lg:h-[350vh] w-full bg-[#03050d]">
 
       <section
         className="sticky top-0 z-30 h-screen w-full flex flex-col justify-center overflow-hidden bg-[#03050d] pt-24 pb-8 px-4 sm:px-6 isolate transform-gpu"

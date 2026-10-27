@@ -51,21 +51,14 @@ export default function LegalTrustModal({ initialTab, isEmbedded = false }: Lega
   }, [initialTab]);
 
   useEffect(() => {
-    if (!isEmbedded) {
-      if (legalModalOpen) {
-        document.body.style.overflow = 'hidden';
-        lenis?.stop();
-      } else {
-        document.body.style.overflow = 'auto';
+    if (!isEmbedded && legalModalOpen) {
+      document.body.style.overflow = 'hidden';
+      lenis?.stop();
+      return () => {
+        document.body.style.overflow = '';
         lenis?.start();
-      }
+      };
     }
-    return () => {
-      if (!isEmbedded) {
-        document.body.style.overflow = 'auto';
-        lenis?.start();
-      }
-    };
   }, [legalModalOpen, isEmbedded, lenis]);
 
   const handleTabChange = (tab: 'privacy' | 'terms' | 'cookies' | 'security') => {
@@ -223,7 +216,7 @@ export default function LegalTrustModal({ initialTab, isEmbedded = false }: Lega
                 <Key className="w-4 h-4" /> 3. Data Confidentiality &amp; Access
               </h4>
               <p className="text-gray-300">
-                Access to client source code, databases, cloud keys, and assets is strictly restricted on a need-to-know basis to authorized Tesseract InfoSystems engineers and developers bound by strict non-disclosure agreements (NDAs) and SOC 2 Type II audit tracking.
+                Access to client source code, databases, cloud keys, and assets is strictly restricted on a need-to-know basis to authorized Tesseract InfoSystems engineers and developers bound by strict non-disclosure agreements (NDAs) and granular access audit logging.
               </p>
             </div>
 

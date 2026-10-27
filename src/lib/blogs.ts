@@ -33,8 +33,8 @@ export const BLOG_POSTS: BlogPost[] = [
     excerpt: 'An evidence-backed analysis of production AI architectures: how enterprise teams decouple reasoning from latency-sensitive inference using local SLMs, hybrid BM25 + HNSW vector RAG, and eBPF kernel security gateways.',
     category: 'Artificial Intelligence',
     author: {
-      name: 'Dr. Alok Verma',
-      role: 'Head of AI & Neural Systems',
+      name: 'Tesseract AI Research Pod',
+      role: 'Applied AI & Neural Systems Group',
       avatar: '/Logo%20Hd.png'
     },
     publishedAt: 'July 28, 2026',
@@ -120,7 +120,7 @@ Read-only actions (such as metrics querying or log analysis) proceed autonomousl
 
 <h2 id="zero-leakage-security">4. Kernel-Level PII Sanitization via eBPF Gateways</h2>
 
-To maintain SOC 2 Type II and HIPAA compliance, organizations increasingly inspect container egress sockets at the Linux kernel level.
+To maintain strict zero-trust data sovereignty and compliance, organizations increasingly inspect container egress sockets at the Linux kernel level.
 
 Using Extended Berkeley Packet Filters (eBPF), sidecar proxies intercept network buffers before they leave the container socket layer, dynamically replacing sensitive identifiers (Aadhaar/SSN numbers, credentials, patient IDs) with temporary token hashes.
 
@@ -167,8 +167,8 @@ Production AI in 2026 is defined by specialized hybrid architectures:
     excerpt: 'A transparent, specification-backed financial breakdown of custom software costs in Indian Rupees (INR), analyzing architectural complexity tiers, multi-tenancy overhead, database isolation, and cloud maintenance SLAs.',
     category: 'Tech Strategy & Costing',
     author: {
-      name: 'Rohan Deshmukh',
-      role: 'VP of Client Solutions & Delivery',
+      name: 'Tesseract Solutions Engineering',
+      role: 'Enterprise Systems & Pricing Architecture',
       avatar: '/Logo%20Hd.png'
     },
     publishedAt: 'July 26, 2026',
@@ -222,7 +222,7 @@ ARCHITECTURAL COMPARISON: TEMPLATE VS. ENTERPRISE SYSTEM
 | Project Tier & Category | Engineering Timeline | Investment Range (INR) | Capabilities & Scope |
 | :--- | :--- | :--- | :--- |
 | **Tier 1: High-Growth MVP** | 6 – 10 Weeks | **₹4.5 Lakhs – ₹12 Lakhs** | Core SaaS or portal, PostgreSQL database, OAuth 2.0, Stripe/Razorpay integration, CI/CD pipeline. |
-| **Tier 2: Commercial Business Platform** | 3 – 5 Months | **₹12 Lakhs – ₹28 Lakhs** | Multi-tenant SaaS, granular RBAC access controls, real-time WebSockets, custom analytics dashboard, SOC 2 ready. |
+| **Tier 2: Commercial Business Platform** | 3 – 5 Months | **₹12 Lakhs – ₹28 Lakhs** | Multi-tenant SaaS, granular RBAC access controls, real-time WebSockets, custom analytics dashboard, zero-trust ready. |
 | **Tier 3: Enterprise Cloud System** | 5 – 9 Months | **₹28 Lakhs – ₹75+ Lakhs** | Microservices or modular monolith, multi-region database failover, local AI integration, eBPF telemetry, 99.99% SLA. |
 
 ---
@@ -236,7 +236,7 @@ ENGINEERING EFFORT EXPANSION DRIVERS:
 1. Data Multi-Tenancy  -> Row Level Security vs. Schema-per-Tenant (+35% DB effort)
 2. Real-Time Streaming -> Redis Pub/Sub + WebSocket Connection Managers (+25% API effort)
 3. Legacy API Adapters  -> Reverse-Engineering SOAP/Enterprise Protocols (+40% Integration effort)
-4. Compliance Audits   -> HIPAA / SOC 2 Immutable WORM Logging & KMS Keys (+20% Total effort)
+4. Compliance Audits   -> Zero-Trust Immutable WORM Logging & KMS Keys (+20% Total effort)
 \`\`\`
 
 ---
@@ -290,8 +290,8 @@ To keep custom software projects strictly on budget:
     excerpt: 'An evidence-based comparison of pure React (Vite SPA) vs Next.js 15 App Router. Evaluating Core Web Vitals, React Server Components (RSC), hydration footprints, and architectural selection frameworks.',
     category: 'Web Development',
     author: {
-      name: 'Vikram Joshi',
-      role: 'Principal Frontend Architect',
+      name: 'Tesseract Frontend Pod',
+      role: 'UI Systems & Web Architecture Group',
       avatar: '/Logo%20Hd.png'
     },
     publishedAt: 'July 24, 2026',
@@ -407,8 +407,8 @@ Pure React (Vite + React Router) remains the cleaner, more efficient choice for:
     excerpt: 'An exhaustive engineering blueprint for building scalable multi-tenant SaaS platforms: multi-tenancy PostgreSQL models, Stripe billing state machines, zero-trust RBAC access controls, and zero-downtime CI/CD.',
     category: 'SaaS & Product Architecture',
     author: {
-      name: 'Karan Sharma',
-      role: 'Lead Cloud & Systems Architect',
+      name: 'Tesseract Cloud Infrastructure Pod',
+      role: 'Distributed Systems & DevOps Group',
       avatar: '/Logo%20Hd.png'
     },
     publishedAt: 'July 22, 2026',
@@ -533,8 +533,8 @@ Using blue-green traffic switching on AWS Application Load Balancers guarantees 
     excerpt: 'An objective architectural evaluation framework for technical leaders: comparing Node.js, Go, and Java Spring Boot, evaluating SQL vs. NoSQL, and applying 5 principles of long-term maintainability.',
     category: 'Software Engineering',
     author: {
-      name: 'Priya Nambiar',
-      role: 'Principal Software Architect',
+      name: 'Tesseract Software Architecture Pod',
+      role: 'Core Systems & Backend Group',
       avatar: '/Logo%20Hd.png'
     },
     publishedAt: 'July 20, 2026',
@@ -556,7 +556,7 @@ Using blue-green traffic switching on AWS Application Load Balancers guarantees 
       { id: 'conclusion', title: '5. The 5 Principles of Enterprise Stack Selection' }
     ],
     content: `
-Selecting a technology stack is one of the most consequential decisions an engineering director, CTO, or founder will make. Choosing battle-tested tools enables teams to ship rapidly, onboard engineers quickly, and scale seamlessly. Choosing tools driven by short-lived trends leads to costly technical debt refactoring.
+Selecting a technology stack is one of the most consequential decisions an engineering leader, CTO, or founder will make. Choosing battle-tested tools enables teams to ship rapidly, onboard engineers quickly, and scale seamlessly. Choosing tools driven by short-lived trends leads to costly technical debt refactoring.
 
 At Tesseract InfoSystems, we evaluate technology choices through a cold, pragmatic framework: **Talent Availability + Operational Maintainability + Compute Efficiency**.
 
@@ -642,8 +642,8 @@ Combined with **Next.js 15** or **React 19**, TypeScript provides end-to-end typ
     excerpt: 'Stop splitting your database too early. An authoritative paper detailing why leading engineering teams adopt Modular Monoliths over distributed microservices complexity.',
     category: 'Software Engineering',
     author: {
-      name: 'Priya Nambiar',
-      role: 'Principal Software Architect',
+      name: 'Tesseract Software Architecture Pod',
+      role: 'Core Systems & Backend Group',
       avatar: '/Logo%20Hd.png'
     },
     publishedAt: 'July 12, 2026',

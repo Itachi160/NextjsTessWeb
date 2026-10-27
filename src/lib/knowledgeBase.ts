@@ -22,20 +22,20 @@ Specialization: High-concurrency custom software engineering, hyperscale cloud p
     id: 'ethos-compliance',
     category: 'Engineering & Compliance',
     title: 'Engineering Ethos, Security & Accreditations',
-    keywords: ['ethos', 'security', 'compliance', 'soc2', 'hipaa', 'gdpr', 'aws', 'azure', 'partner', 'quality', 'testing', 'accreditations'],
+    keywords: ['ethos', 'security', 'compliance', 'zero-trust', 'gdpr', 'aws', 'azure', 'quality', 'testing'],
     content: `Engineering Ethos: We write strictly typed, compiled systems. We reject code shortcuts, enforcing 90%+ unit test coverage and automated vulnerability pipelines before any merge occurs.
 Security Standards: Built for modern enterprise demands. Zero-trust architectures, TLS 1.3 encryption, automated vulnerability testing, and strict data privacy practices.
 Core Competencies: Modern Cloud Native, Enterprise Security, High-Concurrency Systems, Strict Type Safety.`
   },
   {
-    id: 'leadership',
-    category: 'Leadership Team',
-    title: 'Engineering Leadership & Board',
-    keywords: ['ceo', 'leadership', 'team', 'founders', 'alistair', 'vance', 'marcus', 'sterling', 'julia', 'feng', 'who leads'],
-    content: `Executive Leadership:
-1. Dr. Alistair Vance — Chief Executive Officer (CEO). Former Principal Architect at AWS and Distributed Systems researcher.
-2. Marcus Sterling — Head of Software Systems. Vetted database systems lead with 15+ years managing scale infrastructure.
-3. Dr. Julia Feng — Director of AI Systems. PhD in Machine Learning and neural graph optimizer designer.`
+    id: 'engineering-pillars',
+    category: 'Engineering Architecture',
+    title: 'Core Engineering Pillars & Capabilities',
+    keywords: ['engineering', 'pillars', 'capabilities', 'architecture', 'infrastructure', 'systems', 'tech stack'],
+    content: `Core Engineering Pillars at Tesseract InfoSystems:
+1. Cloud Infrastructure & DevOps: Automated Kubernetes clusters, zero-downtime rolling updates, and resilient multi-region infrastructure as code.
+2. High-Concurrency Backends: Clean architecture microservices, event-driven streaming with Kafka & Redis, and high-throughput transactional databases.
+3. AI & Intelligent Systems: End-to-end automated pipelines, neural classification models, and private retrieval-augmented generation architectures.`
   },
   {
     id: 'service-software',
@@ -77,7 +77,7 @@ Tesseract InfoSystems features an Interactive Project Cost Estimator on the /ser
 Pricing starts from ₹5 Lakhs (INR) up to ₹40+ Lakhs depending on:
 1. Scope: Custom Software, Cloud-Native, or AI Integration.
 2. Scale: SME, Enterprise, or Hyperscale.
-3. Security/Compliance: Standard vs. SOC 2 / HIPAA Core.
+3. Security/Compliance: Standard vs. Enterprise Zero-Trust.
 For official custom architecture quotes, users can email info@tesseractinfosystems.com.`
   },
   {
@@ -98,9 +98,10 @@ For official custom architecture quotes, users can email info@tesseractinfosyste
     keywords: ['careers', 'jobs', 'hiring', 'work', 'openings', 'salary', 'internship', 'developer', 'engineer', 'architect', 'benefits', 'perks'],
     content: `Careers at Tesseract InfoSystems:
 Open Positions:
-1. Senior Software Engineer (Java / AWS) — Baramati (Hybrid) | Salary: ₹12L - ₹18L P.A.
-2. Cloud Infrastructure Architect — Pune (On-site) | Salary: ₹15L - ₹24L P.A.
-3. Deep Learning Intern (AI Models) — Baramati (Remote) | Paid Internship.
+1. Senior Software Engineer (Java / AWS) — Pune (Hybrid) | Salary: ₹12L - ₹18L P.A.
+2. AI ML Intern — Baramati (On-site) | Duration: 6 Months (Paid)
+3. Deep Learning Intern (NLP) — Pune (Remote) | Duration: 6 Months (Paid)
+4. Full Stack Developer Training — Baramati (Hybrid) | Duration: 1 Year Program
 
 Employee Perks & Benefits:
 - Flexible hybrid and remote schedules.
@@ -115,7 +116,7 @@ Employee Perks & Benefits:
     content: `Contact Tesseract InfoSystems:
 - Primary Email: info@tesseractinfosystems.com
 - Contact Phone: +91 9588666866
-- Main Offices: Baramati & Pune, Maharashtra, India.
+- Headquarters: 1st Floor, Omkar Commercial Building, TC College Rd, above Durga Cafe, Avdhut Nagar, Baramati, Pune, Maharashtra 413102.
 - Interactive Contact Page: /contact page features a project inquiry submission form and real-time telemetry logs.`
   }
 ];

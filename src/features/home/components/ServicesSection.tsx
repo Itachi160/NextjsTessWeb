@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { Cpu, Cloud, Code, Settings, Smartphone, Database, RefreshCw, Bot, TrendingUp, Users, ShieldCheck, BarChart3 } from 'lucide-react';
 import { useUIStore } from '../../../store/uiStore';
 import ScrollReveal from '../../../components/ScrollReveal';
@@ -15,6 +16,16 @@ interface ServiceItem {
 
 export default function ServicesSection() {
   const setCursorType = useUIStore((state) => state.setCursorType);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const services: ServiceItem[] = [
     { icon: Code, title: 'Custom Software Development', desc: 'Building bespoke, scalable, and ultra-reliable software tailored for specific company goals and operational flows.', hoverBorder: 'hover:border-blue-500/40', accent: 'group-hover:text-blue-400' },
@@ -27,20 +38,20 @@ export default function ServicesSection() {
     { icon: Code, title: 'Web Development', desc: 'Developing fast, secure, search-engine-optimized frontend platforms that offer premium, immersive interactions.', hoverBorder: 'hover:border-yellow-500/40', accent: 'group-hover:text-yellow-400' },
     { icon: Smartphone, title: 'Mobile Development', desc: 'Building native or cross-platform mobile apps for iOS and Android with offline-first synchronization.', hoverBorder: 'hover:border-orange-500/40', accent: 'group-hover:text-orange-400' },
     { icon: RefreshCw, title: 'Digital Transformation', desc: 'Migrating outdated legacy platforms to cloud-native stacks, boosting speeds, and modernizing workflows.', hoverBorder: 'hover:border-indigo-500/40', accent: 'group-hover:text-indigo-400' },
-    { icon: ShieldCheck, title: 'Cybersecurity & Zero Trust', desc: 'Deploying multi-layered network security, automated vulnerability auditing, eBPF telemetry, and SOC 2/HIPAA compliance.', hoverBorder: 'hover:border-red-500/40', accent: 'group-hover:text-red-400' },
+    { icon: ShieldCheck, title: 'Cybersecurity & Zero Trust', desc: 'Deploying multi-layered network security, automated vulnerability auditing, eBPF telemetry, and zero-trust data protection policies.', hoverBorder: 'hover:border-red-500/40', accent: 'group-hover:text-red-400' },
     { icon: BarChart3, title: 'Data & Analytics Engineering', desc: 'Structuring real-time data pipelines, high-throughput ETL buffers, vector search stores, and predictive analytics engines.', hoverBorder: 'hover:border-teal-500/40', accent: 'group-hover:text-teal-400' },
   ];
 
   return (
     <section id="services" className="relative py-20 md:py-24 px-4 sm:px-6 max-w-7xl mx-auto flex flex-col items-center overflow-hidden">
 
-      <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] rounded-full bg-cyber-cyan/5 blur-[120px] pointer-events-none transform-gpu" />
+      <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] rounded-full bg-cyber-cyan/5 blur-[120px] pointer-events-none" />
 
-      <ScrollReveal direction="up" scrub={false} className="text-center mb-12 md:mb-16">
+      <ScrollReveal direction="up" className="text-center mb-12 md:mb-16">
         <h2 className="text-xs uppercase font-mono tracking-widest text-cyber-cyan font-semibold mb-3">
           Our Capability Framework
         </h2>
-        <h3 className="text-3xl md:text-5xl font-black text-white">
+        <h3 className="text-3xl md:text-5xl font-black">
           Innovative Technology <br />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyber-cyan via-cyber-blue to-cyber-purple">
             Architectures & Engineering
@@ -51,22 +62,18 @@ export default function ServicesSection() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 w-full">
         {services.map((service, idx) => {
           const IconComp = service.icon;
+          const colIndex = idx % 4;
+
+          const revealProps = isMobile
+            ? { direction: 'up' as const, zDepth: 20, distance: 25, scrub: false, delay: (idx % 2) * 0.05, duration: 0.5 }
+            : { direction: 'up' as const, zDepth: 25, distance: 30, scrub: false, delay: colIndex * 0.08, duration: 0.6 };
 
           return (
-            <ScrollReveal
-              key={service.title}
-              direction="up"
-              distance={25}
-              duration={0.6}
-              delay={(idx % 4) * 0.06}
-              scrub={false}
-              scale
-            >
+            <ScrollReveal key={service.title} {...revealProps} scale>
               <div
                 onMouseEnter={() => setCursorType('hover')}
                 onMouseLeave={() => setCursorType('default')}
-                className={`glass-card p-5 sm:p-6 rounded-2xl border border-white/5 transition-all duration-300 ${service.hoverBorder} hover:shadow-[0_8px_30px_rgb(0,0,0,0.4)] flex flex-col gap-3.5 sm:gap-4 group h-full relative overflow-hidden bg-[#060a17]/80 transform-gpu`}
-                style={{ WebkitBackfaceVisibility: 'hidden', backfaceVisibility: 'hidden' }}
+                className={`glass-card p-5 sm:p-6 rounded-2xl border border-white/5 transition-all duration-300 ${service.hoverBorder} hover:shadow-[0_8px_30px_rgb(0,0,0,0.4)] flex flex-col gap-3.5 sm:gap-4 group h-full relative overflow-hidden bg-space-darkest/50 backdrop-blur-md`}
               >
                 {service.badge && (
                   <span className="absolute top-3 right-3 text-[9px] font-mono font-bold tracking-wider px-2 py-0.5 rounded-md bg-cyber-cyan/10 border border-cyber-cyan/30 text-cyber-cyan">
@@ -79,7 +86,7 @@ export default function ServicesSection() {
                 <h4 className="text-white text-base font-bold group-hover:text-cyber-cyan transition-colors pr-10">
                   {service.title}
                 </h4>
-                <p className="text-gray-400 text-xs leading-relaxed flex-grow font-sans">{service.desc}</p>
+                <p className="text-gray-400 text-xs leading-relaxed flex-grow">{service.desc}</p>
               </div>
             </ScrollReveal>
           );

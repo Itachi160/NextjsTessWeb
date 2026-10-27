@@ -22,8 +22,12 @@ export default function KeyboardAssemblySection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const isIntersectingRef = useRef(false);
-  const pendingProgressRef = useRef<number>(0);
-  const rafIdRef = useRef<number | null>(null);
+  const drawFrameRef = useRef<(latest: number) => void>(() => { });
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start start', 'end end'],
+  });
 
   const { totalFrames, isSlow } = useMemo(() => {
     const slow = isSlowConnection() || isLowEndDevice();
@@ -47,17 +51,17 @@ export default function KeyboardAssemblySection() {
       setIsTransitioning(false);
     }, 900);
   };
-
   const [imagesLoaded, setImagesLoaded] = useState(false);
-  const [, setLoadProgress] = useState(0);
+  const [loadProgress, setLoadProgress] = useState(0);
   const [imagesArray, setImagesArray] = useState<HTMLImageElement[]>([]);
-  const [shouldPreload] = useState(true);
+  const [shouldPreload, setShouldPreload] = useState(true);
 
   useEffect(() => {
     if (cachedImagesLoaded && cachedFrameCount === totalFrames) {
       setImagesLoaded(true);
       setLoadProgress(100);
       setImagesArray(cachedImages);
+      setShouldPreload(true);
     }
   }, [totalFrames]);
 
@@ -67,8 +71,10 @@ export default function KeyboardAssemblySection() {
 
     const animObserver = new IntersectionObserver(([entry]) => {
       isIntersectingRef.current = entry.isIntersecting;
-      if (entry.isIntersecting && rafIdRef.current === null) {
-        scheduleRender();
+      if (entry.isIntersecting) {
+        requestAnimationFrame(() => {
+          drawFrameRef.current(scrollYProgress.get());
+        });
       }
     }, { threshold: 0.01 });
 
@@ -77,7 +83,7 @@ export default function KeyboardAssemblySection() {
     return () => {
       animObserver.disconnect();
     };
-  }, []);
+  }, [scrollYProgress]);
 
   useEffect(() => {
     if (cachedImagesLoaded && cachedFrameCount === totalFrames) {
@@ -102,7 +108,7 @@ export default function KeyboardAssemblySection() {
       loadedCount++;
       const progress = Math.round((loadedCount / totalFrames) * 100);
 
-      if (progress % 10 === 0 || progress === 100) {
+      if (progress % 5 === 0 || progress === 100) {
         setLoadProgress(progress);
       }
 
@@ -119,11 +125,12 @@ export default function KeyboardAssemblySection() {
       }
     };
 
-    const initialBatchSize = 15;
+    const initialBatchSize = 12;
     for (let i = 0; i < Math.min(initialBatchSize, totalFrames); i++) {
       tempImages[i].src = getFramePath(i, isSlow);
       tempImages[i].onload = handleSingleLoad;
       tempImages[i].onerror = () => {
+        console.error(`Failed to load image frame at index: ${i}`);
         handleSingleLoad();
       };
     }
@@ -132,7 +139,7 @@ export default function KeyboardAssemblySection() {
       { length: totalFrames - initialBatchSize },
       (_, i) => i + initialBatchSize
     );
-    const concurrentLimit = 8;
+    const concurrentLimit = 6;
     let queueIndex = 0;
 
     const loadNext = () => {
@@ -146,6 +153,7 @@ export default function KeyboardAssemblySection() {
         loadNext();
       };
       img.onerror = () => {
+        console.error(`Failed to load image frame at index: ${currentIdx}`);
         handleSingleLoad();
         loadNext();
       };
@@ -158,156 +166,186 @@ export default function KeyboardAssemblySection() {
     return () => {
       isAborted = true;
     };
-  }, [shouldPreload, totalFrames, isSlow, imagesArray.length]);
+  }, [shouldPreload, totalFrames, isSlow]);
 
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start start', 'end end'],
-  });
 
-  const smoothScrollYProgress = useSpring(scrollYProgress, {
-    damping: 32,
-    stiffness: 95,
-    restDelta: 0.0001
-  });
+  useEffect(() => {
+    if (!imagesLoaded || imagesArray.length === 0) return;
 
-  const scheduleRender = () => {
-    if (rafIdRef.current !== null) return;
-    rafIdRef.current = requestAnimationFrame(() => {
-      rafIdRef.current = null;
-      renderCanvasFrame();
-    });
-  };
-
-  const renderCanvasFrame = () => {
-    if (!isIntersectingRef.current) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const imgs = imagesArray.length > 0 ? imagesArray : cachedImages;
-    if (imgs.length === 0) return;
-
-    const latest = pendingProgressRef.current;
-
-    const rawFrame = latest < 0.85
-      ? (latest / 0.85) * (totalFrames - 1)
-      : (totalFrames - 1);
-
-    const floatFrame = Math.min(totalFrames - 1, Math.max(0, rawFrame));
-    const frameIndex = Math.floor(floatFrame);
-    const nextFrameIndex = Math.min(totalFrames - 1, frameIndex + 1);
-    const ratio = floatFrame - frameIndex;
-
-    const img1 = imgs[frameIndex];
-    const img2 = imgs[nextFrameIndex];
-
-    if (img1 && img1.complete) {
-      const rect = canvas.getBoundingClientRect();
-      const dpr = Math.min(window.devicePixelRatio || 1, window.innerWidth < 768 ? 1.5 : 2.0);
-
-      const targetW = Math.round(rect.width * dpr);
-      const targetH = Math.round(rect.height * dpr);
-
-      if (canvas.width !== targetW || canvas.height !== targetH) {
-        canvas.width = targetW;
-        canvas.height = targetH;
-        ctx.setTransform(1, 0, 0, 1, 0, 0);
-        ctx.scale(dpr, dpr);
-        ctx.imageSmoothingEnabled = true;
-        ctx.imageSmoothingQuality = 'high';
-      }
-
-      const imgRatio = img1.width / img1.height;
-      const canvasRatio = rect.width / rect.height;
-
-      let drawW = rect.width;
-      let drawH = rect.height;
-      let drawX = 0;
-      let drawY = 0;
-
-      if (imgRatio > canvasRatio) {
-        drawW = rect.width;
-        drawH = rect.width / imgRatio;
-        drawY = (rect.height - drawH) / 2;
-      } else {
-        drawH = rect.height;
-        drawW = rect.height * imgRatio;
-        drawX = (rect.width - drawW) / 2;
-      }
-
-      ctx.clearRect(0, 0, rect.width, rect.height);
-      ctx.globalAlpha = 1.0;
-      ctx.drawImage(img1, drawX, drawY, drawW, drawH);
-
-      if (ratio > 0.04 && img2 && img2.complete && frameIndex !== nextFrameIndex) {
-        ctx.globalAlpha = ratio;
-        ctx.drawImage(img2, drawX, drawY, drawW, drawH);
-        ctx.globalAlpha = 1.0;
-      }
-    }
-  };
-
-  useEffect(() => {
-    const unsubscribe = smoothScrollYProgress.on('change', (latest) => {
-      pendingProgressRef.current = latest;
-      scheduleRender();
-    });
-
-    pendingProgressRef.current = smoothScrollYProgress.get();
-    scheduleRender();
+    let lastValue = -1;
+    let rect = canvas.getBoundingClientRect();
+    let cachedDpr = Math.min(window.devicePixelRatio || 1, window.innerWidth < 768 ? 1.5 : 2.0);
+    let smoothingSet = false;
+    let pendingProgress = -1;
+    let rafId: number | null = null;
 
     const handleResize = () => {
-      scheduleRender();
+      rect = canvas.getBoundingClientRect();
+      cachedDpr = Math.min(window.devicePixelRatio || 1, window.innerWidth < 768 ? 1.5 : 2.0);
+      smoothingSet = false;
+      if (pendingProgress >= 0) {
+        scheduleRender();
+      }
     };
     window.addEventListener('resize', handleResize, { passive: true });
+
+    const render = () => {
+      rafId = null;
+      if (pendingProgress < 0 || !isIntersectingRef.current) return;
+      const latest = pendingProgress;
+
+      const rawFrame = latest < 0.90
+        ? (latest / 0.90) * (totalFrames - 1)
+        : (totalFrames - 1);
+
+      const floatFrame = Math.min(totalFrames - 1, Math.max(0, rawFrame));
+      const frameIndex = Math.floor(floatFrame);
+      const nextFrameIndex = Math.min(totalFrames - 1, frameIndex + 1);
+      const ratio = floatFrame - frameIndex;
+
+      const img1 = imagesArray[frameIndex];
+      const img2 = imagesArray[nextFrameIndex];
+
+      if (img1 && img1.complete) {
+        if (!rect || rect.width === 0 || rect.height === 0) {
+          rect = canvas.getBoundingClientRect();
+          if ((rect.width === 0 || rect.height === 0) && canvas.parentElement) {
+            rect = canvas.parentElement.getBoundingClientRect();
+          }
+        }
+        if (!rect || rect.width === 0 || rect.height === 0) return;
+
+        const dpr = cachedDpr;
+
+        if (canvas.width !== rect.width * dpr || canvas.height !== rect.height * dpr) {
+          canvas.width = rect.width * dpr;
+          canvas.height = rect.height * dpr;
+          ctx.setTransform(1, 0, 0, 1, 0, 0);
+          ctx.scale(dpr, dpr);
+          smoothingSet = false;
+        }
+
+        if (!smoothingSet) {
+          ctx.imageSmoothingEnabled = true;
+          ctx.imageSmoothingQuality = 'high';
+          smoothingSet = true;
+        }
+
+        const imgRatio = img1.width / img1.height;
+        const canvasRatio = rect.width / rect.height;
+
+        let drawW = rect.width;
+        let drawH = rect.height;
+        let drawX = 0;
+        let drawY = 0;
+
+        if (imgRatio > canvasRatio) {
+          drawW = rect.width;
+          drawH = rect.width / imgRatio;
+          drawY = (rect.height - drawH) / 2;
+        } else {
+          drawH = rect.height;
+          drawW = rect.height * imgRatio;
+          drawX = (rect.width - drawW) / 2;
+        }
+
+        ctx.clearRect(0, 0, rect.width, rect.height);
+        ctx.globalAlpha = 1.0;
+        ctx.drawImage(img1, drawX, drawY, drawW, drawH);
+        if (ratio > 0.005 && img2 && img2.complete && frameIndex !== nextFrameIndex) {
+          ctx.globalAlpha = ratio;
+          ctx.drawImage(img2, drawX, drawY, drawW, drawH);
+          ctx.globalAlpha = 1.0;
+        }
+      }
+    };
+
+    const scheduleRender = () => {
+      if (rafId === null) {
+        rafId = requestAnimationFrame(render);
+      }
+    };
+
+    const drawFrame = (latest: number) => {
+      pendingProgress = latest;
+      scheduleRender();
+    };
+
+    drawFrameRef.current = drawFrame;
+    drawFrame(scrollYProgress.get());
+
+    const unsubscribe = scrollYProgress.on('change', (latest) => {
+      drawFrame(latest);
+    });
 
     return () => {
       unsubscribe();
       window.removeEventListener('resize', handleResize);
-      if (rafIdRef.current !== null) {
-        cancelAnimationFrame(rafIdRef.current);
-        rafIdRef.current = null;
-      }
+      if (rafId !== null) cancelAnimationFrame(rafId);
     };
-  }, [imagesLoaded, smoothScrollYProgress]);
+  }, [imagesLoaded, imagesArray, scrollYProgress, totalFrames]);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container || !imagesLoaded) return;
+
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        requestAnimationFrame(() => {
+          drawFrameRef.current(scrollYProgress.get());
+        });
+      }
+    }, { threshold: 0.01 });
+
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, [imagesLoaded, scrollYProgress]);
+
+  const smoothScrollYProgress = useSpring(scrollYProgress, {
+    damping: 40,
+    stiffness: 140,
+    restDelta: 0.0001
+  });
 
   const heroOpacity = useTransform(smoothScrollYProgress, [0, 0.12, 0.18], [1, 1, 0]);
   const heroY = useTransform(smoothScrollYProgress, [0, 0.12, 0.18], [0, -30, -50]);
   const heroVisibility = useTransform(smoothScrollYProgress, (v: number) => v > 0.18 ? 'hidden' : 'visible');
   const heroPointerEvents = useTransform(smoothScrollYProgress, (v: number) => v > 0.18 ? 'none' : 'auto');
 
-  const sec2Opacity = useTransform(smoothScrollYProgress, [0.18, 0.23, 0.40, 0.45], [0, 1, 1, 0]);
-  const sec2X = useTransform(smoothScrollYProgress, [0.18, 0.23, 0.40, 0.45], [-50, 0, 0, -50]);
-  const sec2Visibility = useTransform(smoothScrollYProgress, (v: number) => (v < 0.18 || v > 0.45) ? 'hidden' : 'visible');
-  const sec2PointerEvents = useTransform(smoothScrollYProgress, (v: number) => (v < 0.18 || v > 0.45) ? 'none' : 'auto');
+  const sec2Opacity = useTransform(smoothScrollYProgress, [0.18, 0.24, 0.38, 0.44], [0, 1, 1, 0]);
+  const sec2X = useTransform(smoothScrollYProgress, [0.18, 0.24, 0.38, 0.44], [-50, 0, 0, -50]);
+  const sec2Visibility = useTransform(smoothScrollYProgress, (v: number) => (v < 0.18 || v > 0.44) ? 'hidden' : 'visible');
+  const sec2PointerEvents = useTransform(smoothScrollYProgress, (v: number) => (v < 0.18 || v > 0.44) ? 'none' : 'auto');
 
-  const sec3Opacity = useTransform(smoothScrollYProgress, [0.45, 0.50, 0.65, 0.70], [0, 1, 1, 0]);
-  const sec3X = useTransform(smoothScrollYProgress, [0.45, 0.50, 0.65, 0.70], [50, 0, 0, 50]);
-  const sec3Visibility = useTransform(smoothScrollYProgress, (v: number) => (v < 0.45 || v > 0.70) ? 'hidden' : 'visible');
-  const sec3PointerEvents = useTransform(smoothScrollYProgress, (v: number) => (v < 0.45 || v > 0.70) ? 'none' : 'auto');
+  const sec3Opacity = useTransform(smoothScrollYProgress, [0.44, 0.50, 0.64, 0.70], [0, 1, 1, 0]);
+  const sec3X = useTransform(smoothScrollYProgress, [0.44, 0.50, 0.64, 0.70], [50, 0, 0, 50]);
+  const sec3Visibility = useTransform(smoothScrollYProgress, (v: number) => (v < 0.44 || v > 0.70) ? 'hidden' : 'visible');
+  const sec3PointerEvents = useTransform(smoothScrollYProgress, (v: number) => (v < 0.44 || v > 0.70) ? 'none' : 'auto');
 
-  const sec4Opacity = useTransform(smoothScrollYProgress, [0.70, 0.75, 0.84, 0.88], [0, 1, 1, 0]);
-  const sec4X = useTransform(smoothScrollYProgress, [0.70, 0.75, 0.84, 0.88], [-50, 0, 0, -50]);
-  const sec4Visibility = useTransform(smoothScrollYProgress, (v: number) => (v < 0.70 || v > 0.88) ? 'hidden' : 'visible');
-  const sec4PointerEvents = useTransform(smoothScrollYProgress, (v: number) => (v < 0.70 || v > 0.88) ? 'none' : 'auto');
+  const sec4Opacity = useTransform(smoothScrollYProgress, [0.70, 0.76, 0.86, 0.92], [0, 1, 1, 0]);
+  const sec4X = useTransform(smoothScrollYProgress, [0.70, 0.76, 0.86, 0.92], [-50, 0, 0, -50]);
+  const sec4Visibility = useTransform(smoothScrollYProgress, (v: number) => (v < 0.70 || v > 0.92) ? 'hidden' : 'visible');
+  const sec4PointerEvents = useTransform(smoothScrollYProgress, (v: number) => (v < 0.70 || v > 0.92) ? 'none' : 'auto');
 
-  const sec5Opacity = useTransform(smoothScrollYProgress, [0.88, 0.93, 1.0], [0, 1, 1]);
-  const sec5Y = useTransform(smoothScrollYProgress, [0.88, 0.93, 1.0], [50, 0, 0]);
-  const sec5Visibility = useTransform(smoothScrollYProgress, (v: number) => v < 0.88 ? 'hidden' : 'visible');
-  const sec5PointerEvents = useTransform(smoothScrollYProgress, (v: number) => v < 0.88 ? 'none' : 'auto');
+  const sec5Opacity = useTransform(smoothScrollYProgress, [0.92, 0.96, 1.0], [0, 1, 1]);
+  const sec5Y = useTransform(smoothScrollYProgress, [0.92, 0.96, 1.0], [50, 0, 0]);
+  const sec5Visibility = useTransform(smoothScrollYProgress, (v: number) => v < 0.92 ? 'hidden' : 'visible');
+  const sec5PointerEvents = useTransform(smoothScrollYProgress, (v: number) => v < 0.92 ? 'none' : 'auto');
 
   return (
     <div
       ref={containerRef}
       id="matrix-scrollytelling"
       className="relative w-full bg-[#050505]"
-      style={{ height: isSlow ? '440vh' : '550vh' }}
+      style={{ height: isSlow ? '650vh' : '850vh' }}
     >
       <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center">
-        <div
-          className="absolute inset-0 pointer-events-none opacity-[0.02]"
+        <div className="absolute inset-0 pointer-events-none opacity-[0.02]"
           style={{
             backgroundImage: 'linear-gradient(rgba(255,255,255,0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.4) 1px, transparent 1px)',
             backgroundSize: '60px 60px',
@@ -316,16 +354,13 @@ export default function KeyboardAssemblySection() {
           }}
         />
 
-        <div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full pointer-events-none opacity-40 blur-[80px]"
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full pointer-events-none opacity-40 blur-[80px]"
           style={{ background: 'radial-gradient(circle, rgba(0,80,255,0.06) 0%, rgba(6,182,212,0.02) 40%, transparent 70%)' }}
         />
-
         <div className="relative w-full h-full flex items-center justify-center max-w-6xl mx-auto p-4 md:p-12 z-10 pointer-events-none md:translate-y-0 -translate-y-24">
           <canvas
             ref={canvasRef}
-            className="w-full h-full object-contain filter drop-shadow-[0_0_35px_rgba(0,0,0,0.8)] transform-gpu will-change-transform"
-            style={{ transform: 'translateZ(0)', WebkitBackfaceVisibility: 'hidden', backfaceVisibility: 'hidden' }}
+            className="w-full h-full object-contain filter drop-shadow-[0_0_35px_rgba(0,0,0,0.8)]"
           />
         </div>
 
@@ -479,6 +514,7 @@ export default function KeyboardAssemblySection() {
             </p>
 
             <div className="flex flex-col sm:flex-row items-center gap-4 mt-8">
+
               <MagneticButton strength={0.2}>
                 <a
                   href="/contact"

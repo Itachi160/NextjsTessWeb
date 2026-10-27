@@ -95,7 +95,7 @@ const LAYERS: LayerConfig[] = [
   {
     id: 5,
     title: 'Cloud Infrastructure',
-    category: 'DEPLOYMENT LAYER',
+    category: 'DEPLOYMENT FABRIC',
     icon: Cloud,
     color: '#f97316',
     borderColor: 'border-orange-500/35',

@@ -25,7 +25,7 @@ const projects: ProjectItem[] = [
     id: 1,
     title: 'Hyperscale Cloud Platform',
     category: 'Cloud Architecture',
-    desc: 'Orchestrating multi-region hybrid Kubernetes clusters on AWS and Azure, processing 150M+ requests per day with 99.999% uptime.',
+    desc: 'Orchestrating multi-region hybrid Kubernetes clusters on AWS and Azure with automated failover and 99.9% uptime architecture.',
     icon: Globe,
     tech: ['AWS', 'Kubernetes', 'Docker', 'Terraform'],
     gradient: 'from-blue-600/30 to-cyan-500/10',

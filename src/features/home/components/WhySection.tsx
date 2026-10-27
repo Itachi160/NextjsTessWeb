@@ -320,12 +320,9 @@ export default function WhySection() {
             <div>
               <h4 className="text-sm font-black text-white">Enterprise-Grade Security Protocol</h4>
               <p className="text-gray-400 text-xs mt-1 leading-relaxed">
-                Every deploy is vetted by automated vulnerability scanners and adheres to strict ISO/IEC 27001 data isolation policies.
+                Every deploy is vetted by automated vulnerability scanners and adheres to strict zero-trust data isolation policies.
               </p>
             </div>
-          </div>
-          <div className="text-xs font-mono font-bold text-cyber-cyan border border-cyber-cyan/30 px-3 py-1.5 rounded-full select-none shrink-0 bg-cyber-cyan/5">
-            ISO 27001 AUDITED
           </div>
         </div>
       </ScrollReveal>

@@ -13,8 +13,11 @@ export default function Contact() {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [selectedStack, setSelectedStack] = useState<'cloud' | 'ai' | 'security' | 'custom'>('cloud');
   const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [logs, setLogs] = useState<string[]>([
     'SYSTEM: Initializing contact channel...',
     'SYSTEM: Securing port 443 with TLS 1.3...',
@@ -40,6 +43,15 @@ export default function Contact() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrorMessage(null);
+
+    const cleanPhone = phone.replace(/[^0-9]/g, '');
+    if (cleanPhone.length < 10 || cleanPhone.length > 15) {
+      setErrorMessage('Please provide a valid mobile number with at least 10 digits.');
+      return;
+    }
+
+    setIsSubmitting(true);
     setFormSubmitted(true);
     setLogs((prev) => [...prev, `SYSTEM: Preparing email transmission for ${selectedStack.toUpperCase()}...`]);
 
@@ -49,6 +61,7 @@ export default function Contact() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name,
+          phone,
           email,
           service: selectedStack.toUpperCase(),
           message,
@@ -57,10 +70,12 @@ export default function Contact() {
       setLogs((prev) => [...prev, 'SYSTEM: Inquiry payload registered with Tesseract server node.']);
     } catch (err) {
       console.warn('API submission error:', err);
+    } finally {
+      setIsSubmitting(false);
     }
 
     const subject = encodeURIComponent(`Project Inquiry (${selectedStack.toUpperCase()}) - ${name}`);
-    const body = encodeURIComponent(`Hello Tesseract Team,\n\nI would like to initiate a request for:\nService: ${selectedStack.toUpperCase()}\nName: ${name}\nEmail: ${email}\n\nMessage:\n${message}`);
+    const body = encodeURIComponent(`Hello Tesseract Team,\n\nI would like to initiate a request for:\nService: ${selectedStack.toUpperCase()}\nName: ${name}\nMobile: ${phone}\nEmail: ${email}\n\nMessage:\n${message}`);
     const mailtoUrl = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
 
     window.location.href = mailtoUrl;
@@ -68,6 +83,7 @@ export default function Contact() {
     setTimeout(() => {
       setFormSubmitted(false);
       setName('');
+      setPhone('');
       setEmail('');
       setMessage('');
     }, 6000);
@@ -128,7 +144,7 @@ export default function Contact() {
             <div className="flex flex-col gap-1">
               <span className="text-white font-extrabold text-sm">Tesseract Infosystems</span>
               <p className="text-gray-400 text-xs leading-relaxed">
-                Ozarde Estate, TC College Road, Baramati Pune, 413102
+                1st Floor, Omkar Commercial Building, TC College Rd, above Durga Cafe, Avdhut Nagar, Baramati, Pune, Maharashtra 413102
               </p>
             </div>
 
@@ -171,7 +187,7 @@ export default function Contact() {
                     </div>
                     <h4 className="text-white font-black text-xl tracking-tight">Transmission Complete</h4>
                     <p className="text-gray-300 text-xs max-w-sm mt-1 leading-relaxed">
-                      Your inquiry has been registered and dispatched to <span className="text-cyber-cyan font-mono">info@tesseractinfosystems.com</span>. Please verify in your email client to complete sending. Our team will contact you at `{email}` shortly.
+                      Your inquiry has been registered and dispatched to <span className="text-cyber-cyan font-mono">info@tesseractinfosystems.com</span>. Please verify in your email client to complete sending. Our team will contact you at <span className="text-white font-mono">{email}</span> / <span className="text-white font-mono">{phone}</span> shortly.
                     </p>
                     <div className="font-mono text-[9px] text-cyber-cyan bg-cyber-cyan/10 border border-cyber-cyan/20 px-3 py-1 rounded-md mt-4 animate-pulse">
                       TARGET: info@tesseractinfosystems.com
@@ -214,58 +230,97 @@ export default function Contact() {
                       <span className="text-cyber-purple">const</span> config = &#123; <br />
                       &nbsp;&nbsp;service: <span className="text-cyber-cyan">'{selectedStack.toUpperCase()}'</span>,<br />
                       &nbsp;&nbsp;name: <span className="text-white">'{name || 'unresolved'}'</span>,<br />
+                      &nbsp;&nbsp;phone: <span className="text-white">'{phone || 'unresolved'}'</span>,<br />
                       &nbsp;&nbsp;email: <span className="text-white">'{email || 'unresolved'}'</span><br />
                       &#125;;
                     </div>
 
-                    <div className="flex flex-col sm:flex-row gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="flex flex-col gap-2 w-full">
-                        <label htmlFor="c-name" className="text-[9px] uppercase font-mono text-gray-500">Your Name</label>
+                        <label htmlFor="c-name" className="text-[9px] uppercase font-mono text-gray-400 font-bold">Your Name *</label>
                         <input
                           id="c-name"
                           required
                           value={name}
-                          onChange={(e) => setName(e.target.value)}
+                          onChange={(e) => {
+                            setName(e.target.value);
+                            if (errorMessage) setErrorMessage(null);
+                          }}
                           type="text"
                           placeholder="Your Name"
                           className="bg-white/[0.02] border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-cyber-cyan/50 focus:shadow-[0_0_10px_rgba(6,182,212,0.1)] transition-all font-mono"
                         />
                       </div>
                       <div className="flex flex-col gap-2 w-full">
-                        <label htmlFor="c-email" className="text-[9px] uppercase font-mono text-gray-500">Your Email</label>
+                        <label htmlFor="c-phone" className="text-[9px] uppercase font-mono text-gray-400 font-bold flex items-center justify-between">
+                          <span>Mobile Number *</span>
+                          <span className="text-[8px] text-cyber-cyan font-normal">Min 10 digits</span>
+                        </label>
                         <input
-                          id="c-email"
+                          id="c-phone"
                           required
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          type="email"
-                          placeholder="your@email.com"
+                          value={phone}
+                          onChange={(e) => {
+                            setPhone(e.target.value);
+                            if (errorMessage) setErrorMessage(null);
+                          }}
+                          type="tel"
+                          placeholder="+91 98765 43210"
                           className="bg-white/[0.02] border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-cyber-cyan/50 focus:shadow-[0_0_10px_rgba(6,182,212,0.1)] transition-all font-mono"
                         />
                       </div>
                     </div>
 
+                    <div className="flex flex-col gap-2 w-full">
+                      <label htmlFor="c-email" className="text-[9px] uppercase font-mono text-gray-400 font-bold flex items-center justify-between">
+                        <span>Your Email *</span>
+                        <span className="text-[8px] text-cyber-cyan font-normal">name@domain.com</span>
+                      </label>
+                      <input
+                        id="c-email"
+                        required
+                        value={email}
+                        onChange={(e) => {
+                          setEmail(e.target.value);
+                          if (errorMessage) setErrorMessage(null);
+                        }}
+                        type="email"
+                        placeholder="your@email.com"
+                        className="bg-white/[0.02] border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-cyber-cyan/50 focus:shadow-[0_0_10px_rgba(6,182,212,0.1)] transition-all font-mono"
+                      />
+                    </div>
+
                     <div className="flex flex-col gap-2">
-                      <label htmlFor="c-message" className="text-[9px] uppercase font-mono text-gray-500">Message / Requirements</label>
+                      <label htmlFor="c-message" className="text-[9px] uppercase font-mono text-gray-400 font-bold">Message / Requirements *</label>
                       <textarea
                         id="c-message"
                         required
                         value={message}
-                        onChange={(e) => setMessage(e.target.value)}
+                        onChange={(e) => {
+                          setMessage(e.target.value);
+                          if (errorMessage) setErrorMessage(null);
+                        }}
                         rows={3}
                         placeholder="Describe your technical needs and timeline..."
                         className="bg-white/[0.02] border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-cyber-cyan/50 focus:shadow-[0_0_10px_rgba(6,182,212,0.1)] transition-all resize-none font-mono"
                       />
                     </div>
 
+                    {errorMessage && (
+                      <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs font-mono">
+                        {errorMessage}
+                      </div>
+                    )}
+
                     <MagneticButton strength={0.1} className="self-start mt-2">
                       <button
                         type="submit"
-                        className="btn-cyber-primary cyber-sheen px-8 py-3.5 rounded-full text-xs font-bold uppercase tracking-widest text-white flex items-center gap-2 cursor-pointer relative overflow-hidden shadow-lg hover:shadow-cyan-500/25 transition-all"
+                        disabled={isSubmitting}
+                        className="btn-cyber-primary cyber-sheen px-8 py-3.5 rounded-full text-xs font-bold uppercase tracking-widest text-white flex items-center gap-2 cursor-pointer relative overflow-hidden shadow-lg hover:shadow-cyan-500/25 transition-all disabled:opacity-50"
                         onMouseEnter={() => setCursorType('magnetic')}
                         onMouseLeave={() => setCursorType('default')}
                       >
-                        Send Message
+                        {isSubmitting ? 'Sending...' : 'Send Message'}
                         <Send className="w-3.5 h-3.5 fill-white" />
                       </button>
                     </MagneticButton>
