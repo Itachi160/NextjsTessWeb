@@ -2,18 +2,18 @@ import type { Metadata } from 'next';
 import LegalTrustModal from '../../components/LegalTrustModal';
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy & QuVouch Compliance | Tesseract InfoSystems',
+  title: 'Privacy Policy & QuVouch Compliance | Tesseract Infosystems',
   description:
-    'Read the official Privacy Policy for Tesseract InfoSystems and our QuVouch application. Strict adherence to Google API Services User Data Policy and Limited Use requirements.',
+    'Read the official Privacy Policy for Tesseract Infosystems and our QuVouch application. Strict adherence to Google API Services User Data Policy and Limited Use requirements.',
   alternates: {
     canonical: 'https://tesseractinfosystems.com/privacy',
   },
   openGraph: {
-    title: 'Privacy Policy & QuVouch Compliance | Tesseract InfoSystems',
+    title: 'Privacy Policy & QuVouch Compliance | Tesseract Infosystems',
     description:
-      'Official Privacy Policy for Tesseract InfoSystems and QuVouch. Google Cloud and Business Profile API compliance.',
+      'Official Privacy Policy for Tesseract Infosystems and QuVouch. Google Cloud and Business Profile API compliance.',
     url: 'https://tesseractinfosystems.com/privacy',
-    siteName: 'Tesseract InfoSystems',
+    siteName: 'Tesseract Infosystems',
     images: [{ url: '/Logo%20Hd.png', width: 1200, height: 630, alt: 'Tesseract Privacy Policy' }],
     type: 'website',
   },

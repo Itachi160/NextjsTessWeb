@@ -30,7 +30,7 @@ export default function AboutSection() {
     { year: 'Phase 1', title: 'Architecture Blueprinting', desc: 'We design zero-trust, high-throughput system blueprints tailored to your specific scale and security requirements.' },
     { year: 'Phase 2', title: 'Cloud-Native Orchestration', desc: 'Deploying modular, containerized microservices across Kubernetes, AWS, or GCP with automated horizontal scaling.' },
     { year: 'Phase 3', title: 'AI & Automation Integration', desc: 'We inject secure, intelligent automation nodes into your operations to accelerate data tasks and workflows.' },
-    { year: 'Phase 4', title: 'Zero-Downtime Deploy & SLA', desc: 'Continuous telemetry monitoring and active engineering support to guarantee 99.99% system uptime and reliability.' },
+    { year: 'Phase 4', title: 'Zero-Downtime Deploy & SLA', desc: 'Continuous telemetry monitoring and active engineering support maintaining 99.9% high-availability architecture with automated failover for client deployments.' },
   ];
 
   return (

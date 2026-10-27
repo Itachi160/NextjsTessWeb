@@ -2,18 +2,18 @@ import type { Metadata } from 'next';
 import LegalTrustModal from '../../components/LegalTrustModal';
 
 export const metadata: Metadata = {
-  title: 'Terms of Service & Project Agreement | Tesseract InfoSystems',
+  title: 'Terms of Service & Project Agreement | Tesseract Infosystems',
   description:
-    'Review the Terms of Service for Tesseract InfoSystems and our software platforms including QuVouch. Transparent service scope, IP rights, and Google Business Profile Third-Party Policy disclosures.',
+    'Review the Terms of Service for Tesseract Infosystems and our software platforms including QuVouch. Transparent service scope, IP rights, and Google Business Profile Third-Party Policy disclosures.',
   alternates: {
     canonical: 'https://tesseractinfosystems.com/terms',
   },
   openGraph: {
-    title: 'Terms of Service & QuVouch Project Agreement | Tesseract InfoSystems',
+    title: 'Terms of Service & QuVouch Project Agreement | Tesseract Infosystems',
     description:
-      'Terms of Service and Google Business Profile Third-Party Policy disclosures for Tesseract InfoSystems and QuVouch.',
+      'Terms of Service and Google Business Profile Third-Party Policy disclosures for Tesseract Infosystems and QuVouch.',
     url: 'https://tesseractinfosystems.com/terms',
-    siteName: 'Tesseract InfoSystems',
+    siteName: 'Tesseract Infosystems',
     images: [{ url: '/Logo%20Hd.png', width: 1200, height: 630, alt: 'Tesseract Terms of Service' }],
     type: 'website',
   },

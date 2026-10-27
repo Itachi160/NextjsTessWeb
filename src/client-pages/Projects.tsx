@@ -33,7 +33,7 @@ export default function Projects() {
       id: 1,
       title: 'Hyperscale Cloud Platform',
       category: 'Cloud',
-      desc: 'Orchestrating multi-region hybrid Kubernetes clusters on AWS and Azure with automated failover and 99.9% uptime architecture.',
+      desc: 'Orchestrating multi-region hybrid Kubernetes clusters on AWS and Azure with automated failover and 99.9% high-availability architecture.',
       icon: Globe,
       tech: ['AWS', 'Kubernetes', 'Docker', 'Terraform'],
       gradient: 'from-blue-600/35 via-cyan-500/10 to-transparent',

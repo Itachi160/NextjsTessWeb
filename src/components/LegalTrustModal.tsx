@@ -502,7 +502,7 @@ export default function LegalTrustModal({ initialTab, isEmbedded = false }: Lega
                 <Server className="w-4 h-4" /> 3. Server Uptime &amp; Incident Response
               </h4>
               <p className="text-gray-300">
-                We deploy on global edge CDN infrastructure featuring continuous health telemetry, automated DDoS mitigation, and 99.99% uptime SLA commitments.
+                We deploy on global edge CDN infrastructure featuring continuous health telemetry, automated DDoS mitigation, and 99.9% high-availability architecture commitments.
               </p>
             </div>
           </div>

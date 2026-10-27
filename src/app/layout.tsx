@@ -6,14 +6,14 @@ import '../index.css';
 export const metadata: Metadata = {
   metadataBase: new URL('https://tesseractinfosystems.com'),
   title: {
-    default: 'Tesseract Tech & Cloud Systems | Tesseract Infosystems',
-    template: '%s | Tesseract Tech & Systems',
+    default: 'Tesseract Infosystems | Enterprise Software & Cloud Architectures',
+    template: '%s | Tesseract Infosystems',
   },
-  description: 'Tesseract Infosystems (Tesseract Tech) designs and deploys custom software platforms, cloud-native architectures, AI & automation solutions, and high-performance enterprise systems.',
+  description: 'Tesseract Infosystems designs and deploys custom software platforms, cloud-native architectures, AI & automation solutions, and high-performance enterprise systems.',
   keywords: [
-    'Tesseract Tech',
-    'Tesseract Sys',
     'Tesseract Infosystems',
+    'Tesseract Tech',
+    'Tesseract Systems',
     'Enterprise Software Engineering',
     'Cloud-Native Systems',
     'Custom Software Platforms',
@@ -42,8 +42,8 @@ export const metadata: Metadata = {
     canonical: './',
   },
   openGraph: {
-    title: 'Tesseract Tech & Cloud Systems | Tesseract Infosystems',
-    description: 'Tesseract Infosystems (Tesseract Tech) designs and deploys custom software platforms, cloud-native architectures, AI & automation solutions, and high-performance enterprise systems.',
+    title: 'Tesseract Infosystems | Enterprise Software & Cloud Architectures',
+    description: 'Tesseract Infosystems designs and deploys custom software platforms, cloud-native architectures, AI & automation solutions, and high-performance enterprise systems.',
     url: 'https://tesseractinfosystems.com',
     siteName: 'Tesseract Infosystems',
     images: [
@@ -51,7 +51,7 @@ export const metadata: Metadata = {
         url: '/Logo%20Hd.png',
         width: 1200,
         height: 630,
-        alt: 'Tesseract InfoSystems Logo',
+        alt: 'Tesseract Infosystems Logo',
       },
     ],
     locale: 'en_US',
@@ -59,8 +59,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Tesseract Tech & Cloud Systems | Tesseract Infosystems',
-    description: 'Tesseract Infosystems (Tesseract Tech) designs and deploys custom software platforms, cloud-native architectures, AI & automation solutions, and high-performance enterprise systems.',
+    title: 'Tesseract Infosystems | Enterprise Software & Cloud Architectures',
+    description: 'Tesseract Infosystems designs and deploys custom software platforms, cloud-native architectures, AI & automation solutions, and high-performance enterprise systems.',
     images: ['/Logo%20Hd.png'],
   },
   icons: {

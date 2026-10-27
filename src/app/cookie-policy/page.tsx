@@ -2,9 +2,9 @@ import type { Metadata } from 'next';
 import LegalTrustModal from '../../components/LegalTrustModal';
 
 export const metadata: Metadata = {
-  title: 'Cookie Policy & Tracking Preferences | Tesseract InfoSystems',
+  title: 'Cookie Policy & Tracking Preferences | Tesseract Infosystems',
   description:
-    'Information on how Tesseract InfoSystems uses essential and performance cookies across our web portal and applications.',
+    'Information on how Tesseract Infosystems uses essential and performance cookies across our web portal and applications.',
   alternates: {
     canonical: 'https://tesseractinfosystems.com/cookie-policy',
   },

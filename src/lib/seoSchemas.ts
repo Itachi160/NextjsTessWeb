@@ -6,16 +6,28 @@ export function getOrganizationSchema() {
     '@context': 'https://schema.org',
     '@type': 'Organization',
     '@id': `${BASE_URL}/#organization`,
-    name: 'Tesseract InfoSystems',
-    alternateName: ['Tesseract Tech', 'Tesseract Systems', 'TesseractSys'],
+    name: 'Tesseract Infosystems',
+    alternateName: ['Tesseract Tech', 'Tesseract Systems'],
     url: BASE_URL,
     logo: `${BASE_URL}/android-chrome-512x512.png`,
     image: `${BASE_URL}/Logo%20Hd.png`,
     description:
-      'Tesseract InfoSystems designs and deploys custom enterprise software platforms, hyperscale cloud-native architectures, AI & automation solutions, and zero-trust security infrastructure.',
+      'Tesseract Infosystems designs and deploys custom enterprise software platforms, hyperscale cloud-native architectures, AI & automation solutions, and zero-trust security infrastructure.',
     email: 'info@tesseractinfosystems.com',
     telephone: '+91 9588666866',
-    foundingDate: '2021',
+    foundingDate: '2025',
+    founder: [
+      {
+        '@type': 'Person',
+        name: 'Ashutosh',
+        jobTitle: 'Co-Founder',
+      },
+      {
+        '@type': 'Person',
+        name: 'Somesh',
+        jobTitle: 'Co-Founder',
+      },
+    ],
     address: {
       '@type': 'PostalAddress',
       streetAddress: '1st Floor, Omkar Commercial Building, TC College Rd, above Durga Cafe, Avdhut Nagar',
@@ -52,12 +64,24 @@ export function getLocalBusinessSchema() {
     '@context': 'https://schema.org',
     '@type': 'ProfessionalService',
     '@id': `${BASE_URL}/#localbusiness`,
-    name: 'Tesseract InfoSystems',
+    name: 'Tesseract Infosystems',
     image: `${BASE_URL}/Logo%20Hd.png`,
     url: BASE_URL,
     telephone: '+91 9588666866',
     email: 'info@tesseractinfosystems.com',
     priceRange: '₹5 Lakhs - ₹40+ Lakhs',
+    founder: [
+      {
+        '@type': 'Person',
+        name: 'Ashutosh',
+        jobTitle: 'Co-Founder',
+      },
+      {
+        '@type': 'Person',
+        name: 'Somesh',
+        jobTitle: 'Co-Founder',
+      },
+    ],
     address: {
       '@type': 'PostalAddress',
       streetAddress: '1st Floor, Omkar Commercial Building, TC College Rd, above Durga Cafe, Avdhut Nagar',
@@ -86,7 +110,7 @@ export function getWebSiteSchema() {
     '@type': 'WebSite',
     '@id': `${BASE_URL}/#website`,
     url: BASE_URL,
-    name: 'Tesseract InfoSystems',
+    name: 'Tesseract Infosystems',
     description:
       'Enterprise Software Engineering, Cloud-Native Systems & AI Orchestration Architectures.',
     publisher: {
@@ -187,7 +211,7 @@ export function getServicesListSchema() {
   return {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
-    name: 'Tesseract InfoSystems Engineering Services',
+    name: 'Tesseract Infosystems Engineering Services',
     description: 'Complete catalog of software, cloud, AI, marketing, and staffing capability frameworks.',
     numberOfItems: services.length,
     itemListElement: services.map((s, idx) => ({
@@ -207,7 +231,7 @@ export function getSolutionsSchema() {
   return {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
-    name: 'Tesseract InfoSystems Corporate Blueprint Solutions',
+    name: 'Tesseract Infosystems Corporate Blueprint Solutions',
     description: 'Pre-engineered customizable architecture modules for cloud, AI, security, and transaction processing.',
     itemListElement: [
       {
@@ -273,10 +297,10 @@ export function getJobPostingsSchema() {
       '@type': 'JobPosting',
       title: 'Senior Software Engineer (Java / AWS)',
       description:
-        'Lead high-concurrency microservice architectures, JVM performance tuning, and Spring Boot cloud integrations at Tesseract InfoSystems.',
+        'Lead high-concurrency microservice architectures, JVM performance tuning, and Spring Boot cloud integrations at Tesseract Infosystems.',
       identifier: {
         '@type': 'PropertyValue',
-        name: 'Tesseract InfoSystems',
+        name: 'Tesseract Infosystems',
         value: 'JVM-SE',
       },
       datePosted: '2026-07-01',
@@ -313,7 +337,7 @@ export function getJobPostingsSchema() {
         'Build neural network graphs, train machine learning models, and implement intelligent automation pipelines under senior AI researchers.',
       identifier: {
         '@type': 'PropertyValue',
-        name: 'Tesseract InfoSystems',
+        name: 'Tesseract Infosystems',
         value: 'AIML-INT',
       },
       datePosted: '2026-07-01',
@@ -340,7 +364,7 @@ export function getJobPostingsSchema() {
         'Train transformer model graphs, fine-tune LLMs, and structure vector stores alongside senior AI researchers.',
       identifier: {
         '@type': 'PropertyValue',
-        name: 'Tesseract InfoSystems',
+        name: 'Tesseract Infosystems',
         value: 'DL-INT',
       },
       datePosted: '2026-07-01',
@@ -367,7 +391,7 @@ export function getJobPostingsSchema() {
         'Fast-track 1-year mentorship covering modern full stack architectures, reactive UI systems, and backend API engineering.',
       identifier: {
         '@type': 'PropertyValue',
-        name: 'Tesseract InfoSystems',
+        name: 'Tesseract Infosystems',
         value: 'FS-TRN',
       },
       datePosted: '2026-07-01',
@@ -398,18 +422,18 @@ export function getFAQSchema() {
     mainEntity: [
       {
         '@type': 'Question',
-        name: 'What services does Tesseract InfoSystems provide?',
+        name: 'What services does Tesseract Infosystems provide?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Tesseract InfoSystems specializes in Custom Software Development, Enterprise Applications, Hyperscale Cloud Deployments, DevOps Engineering, AI & Automation Solutions, Digital Marketing, and IT Staffing Solutions.',
+          text: 'Tesseract Infosystems specializes in Custom Software Development, Enterprise Applications, Hyperscale Cloud Deployments, DevOps Engineering, AI & Automation Solutions, Digital Marketing, and IT Staffing Solutions.',
         },
       },
       {
         '@type': 'Question',
-        name: 'Where are Tesseract InfoSystems offices located?',
+        name: 'Where are Tesseract Infosystems offices located?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Tesseract InfoSystems headquarters are located in Baramati and Pune, Maharashtra, India.',
+          text: 'Tesseract Infosystems headquarters are located in Baramati and Pune, Maharashtra, India.',
         },
       },
       {
@@ -460,7 +484,7 @@ export function getBlogPostSchema(post: {
     },
     publisher: {
       '@type': 'Organization',
-      name: 'Tesseract InfoSystems',
+      name: 'Tesseract Infosystems',
       logo: {
         '@type': 'ImageObject',
         url: `${BASE_URL}/android-chrome-512x512.png`,

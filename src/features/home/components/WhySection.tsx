@@ -12,7 +12,7 @@ interface MetricProps {
 }
 
 function Counter({ target, suffix = '', duration = 1500, decimals = 0 }: MetricProps) {
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(target);
   const [hasStarted, setHasStarted] = useState(false);
   const elementRef = useRef<HTMLSpanElement>(null);
 
@@ -39,6 +39,7 @@ function Counter({ target, suffix = '', duration = 1500, decimals = 0 }: MetricP
     const stepTime = duration / steps;
     const increment = end / steps;
 
+    setCount(0);
     const timer = setInterval(() => {
       start += increment;
       if (start >= end) {

@@ -27,7 +27,7 @@ export async function generateMetadata({
   const url = `https://tesseractinfosystems.com/blog/${post.slug}`;
 
   return {
-    title: `${post.title} | Tesseract Engineering Blog`,
+    title: `${post.title} | Tesseract Infosystems`,
     description: post.excerpt,
     alternates: {
       canonical: url,

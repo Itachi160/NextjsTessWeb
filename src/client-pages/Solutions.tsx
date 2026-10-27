@@ -30,7 +30,7 @@ const SOLUTIONS_DATA: SolutionItem[] = [
       'Frictionless GitOps pipelining',
     ],
     metrics: [
-      { label: 'Uptime', val: '99.99%' },
+      { label: 'Availability', val: '99.9% Target' },
       { label: 'Auto-Scale', val: '< 45s' },
       { label: 'Latency', val: '2ms' }
     ]

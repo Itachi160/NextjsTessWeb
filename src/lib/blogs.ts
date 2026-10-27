@@ -223,7 +223,7 @@ ARCHITECTURAL COMPARISON: TEMPLATE VS. ENTERPRISE SYSTEM
 | :--- | :--- | :--- | :--- |
 | **Tier 1: High-Growth MVP** | 6 – 10 Weeks | **₹4.5 Lakhs – ₹12 Lakhs** | Core SaaS or portal, PostgreSQL database, OAuth 2.0, Stripe/Razorpay integration, CI/CD pipeline. |
 | **Tier 2: Commercial Business Platform** | 3 – 5 Months | **₹12 Lakhs – ₹28 Lakhs** | Multi-tenant SaaS, granular RBAC access controls, real-time WebSockets, custom analytics dashboard, zero-trust ready. |
-| **Tier 3: Enterprise Cloud System** | 5 – 9 Months | **₹28 Lakhs – ₹75+ Lakhs** | Microservices or modular monolith, multi-region database failover, local AI integration, eBPF telemetry, 99.99% SLA. |
+| **Tier 3: Enterprise Cloud System** | 5 – 9 Months | **₹28 Lakhs – ₹75+ Lakhs** | Microservices or modular monolith, multi-region database failover, local AI integration, eBPF telemetry, 99.9% SLA. |
 
 ---
 

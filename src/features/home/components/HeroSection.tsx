@@ -285,7 +285,9 @@ export default function HeroSection() {
           {STATS.map((stat, i) => (
             <div key={stat.label} className="text-center">
               <div className="text-2xl md:text-3xl font-black text-white">
-                <span ref={(el) => { counterRefs.current[i] = el; }}>0</span>
+                <span ref={(el) => { counterRefs.current[i] = el; }}>
+                  {(stat as any).decimals ? stat.value.toFixed((stat as any).decimals) : stat.value}
+                </span>
                 <span className="text-cyber-cyan">{stat.suffix}</span>
               </div>
               <div className="text-[10px] uppercase font-mono tracking-wider text-gray-500 mt-1">{stat.label}</div>

@@ -4,22 +4,22 @@ import ProductsClient from '../../client-pages/Products';
 export const metadata: Metadata = {
   title: 'Proprietary Software Products & SaaS Platforms',
   description:
-    'Explore proprietary software products by Tesseract InfoSystems: Garage 360 (Automotive OS), ERP Core, QuVouch (Customer Relationship & Merchant SaaS), Rent-It (Brokerage & Tenant App), Atithi (Hotel Management), and Gurukul-LMS.',
+    'Explore proprietary software products by Tesseract Infosystems: Garage 360 (Automotive OS), ERP Core, QuVouch (Customer Relationship & Merchant SaaS), Rent-It (Brokerage & Tenant App), Atithi (Hotel Management), and Gurukul-LMS.',
   alternates: {
     canonical: 'https://tesseractinfosystems.com/products',
   },
   openGraph: {
-    title: 'Proprietary Software Products & SaaS Platforms | Tesseract InfoSystems',
+    title: 'Proprietary Software Products & SaaS Platforms | Tesseract Infosystems',
     description:
       'Garage 360, Tesseract ERP, QuVouch, Rent-It, Atithi, and Gurukul-LMS. Engineered for scale, speed, and real-time operational efficiency.',
     url: 'https://tesseractinfosystems.com/products',
-    siteName: 'Tesseract InfoSystems',
+    siteName: 'Tesseract Infosystems',
     images: [{ url: '/Logo%20Hd.png', width: 1200, height: 630, alt: 'Tesseract Products' }],
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Proprietary Software Products & SaaS Platforms | Tesseract InfoSystems',
+    title: 'Proprietary Software Products & SaaS Platforms | Tesseract Infosystems',
     description:
       'Explore Garage 360, ERP Core, QuVouch, Rent-It, Atithi, and Gurukul-LMS.',
     images: ['/Logo%20Hd.png'],
@@ -30,7 +30,7 @@ export default function ProductsPage() {
   const productSchema = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
-    name: 'Tesseract InfoSystems Software Products',
+    name: 'Tesseract Infosystems Software Products',
     itemListElement: [
       {
         '@type': 'SoftwareApplication',

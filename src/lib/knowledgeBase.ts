@@ -86,7 +86,7 @@ For official custom architecture quotes, users can email info@tesseractinfosyste
     title: 'Core Modular Architectures & Blueprint Metrics',
     keywords: ['solutions', 'cld-node', 'ai-core', 'sec-shield', 'tx-fabric', 'uptime', 'latency', 'throughput', 'tps', 'metrics', 'specifications'],
     content: `Customizable Corporate Blueprint Solutions:
-1. CLD-NODE (Hyperscale Cloud Platform): 99.99% uptime, <45s auto-scale, 2ms latency. Stack: EKS/GKE, Terraform, Istio.
+1. CLD-NODE (Hyperscale Cloud Platform): 99.9% high availability, <45s auto-scale, 2ms latency. Stack: EKS/GKE, Terraform, Istio.
 2. AI-CORE (AI Logistics & Automation Core): 50k/s throughput, 12ms latency, 99.2% accuracy. Stack: PyTorch, Kafka, Redis.
 3. SEC-SHIELD (Zero-Trust Cybersecurity Shield): <8ms auth time, realtime audit lag, AES-256 cipher. Stack: OAuth 2.1, eBPF Audits, Vault.
 4. TX-FABRIC (Omni-Channel Transaction Core): 25,000 peak TPS, strict sync, instant settlement. Stack: Spring Boot, Postgres Shards, Kafka.`

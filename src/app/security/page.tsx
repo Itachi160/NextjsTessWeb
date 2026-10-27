@@ -2,9 +2,9 @@ import type { Metadata } from 'next';
 import LegalTrustModal from '../../components/LegalTrustModal';
 
 export const metadata: Metadata = {
-  title: 'Security Architecture & Data Safety | Tesseract InfoSystems',
+  title: 'Security Architecture & Data Safety | Tesseract Infosystems',
   description:
-    'Explore the zero-trust cybersecurity standards, TLS 1.3 encryption, and cloud resilience safeguarding Tesseract InfoSystems and QuVouch platforms.',
+    'Explore the zero-trust cybersecurity standards, TLS 1.3 encryption, and cloud resilience safeguarding Tesseract Infosystems and QuVouch platforms.',
   alternates: {
     canonical: 'https://tesseractinfosystems.com/security',
   },
